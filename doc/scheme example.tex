@@ -1,0 +1,33 @@
+\documentclass[11pt, letterpaper, oneside]{article}
+\usepackage{enumitem}
+\usepackage{calc}
+\usepackage{ amssymb }
+
+\begin{document}
+\section{Step 1: Generate Keys}
+
+	genkey procedure generates a secret and public key.  The public key includes vectors \textbf{L} and \textbf{R} as well as $q$ and $\mathcal{U}$.
+	
+	Questions on this step:
+	\begin{enumerate}
+	\item	 In the first algorithm defined on page 10, what does the character in 'sk =  \O' represent? Is that the null set?
+	\end{enumerate}
+
+\section{Step 2: Initialization}
+
+	initialize takes the secret key and the public key generated in step 1, and an empty dictionary over the universe of elements and produces
+	
+	\begin{enumerate}
+	\item a table \textbf{T} with N entries (0 to N-1) to represent the Merkle tree leaves
+	\item initial state $d_{0} = \textbf{0} \in Z_{q}^{k}$ representing the root digest
+	\item a label for each internal node: $\lambda(v)$
+	\end{enumerate}
+	
+	
+	Questions on this step:
+	\begin{enumerate}
+	\item What are the dimensions of table \textbf{T}?  ( $N \times ?$ )
+	\item What does q mean in the context of $Z_{q}^{k}$?  Is this a set of $k \times 1$ vectors or a set of $q \times k$ matrices?
+	\end{enumerate}
+	
+\end{document}
