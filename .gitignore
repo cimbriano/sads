@@ -1,4 +1,8 @@
+# OSX
 .DS_Store
+
+# LaTeX
 *.aux
 *.pdf
 *.synctex.gz
+*.log
