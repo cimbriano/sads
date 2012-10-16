@@ -1,0 +1,23 @@
+# Python 
+http://numpy.scipy.org/
+numpy is a language extension that defines the numerical array and matrix type and basic operations on them. 
+scipy is another language extension that uses numpy to do advanced math, signal processing, optimization, statistics and much more. 
+matplotlib is a language extension to facilitate plotting. 
+
+#Ruby
+has a built in library which includes Matrix, Vector and allows you to do things like multple a matrix times a vecotr like m * n
+
+# Creates a zero-filled square matrix
+> m = Matrix.zero(10)
+> v = Vector.elements((0...10).to_a, copy = true)
+> m * v
+=> Vector[0, 0, 0, 0, 0, 0, 0, 0, 0, 0] 
+
+# Dimension Checking
+> bad_v = Vector.elements((0...12).to_a, copy = true)
+> m * bad_v
+ExceptionForMatrix::ErrDimensionMismatch: Matrix dimension mismatch
+	from /Users/chris/.rvm/rubies/ruby-1.9.3-p194/lib/ruby/1.9.1/matrix.rb:815:in `*'
+	from /Users/chris/.rvm/rubies/ruby-1.9.3-p194/lib/ruby/1.9.1/matrix.rb:812:in `*'
+	from (irb):14
+	from /Users/chris/.rvm/rubies/ruby-1.9.3-p194/bin/irb:16:in `<main>'
