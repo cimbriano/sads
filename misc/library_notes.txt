@@ -4,6 +4,10 @@ numpy is a language extension that defines the numerical array and matrix type a
 scipy is another language extension that uses numpy to do advanced math, signal processing, optimization, statistics and much more. 
 matplotlib is a language extension to facilitate plotting. 
 
+- Big Integers: Above version 2.5, python supports automatic conversion of an int 
+	to a long.  (long in Python is not the same as long in C or Java. Python long is 
+	an arbitrary precision integer limited by system memory, not word size)
+
 #Ruby
 has a built in library which includes Matrix, Vector and allows you to do things like multple a matrix times a vecotr like m * n
 

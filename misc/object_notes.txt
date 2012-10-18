@@ -1,29 +1,41 @@
 # Streaming Authenticated Data Structure
 
+ Data Structures
  - Random Matrices L & R  
  - Table of leaf values
  - Table of node labels
+ - Public/Secret Key
 
+ Operations
+ - "Add element to Merkle tree"
+ - "Remove element from Merkle Tree" (?)
+ - "Boolean (non)-membership test"
+
+QUESTION: For a membership (or other type of) test, does the Merkle Tree data structure provide the proof
+	i.e. does it store the table of labels
+	or is it table of labels part of some server-side of this library
+
+	So, do we have a data structure that is used by some server side code,
+	or are they neccessarily one entity?
 
 # Server
 
-Data Structures
-
- -  Public/Secret Key
+ Data Structures
  -  SADS-server side
 
-Operations
+ Operations
  - genKey
  - initialize
  - updateProver
 
 # Client
 
-Data Structures
+ Data Structures
+
  - Tree digest (SADS - client side)
  - Random Matrices L & R  
 
-Operations
+ Operations
  - updateVerifier
 
 
