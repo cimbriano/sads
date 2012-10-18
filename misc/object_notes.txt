@@ -1,34 +1,33 @@
 # Streaming Authenticated Data Structure
 
-### Random Matrices L & R  
-### Table of leaf values
-### Table of node labels
+ - Random Matrices L & R  
+ - Table of leaf values
+ - Table of node labels
 
 
 # Server
 
 Data Structures
-### Public/Secret Key
-### SADS-server side
+
+ -  Public/Secret Key
+ -  SADS-server side
 
 Operations
-genKey
-initialize
-updateProver
+ - genKey
+ - initialize
+ - updateProver
 
 # Client
 
 Data Structures
-### Tree digest (SADS - client side)
-### Random Matrices L & R  
+ - Tree digest (SADS - client side)
+ - Random Matrices L & R  
 
 Operations
-updateVerifier
+ - updateVerifier
 
 
 # SADS Protocol
-init - 
-
-
+ - init 
 
 
