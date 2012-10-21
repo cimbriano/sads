@@ -2,6 +2,10 @@
 require 'sads'
 
 describe Sads do
+
+	it "should be a sads object" do
+		Sads.new.should be_a(Sads)
+	end
 	
 	before(:each) do
 		# Pre-test setup
@@ -15,7 +19,15 @@ describe Sads do
 			@sad.should respond_to(:labels)
 		end
 
-	end # describe some features
+		it "should have L (left) and R (right) matrices (or column vectors)" do
+			@sad.should respond_to(:L)
+			@sad.should respond_to(:R)
+		end
+
+		it "should have a public and secret keypair" do
+			@sad.should respond_to(:pubkey)
+		end
+	end # describe instance fields
 
 
 	
