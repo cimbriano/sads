@@ -13,7 +13,6 @@ describe Sads do
 	end
 
 	describe "instance fields" do
-		# Put feature tests here
 
 		it "should have a structure called labels" do
 			@sad.should respond_to(:labels)
@@ -27,8 +26,73 @@ describe Sads do
 		it "should have a public and secret keypair" do
 			@sad.should respond_to(:pubkey)
 		end
+
+		it "should have a field called leaves" do
+			@sad.should respond_to(:leaves)
+		end
+
+		it "should have a field called digest" do
+			@sad.should respond_to(:digest)
+		end
 	end # describe instance fields
 
+	describe "initialize" do
 
-	
+		it "should initialize labels as a map" do
+			@sad.labels.should be_empty
+		end
+
+		it "should initialize leaves as a map" do
+			pending
+		end
+
+		it "should initialize digest as a SOMETHING" do
+			pending
+		end
+
+	end # describe initialize
+
+	describe "add element" do
+
+		it "should update leaves table if the element is new" do
+			pending
+		end
+
+		it "should update the labels of the internal nodes on the path to the root" do
+			pending
+		end
+
+		it "should update the digest of the tree" do
+			pending
+		end
+
+	end # describe add element
+
+	describe "remove element" do
+
+		it "should update the leaves table if the element was in the tree" do
+			pending
+		end
+
+		it "should update the labels of the internal nodes on the path to the root" do
+			pending
+		end
+
+		it "should update the digest of the tree" do
+			pending
+		end
+
+	end # describe remove element
+
+	describe "exists?" do
+
+		it "should return true for elements in the tree" do
+			pending
+		end
+
+		it "should return false for elements not in the tree" do
+			pending
+		end
+
+	end # describe 
 end # describe Sads
