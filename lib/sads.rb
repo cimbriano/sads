@@ -8,8 +8,9 @@ class Sads
 	def initialize()
 		# Size of Universe
 		# 
-
-
+		@labels = {}
+		
+		
 	end
 
 
