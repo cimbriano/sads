@@ -5,8 +5,8 @@
 
 \begin{document}
 \section{Algortihm 1: Generate Keys}
-
-	genkey procedure generates a secret and public key.  The public key includes vectors \textbf{L} and \textbf{R} as well as $q$ and $\mathcal{U}$.
+genkey procedure generates a secret and public key.
+The public key includes vectors \textbf{L} and \textbf{R} as well as $q$ and $\mathcal{U}$.
 
 %Questions on this step:
 %	\begin{enumerate}
@@ -15,8 +15,7 @@
 
 \section{Algorithm 2: Initialization}
 \label{initialize}
-
-	initialize takes the secret key and the public key generated in step 1, and an empty dictionary over the universe of elements and produces
+initialize takes the secret key and the public key generated in step 1, and an empty dictionary over the universe of elements and produces
 
 	\begin{enumerate}
 	\item a table \textbf{T} with N entries (0 to N-1) to represent the Merkle tree leaves
@@ -56,9 +55,9 @@
 	\item Suppose $x = 3$
 	\end{itemize}
 
-	Calculating $d_{h + 1}$ reduces to calculating 	$ \mathcal{D}_{r}(x, \textbf{1})$ because $d_{h}$ is known.  \\
+Calculating $d_{h + 1}$ reduces to calculating 	$ \mathcal{D}_{r}(x, \textbf{1})$ because $d_{h}$ is known.  \\
 
-	In our case, we'd like to calculate $\mathcal{D}_{r}(3, \textbf{1})$, i.e. the digest of the root node with respect 3. \\
+In our case, we'd like to calculate $\mathcal{D}_{r}(3, \textbf{1})$, i.e. the digest of the root node with respect 3. \\
 
 	By definition 10, 
 	\begin{equation}
@@ -66,13 +65,14 @@
 	\end{equation}
 where $v_{11}$ is the left child of $r$, and $\mathcal{D}_{v_{11}}$ is the partial digest of $v_{11}$.
 
-	This procedure continues for each internal node eventually reaching the leaf node. The partial digest of a leaf node, in our case, that representing the element $x = 3$ is given by:
+This procedure continues for each internal node eventually reaching the leaf node.
+The partial digest of a leaf node, in our case, that representing the element $x = 3$ is given by:
 
 	\begin{equation}
 	\mathcal{D}_{3}(3, \textbf{1}) = \textbf{1}
 	\end{equation}
 
-	Substituting the calculated partial digests for each node in the path from the root to the updated leaf node results in:
+Substituting the calculated partial digests for each node in the path from the root to the updated leaf node results in:
 
 	\begin{equation}
 	\mathcal{D}_{r}(3, \textbf{1}) = \textbf{L} \cdot \textbf{b} ( \textbf{R} \cdot \textbf{b} ( \textbf{R} \cdot \textbf{b} ( \textbf{1} ) )  )
@@ -149,31 +149,22 @@ Calculating each $\lambda(v_{i})$ is straight forward.  In the last example, we 
 	\begin{enumerate}
 	\item \textbf{NTL 5.5.2} : A free software written in C++ providing data structures and algorithms for arbitrary length
 	integers, for vectors, matrices and polynomials over the integers and over the finite fields and for 
-	arbitrary precision floating point arithmetic. \texttt{http://shoup.net/ntl/}
-	\item \textbf{MAGMA V2.18} : The kernel of Magma contains implementations of many ofthe important concrete classes of 
-	structure in five fundamental branches of algebra, namely group theory, ring theory, field theory, 
-	module theory and the theory of algebras. In addition, certainfamilies of structures from algebraic 
-	geometry and finite incidence geometry are included. \texttt{http://magma.maths.usyd.edu.au/}
+	arbitrary precision floating point arithmetic.
+	\texttt{http://shoup.net/ntl/}
+	\item \textbf{MAGMA V2.18} : The kernel of Magma contains implementations of many ofthe important concrete classes of structure in five fundamental branches of algebra, namely group theory, ring theory, field theory, module theory and the theory of algebras.
+In addition, certainfamilies of structures from algebraic geometry and finite incidence geometry are included. \texttt{http://magma.maths.usyd.edu.au/}
 	\end{enumerate}
 
 \subsection{ Library Prototype\\}
 
-	We decided to start a feasible implementation of the model by trying to find the right library
-	for matrix operations and arbitrary precision floating point arithmetics. In our investigations,
-	we had the following observations :
+	We decided to start a feasible implementation of the model by trying to find the right library for matrix operations and arbitrary precision floating point arithmetics. In our investigations, we had the following observations :
 	
 	\begin{itemize}
 	 
-	\item It seems that there has been more recent updates and user discussion links regarding MAGMA
-	and the library has attracted more draw in terms of being more up to dated and user-friendly.
-	\item MAGMA is a collection of linear algebra GPU accelerated libraries designed and implemented
-	by the team that developed LAPACK. Since we were not completely sure about MAGMA's dependency on
-	CUDA and other related libraries we did not go into further detail at this stage.
-	\item We decided to work with Ruby (or Python) for the first implementation since they both have a
-	standard library documentation for matrices.
-	\item Starting with this idea, we can smoothly find the best matching library for our system 
-	model which helps us to know exactly what requirements we need and which library matches these 
-	requirements accordingly.
+	\item It seems that there has been more recent updates and user discussion links regarding MAGMA and the library has attracted more draw in terms of being more up to dated and user-friendly.
+	\item MAGMA is a collection of linear algebra GPU accelerated libraries designed and implemented by the team that developed LAPACK. Since we were not completely sure about MAGMA's dependency on CUDA and other related libraries we did not go into further detail at this stage.
+	\item We decided to work with Ruby (or Python) for the first implementation since they both have a standard library documentation for matrices.
+	\item Starting with this idea, we can smoothly find the best matching library for our system model which helps us to know exactly what requirements we need and which library matches these requirements accordingly.
 	\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
