@@ -9,8 +9,9 @@ class Sads
 		# Size of Universe
 		# 
 		@labels = {}
-		
-		
+		@leaves = {}
+
+
 	end
 
 

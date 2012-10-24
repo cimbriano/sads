@@ -43,7 +43,7 @@ describe Sads do
 		end
 
 		it "should initialize leaves as a map" do
-			pending
+			@sad.leaves.should be_empty
 		end
 
 		it "should initialize digest as a SOMETHING" do
