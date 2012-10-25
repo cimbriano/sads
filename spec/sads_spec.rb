@@ -47,6 +47,7 @@ describe Sads do
 		end
 
 		it "should initialize digest as a SOMETHING" do
+			# @sad.digest.should_not be_nil
 			pending
 		end
 
@@ -55,7 +56,7 @@ describe Sads do
 	describe "add element" do
 
 		it "should update leaves table if the element is new" do
-			pending
+			@sad.leaves.should_not be_empty
 		end
 
 		it "should update the labels of the internal nodes on the path to the root" do
