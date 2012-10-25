@@ -71,7 +71,9 @@ describe Sads do
 	describe "remove element" do
 
 		it "should update the leaves table if the element was in the tree" do
-			pending
+			@sad.addElement(1)
+			@sad.removeElement(1)
+			@sad.exists?(1).should be_false
 		end
 
 		it "should update the labels of the internal nodes on the path to the root" do

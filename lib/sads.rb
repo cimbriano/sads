@@ -16,11 +16,11 @@ class Sads
 
 
 	def addElement(ele)
-		leaves[ele] = 1
+		leaves.store(ele, 1)
 	end
 
 	def removeElement(ele)
-
+		leaves.delete ele
 	end
 
 	def exists?(ele)
