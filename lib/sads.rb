@@ -6,12 +6,12 @@ class Sads
 	attr_reader :L, :R, :pubkey
 
 	def initialize()
-		# Size of Universe
-		# 
+		# Input parameteres?
+		#  # Size of Universe
+
 		@labels = {}
 		@leaves = {}
-
-
+		# @digest = 0
 	end
 
 
