@@ -1,0 +1,9 @@
+Data Structures:
+  ☐ Pick type for digest @init
+
+--- ✄ -----------------------
+
+Methods:
+  ☐ Test add updates labels correctly
+  ☐ Test remove updated labels correctly
+  ☐ Implement exists?
