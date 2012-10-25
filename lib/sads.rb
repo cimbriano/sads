@@ -16,7 +16,7 @@ class Sads
 
 
 	def addElement(ele)
-
+		leaves[ele] = 1
 	end
 
 	def removeElement(ele)
@@ -24,7 +24,7 @@ class Sads
 	end
 
 	def exists?(ele)
-		return false
+		return leaves.include?(ele)
 	end
 
 end

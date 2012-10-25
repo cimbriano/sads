@@ -50,12 +50,12 @@ describe Sads do
 			# @sad.digest.should_not be_nil
 			pending
 		end
-
 	end # describe initialize
 
 	describe "add element" do
 
 		it "should update leaves table if the element is new" do
+			@sad.addElement(1)
 			@sad.leaves.should_not be_empty
 		end
 
@@ -66,7 +66,6 @@ describe Sads do
 		it "should update the digest of the tree" do
 			pending
 		end
-
 	end # describe add element
 
 	describe "remove element" do
@@ -82,18 +81,22 @@ describe Sads do
 		it "should update the digest of the tree" do
 			pending
 		end
-
 	end # describe remove element
 
 	describe "exists?" do
 
 		it "should return true for elements in the tree" do
-			pending
+			@sad.addElement(1)
+			@sad.exists?(1).should be_true
 		end
 
 		it "should return false for elements not in the tree" do
-			pending
+			@sad.addElement(1)
+			@sad.exists?(2).should be_false
 		end
 
+		it "should return false for empty tree" do
+			@sad.exists?(1).should be_false
+		end
 	end # describe 
 end # describe Sads
