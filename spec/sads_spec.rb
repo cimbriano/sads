@@ -24,7 +24,7 @@ describe Sads do
 		end
 
 		it "should have a public and secret keypair" do
-			@sad.should respond_to(:pubkey)
+			pending "Accessible via accessor so test isn't fragile w.r.t field name"
 		end
 
 		it "should have a field called leaves" do
@@ -37,6 +37,18 @@ describe Sads do
 	end # describe instance fields
 
 	describe "initialize" do
+
+		it "should initialize L vector" do
+			pending "Needs specification"
+		end
+
+		it "should initialize R vector" do
+			pending "Needs specification"
+		end
+
+		it "should initialize the public/secret keypair" do
+			pending "Needs specification"
+		end
 
 		it "should initialize labels as a map" do
 			@sad.labels.should be_empty
