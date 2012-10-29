@@ -4,7 +4,28 @@
 \usepackage{ amssymb }
 
 \begin{document}
-\section{Algortihm 1: Generate Keys}
+
+\title{\textbf{ CMCS 818J Project Milestone Report } \\  \small{Christopher Imbriano \& Behzad Koosha}}
+\maketitle
+
+\section{Abstract}
+
+	As it has been described in the project proposal, the aim for this project is to present and implement a new model for verifying data structure queries in a streaming scenario. The proposed scheme gives rise to new cryptographic constructions with improved properties such as dynamic cryptographic accumulator; parallel online memory checking and a space efficient three party authenticated data structure. 
+	
+	
+\section{Introduction}
+
+	The introduced scheme, streaming authenticated data structure, does not require any interaction between the client and the server while the stream is observed. Three important properties is obtained using this scheme : a. Independence of prover and verifier : the prover and the verifier update their status independently and with no interaction. b. Efficiency : It can be shown that an exponential improvement for many commonly queries in the prover's running time can be achieved. c. Expressiveness : a wide range of queries such as membership/ non-membership, successor, range search and frequencies can be supported using this scheme. 
+
+\section{Previous Work}
+
+	Most of the existing streaming verifiable protocols are efficient in terms of verifier complexity; it can be observed that in all of them the prover complexity is linear in the size of stream which this limits the applicability of the protocols. Other works include verifiable computation and authenticated data structures, which are not directly applicable to the streaming data set or their application results in increased complexities or interactive protocols. 
+	
+\section{Algorithm}
+	
+	In the following, we will represent the steps that the streaming authenticated data structure follows to implement range search queries.
+	
+\subsection{ 1: Generate Keys}
 
 	genkey procedure generates a secret and public key.  The public key includes vectors \textbf{L} and \textbf{R} as well as $q$ and $\mathcal{U}$.
 
@@ -13,7 +34,7 @@
 %	\item	 In the first algorithm defined on page 10, what does the character in 'sk =  \O' represent? Is that the null set?
 %	\end{enumerate}
 
-\section{Algorithm 2: Initialization}
+\subsection{ 2: Initialization}
 \label{initialize}
 
 	initialize takes the secret key and the public key generated in step 1, and an empty dictionary over the universe of elements and produces
@@ -32,15 +53,15 @@
 %	\end{enumerate}
 
 
-\section{Algorithm 3: updateVerifier}
-\subsection{Inputs}
+\subsection{ 3: updateVerifier}
+\subsubsection{Inputs}
 	\begin{enumerate}
 	\item $x$ where $x \in \mathcal{U}$ is the current element of the stream
 	\item $d_{h}$ current state of $auth(D_{h})$
 	\item sk and pk - secret and public key \\
 	\end{enumerate}
 
-\subsection{Outputs}
+\subsubsection{Outputs}
 	\begin{enumerate}
 	\item $d_{h + 1}$ updated state of $auth(D_{h + 1})$
 	\end{enumerate}
@@ -49,13 +70,13 @@
 		d_{h+1} = d_{h} + \mathcal{D}_{r}(x, \textbf{1})
 	\end{equation}
 
-\subsection{Example}
+\subsubsection{Example}
 
 	\begin{itemize}
 	\item $\mathcal{U} = \{ 0, 1, 2, 3, 4, 5, 6, 7\}$ similar to example in figure 7.1
 	\item Suppose $x = 3$
 	\end{itemize}
-
+	
 	Calculating $d_{h + 1}$ reduces to calculating 	$ \mathcal{D}_{r}(x, \textbf{1})$ because $d_{h}$ is known.  \\
 
 	In our case, we'd like to calculate $\mathcal{D}_{r}(3, \textbf{1})$, i.e. the digest of the root node with respect 3. \\
@@ -88,22 +109,22 @@ where $v_{11}$ is the left child of $r$, and $\mathcal{D}_{v_{11}}$ is the parti
 %\item What are the roles of the secret and public key as inputs?  In the previous email, you said the prover generates the secret key and does not output it. Therefore, the verifier can't have any value here for $sk$ besides null.
 %\end{enumerate}
 
-\section{Algorithm 4: updateProver}
-\subsection{Input}
+\subsection{ 4: updateProver}
+\subsubsection{Input}
 	\begin{itemize}
 	\item $x$: $x \in \mathcal{U}$ is the current element of the stream
 	\item $pk$:  public key
 	\item $D_{h}$: The table, \textbf{T} which represents leaves of the Merkle tree described by the scheme
 	\item $auth(D_{h})$: The auxiliary information allowing authentication of the elements in $D_{h}$ including all labels $\lambda(v_{i})$ for internals nodes and $d_{h}$, the root digest of the whole tree.
 	\end{itemize}
-\subsection{Output}
+\subsubsection{Output}
 
 	\begin{itemize}
 	\item $D_{h + 1}$: Updated table \textbf{T}
 	\item $auth(D_{h + 1})$: Updated labels and root digest
 	\end{itemize}
 
-\subsection{Example}
+\subsubsection{Example}
 
 Using the same scenario as the verifier example where $x = 3$, the updated labels is given by:
 
@@ -150,9 +171,11 @@ Calculating each $\lambda(v_{i})$ is straight forward.  In the last example, we 
 	\item \textbf{NTL 5.5.2} : A free software written in C++ providing data structures and algorithms for arbitrary length
 	integers, for vectors, matrices and polynomials over the integers and over the finite fields and for 
 	arbitrary precision floating point arithmetic. \texttt{http://shoup.net/ntl/}
-	\item \textbf{MAGMA V2.18} : The kernel of Magma contains implementations of many ofthe important concrete classes of 
+	\item \textbf{MAGMA V2.18} : The kernel of Magma contains implementations of many of
+the important concrete classes of 
 	structure in five fundamental branches of algebra, namely group theory, ring theory, field theory, 
-	module theory and the theory of algebras. In addition, certainfamilies of structures from algebraic 
+	module theory and the theory of algebras. In addition, certain
+families of structures from algebraic 
 	geometry and finite incidence geometry are included. \texttt{http://magma.maths.usyd.edu.au/}
 	\end{enumerate}
 
@@ -220,6 +243,11 @@ Calculating each $\lambda(v_{i})$ is straight forward.  In the last example, we 
 	\item $ \Theta(n^{2.376}) $ \\
 	\end{itemize}
 
+	
+	
+\section{Future Work}
+
+	For the remaining time in the semester, we plan to implement our idea in Ruby and then move on to implenting the structure to the right library such as MAGMA. We aim to design and implement the scheme for applications that can fully enable efficient verification of data structure queries on a stream. In addition, we will be meeting with Elaine (and Babis via Skype) to discuss and exchange thoughts about our approach to solve the problem as we have already practiced it before.
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
