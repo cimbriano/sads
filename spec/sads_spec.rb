@@ -92,7 +92,7 @@ describe Sads do
 			pending
 		end
 
-		it "should update the digest of the tree" do
+		it "should update the root digest of the tree" do
 			pending
 		end
 	end # describe remove element
