@@ -1,0 +1,13 @@
+Data Structures:
+  ☐ Pick type for digest
+  ☐ What should leaves actually store: key is ele (or some identifier for that element) but what is value?
+  
+
+--- ✄ -----------------------
+
+Methods:
+  ☐ Test add updates labels correctly
+  ☐ Test add updates digest correctly
+  ☐ Test remove updated labels correctly
+  ☐ Test remove updates digest correctly
+  ✔ Implement exists? @done (12-10-24 23:11)
