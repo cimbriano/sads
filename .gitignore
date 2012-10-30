@@ -6,3 +6,7 @@
 *.pdf
 *.synctex.gz
 *.log
+
+# Sublime Text 2
+sads.sublime-project
+sads.sublime-workspace
