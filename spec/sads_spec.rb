@@ -47,7 +47,8 @@ describe Sads do
 	describe "initialize" do
 
 		it "should initialize L vector" do
-			pending "Needs specification"
+			expect(@sad.L.size).to eq(10)
+			# pending "Needs specification"
 		end
 
 		it "should initialize R vector" do
