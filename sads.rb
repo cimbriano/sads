@@ -33,35 +33,13 @@ class Sads
 	def initialize()
 		# Input parameteres?
 		#  # Size of Universe
+				
+		@k = 5
+		@q = 17
+		@mu   = calculate_mu(@k, @q)
 		
-		@k = 500
-		# @stream_bound_n = poly(k)
-		
-		q    = calculate_q(@stream_bound_n, @k, 1)
-		mu   = calculate_mu(@k, q)
-		beta = calculate_beta(4, 9)
+		init_L_R
 
-
-		# m = mu / 2
-		m = 10
-
-		dim = @k * m
-		l_array = Array.new
-		dim.times do 
-			l_array.push rand(q) 
-		end
-
-		r_array = Array.new
-		dim.times do 
-			r_array.push rand(q) 
-		end
-
-		@L = Vector.elements(l_array)
-		@R = Vector.elements(r_array)
-
-		@labels = {}
-		@leaves = {}
-		# @digest = 0
 	end
 
 
@@ -77,20 +55,32 @@ class Sads
 		return leaves.include?(ele)
 	end
 
-	private
+	# private below here
 
-	def calculate_q(n, k, w)
+	def calculate_q(n, k)
 		# q is the smallest prime satisfying
 		# 
 		# q / log (q + 1) >= n * 2k * w( sqrt(k * log k))
+		
+		# Temporarily Set to arbirary value
+		n * k
 	end
 
 	def calculate_mu(k, q)
-		#2 * k * round_up(log q)
+		2 * k * Math.log2(q).ceil
 	end
 
 	def calculate_beta(n, mu)
 		n * Math.sqrt(mu)
+	end
+
+	def init_L_R
+		@L = Matrix.build(@k, @mu / 2) { rand @q }
+		@R = Matrix.build(@k, @mu / 2) { rand @q }
+	end
+
+	def hash(x, y)
+		@L * x + @R * y
 	end
 	# end private
 end
