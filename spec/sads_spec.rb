@@ -34,6 +34,14 @@ describe Sads do
 		it "should have a field called digest" do
 			@sad.should respond_to(:digest)
 		end
+
+		describe "L and R vectors" do
+
+			it "should be a vector sized k * m and have elements in Z_q" do
+				pending "Not implemented"
+			end
+
+		end #describe L and R vectors
 	end # describe instance fields
 
 	describe "initialize" do
