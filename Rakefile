@@ -32,6 +32,12 @@ Rake::TestTask.new(:test) do |test|
   test.verbose = true
 end
 
+
+task :coverage do
+  ENV['COVERAGE'] = "true"
+  Rake::Task["test"].execute
+end
+
 #require 'simplecov/simplecovtask'
 #SimpleCov::SimpleCovTask.new do |test|
 #  test.libs << 'test'

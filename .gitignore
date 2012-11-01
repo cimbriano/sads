@@ -13,3 +13,6 @@ sads.sublime-workspace
 
 # rdoc generated
 rdoc
+
+# simplecov generated
+coverage
