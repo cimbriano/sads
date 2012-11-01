@@ -10,3 +10,6 @@
 # Sublime Text 2
 sads.sublime-project
 sads.sublime-workspace
+
+# rdoc generated
+rdoc
