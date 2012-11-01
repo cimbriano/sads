@@ -32,19 +32,12 @@ Rake::TestTask.new(:test) do |test|
   test.verbose = true
 end
 
-
+# coverage task is not a Rake::Task b/c of issue described here: 
+# https://github.com/colszowka/simplecov/issues/37
 task :coverage do
   ENV['COVERAGE'] = "true"
   Rake::Task["test"].execute
 end
-
-#require 'simplecov/simplecovtask'
-#SimpleCov::SimpleCovTask.new do |test|
-#  test.libs << 'test'
-#  test.pattern = 'test/**/test_*.rb'
-#  test.verbose = true
-#  test.rcov_opts << '--exclude "gems/*"'
-#end
 
 task :default => :test
 
