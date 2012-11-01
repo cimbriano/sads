@@ -1,5 +1,5 @@
 require 'simplecov'
-SimpleCov.start if ENV['COVERAGE']
+#SimpleCov.start if ENV['COVERAGE']
 
 require 'rubygems'
 require 'bundler'
