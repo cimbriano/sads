@@ -25,18 +25,30 @@ Most of the existing streaming verifiable protocols are efficient in terms of ve
 
 %In the following, we will represent the steps that the streaming authenticated data structure follows to implement range search queries.
 Taking into account that the bottomline of our scheme is the Merkle tree structure and using lattice based hash
-function with homomorphic property, we are implementing the algorithm in Ruby language at this stage and 
-defining classes for actually testing and configuring different steps in the algorithm. \\
+function with homomorphic property, we are implementing the algorithm in Python or Ruby language at this stage and 
+actually testing and configuring different steps in the algorithm i.e. \texttt{genkey, initialize, updateVerifier, updateProver, query, verify}.   \\
 
-Languages such as Python or Ruby support 
+Languages such as Python or Ruby have support for their community of users that grows up and that
+is one of its most important strengths. Ruby has a vibrant and growing community that is friendly towards
+people of all skill levels. Such groups allow users to network with other Ruby
+programmers.  \\
 
-\subsection{ Parts completed so far}
+As for Python, NumPy is an extension module which provides efficient operations on arrays of data allowing
+Python to operate as a high level language for manipulating numerical data.
+In addition, SciPy is a set of open source scientific and numerical tools for Python. It can 
+support special functions, integration, differential equation solvers, etc. \\
+
+We are also thinking to use some software system such as EventMachine that is designed for writing
+scalable applications in Ruby. EventMachine has been used for making various libraries and frameworks
+in which concurrency is considered. Examples of such application could be
+web servers and proxies, email and IM, authentication and authorization processors and 
+network applications. \\
 
 
-We started by to generate a secret and public key depending on the size of the stream and the 
+In our work, we have generated a secret and public key depending on the size of the stream and the 
 security parameter. The next step was to generate the hash function according to each left and right leaf. 
 The hash function is computed as $ h(x,y) = Lx + Ry $ where \textbf{L, R} are selected randomly from $Z_{q}^{k \times m}$ and
-\textbf{x,y} are vectors of small norm.
+\textbf{x,y} are vectors of small norm. \\
 
 
 
@@ -47,7 +59,7 @@ The hash function is computed as $ h(x,y) = Lx + Ry $ where \textbf{L, R} are se
 %\item	 In the first algorithm defined on page 10, what does the character in 'sk =  \O' represent? Is that the null set?
 %\end{enumerate}
 
-\subsection{ 2: Initialization}
+%\subsection{ 2: Initialization}
 %\label{initialize}
 
 %initialize takes the secret key and the public key generated in step 1, and an empty dictionary over the universe of elements and produces
@@ -66,7 +78,7 @@ The hash function is computed as $ h(x,y) = Lx + Ry $ where \textbf{L, R} are se
 %\end{enumerate}
 
 
-\subsection{ 3: updateVerifier}
+%\subsection{ 3: updateVerifier}
 %\subsubsection{Inputs}
 %\begin{enumerate}
 %\item $x$ where $x \in \mathcal{U}$ is the current element of the stream
