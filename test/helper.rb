@@ -10,8 +10,8 @@ rescue Bundler::BundlerError => e
 end
 
 require 'minitest/unit'
-require "minitest/reporters"
-MiniTest::Reporters.use! MiniTest::Reporters::SpecReporter.new
+# require "minitest/reporters"
+# MiniTest::Reporters.use! MiniTest::Reporters::SpecReporter.new
 
 #require 'shoulda'
 
