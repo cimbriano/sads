@@ -21,29 +21,54 @@ The introduced scheme, streaming authenticated data structure, does not require 
 
 Most of the existing streaming verifiable protocols are efficient in terms of verifier complexity; it can be observed that in all of them the prover complexity is linear in the size of stream which this limits the applicability of the protocols. Other works include verifiable computation and authenticated data structures, which are not directly applicable to the streaming data set or their application results in increased complexities or interactive protocols. 
 
-\section{Algorithm}
+\section{Our Approach}
 
-In the following, we will represent the steps that the streaming authenticated data structure follows to implement range search queries.
+%In the following, we will represent the steps that the streaming authenticated data structure follows to implement range search queries.
+Taking into account that the bottomline of our scheme is the Merkle tree structure and using lattice based hash
+function with homomorphic property, we are implementing the algorithm in Python or Ruby language at this stage and 
+actually testing and configuring different steps in the algorithm i.e. \texttt{genkey, initialize, updateVerifier, updateProver, query, verify}.   \\
 
-\subsection{ 1: Generate Keys}
+Languages such as Python or Ruby have support for their community of users that grows up and that
+is one of its most important strengths. Ruby has a vibrant and growing community that is friendly towards
+people of all skill levels. Such groups allow users to network with other Ruby
+programmers.  \\
 
-genkey procedure generates a secret and public key.  The public key includes vectors \textbf{L} and \textbf{R} as well as $q$ and $\mathcal{U}$.
+As for Python, NumPy is an extension module which provides efficient operations on arrays of data allowing
+Python to operate as a high level language for manipulating numerical data.
+In addition, SciPy is a set of open source scientific and numerical tools for Python. It can 
+support special functions, integration, differential equation solvers, etc. \\
+
+We are also thinking to use some software system such as EventMachine that is designed for writing
+scalable applications in Ruby. EventMachine has been used for making various libraries and frameworks
+in which concurrency is considered. Examples of such application could be
+web servers and proxies, email and IM, authentication and authorization processors and 
+network applications. \\
+
+
+In our work, we have generated a secret and public key depending on the size of the stream and the 
+security parameter. The next step was to generate the hash function according to each left and right leaf. 
+The hash function is computed as $ h(x,y) = Lx + Ry $ where \textbf{L, R} are selected randomly from $Z_{q}^{k \times m}$ and
+\textbf{x,y} are vectors of small norm. \\
+
+
+
+%genkey procedure generates a secret and public key.  The public key includes vectors \textbf{L} and \textbf{R} as well as $q$ and $\mathcal{U}$.
 
 %Questions on this step:
 %\begin{enumerate}
 %\item	 In the first algorithm defined on page 10, what does the character in 'sk =  \O' represent? Is that the null set?
 %\end{enumerate}
 
-\subsection{ 2: Initialization}
-\label{initialize}
+%\subsection{ 2: Initialization}
+%\label{initialize}
 
-initialize takes the secret key and the public key generated in step 1, and an empty dictionary over the universe of elements and produces
+%initialize takes the secret key and the public key generated in step 1, and an empty dictionary over the universe of elements and produces
 
-\begin{enumerate}
-\item a table \textbf{T} with N entries (0 to N-1) to represent the Merkle tree leaves
-\item initial state $d_{0} = \textbf{0} \in Z_{q}^{k}$ representing the root digest
-\item a label for each internal node: $\lambda(v)$
-\end{enumerate}
+%\begin{enumerate}
+%\item a table \textbf{T} with N entries (0 to N-1) to represent the Merkle tree leaves
+%\item initial state $d_{0} = \textbf{0} \in Z_{q}^{k}$ representing the root digest
+%\item a label for each internal node: $\lambda(v)$
+%\end{enumerate}
 
 
 %Questions on this step:
@@ -53,86 +78,86 @@ initialize takes the secret key and the public key generated in step 1, and an e
 %\end{enumerate}
 
 
-\subsection{ 3: updateVerifier}
-\subsubsection{Inputs}
-\begin{enumerate}
-\item $x$ where $x \in \mathcal{U}$ is the current element of the stream
-\item $d_{h}$ current state of $auth(D_{h})$
-\item sk and pk - secret and public key \\
-\end{enumerate}
-
-\subsubsection{Outputs}
-\begin{enumerate}
-\item $d_{h + 1}$ updated state of $auth(D_{h + 1})$
-\end{enumerate}
-
-\begin{equation}
-d_{h+1} = d_{h} + \mathcal{D}_{r}(x, \textbf{1})
-\end{equation}
-
-\subsubsection{Example}
-
-\begin{itemize}
-\item $\mathcal{U} = \{ 0, 1, 2, 3, 4, 5, 6, 7\}$ similar to example in figure 7.1
-\item Suppose $x = 3$
-\end{itemize}
-
-Calculating $d_{h + 1}$ reduces to calculating 	$ \mathcal{D}_{r}(x, \textbf{1})$ because $d_{h}$ is known.  \\
-
-In our case, we'd like to calculate $\mathcal{D}_{r}(3, \textbf{1})$, i.e. the digest of the root node with respect 3. \\
-
-By definition 10, 
-\begin{equation}
-\mathcal{D}_{r}(3, \textbf{1}) = \textbf{L} \cdot \textbf{b}(\mathcal{D}_{v_{11}}(3, \textbf{x}_{3})) 
-\end{equation}
-where $v_{11}$ is the left child of $r$, and $\mathcal{D}_{v_{11}}$ is the partial digest of $v_{11}$.
-
-This procedure continues for each internal node eventually reaching the leaf node. The partial digest of a leaf node, in our case, that representing the element $x = 3$ is given by:
-
-\begin{equation}
-\mathcal{D}_{3}(3, \textbf{1}) = \textbf{1}
-\end{equation}
-
-Substituting the calculated partial digests for each node in the path from the root to the updated leaf node results in:
-
-\begin{equation}
-\mathcal{D}_{r}(3, \textbf{1}) = \textbf{L} \cdot \textbf{b} ( \textbf{R} \cdot \textbf{b} ( \textbf{R} \cdot \textbf{b} ( \textbf{1} ) )  )
-\end{equation}
-
-Thus, the new digest for the entire tree is given by:
-\begin{equation}
-d_{h+1} = d_{h} + \textbf{L} \cdot \textbf{b} ( \textbf{R} \cdot \textbf{b} ( \textbf{R} \cdot \textbf{b} ( \textbf{1} ) )  )
-\end{equation}
-
-%\subsection{Questions}
+%\subsection{ 3: updateVerifier}
+%\subsubsection{Inputs}
 %\begin{enumerate}
-%\item What are the roles of the secret and public key as inputs?  In the previous email, you said the prover generates the secret key and does not output it. Therefore, the verifier can't have any value here for $sk$ besides null.
+%\item $x$ where $x \in \mathcal{U}$ is the current element of the stream
+%\item $d_{h}$ current state of $auth(D_{h})$
+%\item sk and pk - secret and public key \\
 %\end{enumerate}
-
-\subsection{ 4: updateProver}
-\subsubsection{Input}
-\begin{itemize}
-\item $x$: $x \in \mathcal{U}$ is the current element of the stream
-\item $pk$:  public key
-\item $D_{h}$: The table, \textbf{T} which represents leaves of the Merkle tree described by the scheme
-\item $auth(D_{h})$: The auxiliary information allowing authentication of the elements in $D_{h}$ including all labels $\lambda(v_{i})$ for internals nodes and $d_{h}$, the root digest of the whole tree.
-\end{itemize}
-\subsubsection{Output}
-
-\begin{itemize}
-\item $D_{h + 1}$: Updated table \textbf{T}
-\item $auth(D_{h + 1})$: Updated labels and root digest
-\end{itemize}
-
-\subsubsection{Example}
-
-Using the same scenario as the verifier example where $x = 3$, the updated labels is given by:
-
-\begin{equation}
-\lambda(v_{i}) = \lambda(v_{i}) + \textbf{b}( \mathcal{D}_{v_{i}}(3, \textbf{1}) ) \textrm{ for } i = \ell, \ell -1, \ldots, 1  
-\end{equation}
-
-Calculating each $\lambda(v_{i})$ is straight forward.  In the last example, we understood how to calculate a partial digest, and the $\textbf{b}()$ function is well-defined.
+% 
+% \subsubsection{Outputs}
+% \begin{enumerate}
+% \item $d_{h + 1}$ updated state of $auth(D_{h + 1})$
+% \end{enumerate}
+% 
+% \begin{equation}
+% d_{h+1} = d_{h} + \mathcal{D}_{r}(x, \textbf{1})
+% \end{equation}
+% 
+% \subsubsection{Example}
+% 
+% \begin{itemize}
+% \item $\mathcal{U} = \{ 0, 1, 2, 3, 4, 5, 6, 7\}$ similar to example in figure 7.1
+% \item Suppose $x = 3$
+% \end{itemize}
+% 
+% Calculating $d_{h + 1}$ reduces to calculating 	$ \mathcal{D}_{r}(x, \textbf{1})$ because $d_{h}$ is known.  \\
+% 
+% In our case, we'd like to calculate $\mathcal{D}_{r}(3, \textbf{1})$, i.e. the digest of the root node with respect 3. \\
+% 
+% By definition 10, 
+% \begin{equation}
+% \mathcal{D}_{r}(3, \textbf{1}) = \textbf{L} \cdot \textbf{b}(\mathcal{D}_{v_{11}}(3, \textbf{x}_{3})) 
+% \end{equation}
+% where $v_{11}$ is the left child of $r$, and $\mathcal{D}_{v_{11}}$ is the partial digest of $v_{11}$.
+% 
+% This procedure continues for each internal node eventually reaching the leaf node. The partial digest of a leaf node, in our case, that representing the element $x = 3$ is given by:
+% 
+% \begin{equation}
+% \mathcal{D}_{3}(3, \textbf{1}) = \textbf{1}
+% \end{equation}
+% 
+% Substituting the calculated partial digests for each node in the path from the root to the updated leaf node results in:
+% 
+% \begin{equation}
+% \mathcal{D}_{r}(3, \textbf{1}) = \textbf{L} \cdot \textbf{b} ( \textbf{R} \cdot \textbf{b} ( \textbf{R} \cdot \textbf{b} ( \textbf{1} ) )  )
+% \end{equation}
+% 
+% Thus, the new digest for the entire tree is given by:
+% \begin{equation}
+% d_{h+1} = d_{h} + \textbf{L} \cdot \textbf{b} ( \textbf{R} \cdot \textbf{b} ( \textbf{R} \cdot \textbf{b} ( \textbf{1} ) )  )
+% \end{equation}
+% 
+% %\subsection{Questions}
+% %\begin{enumerate}
+% %\item What are the roles of the secret and public key as inputs?  In the previous email, you said the prover generates the secret key and does not output it. Therefore, the verifier can't have any value here for $sk$ besides null.
+% %\end{enumerate}
+% 
+% \subsection{ 4: updateProver}
+% \subsubsection{Input}
+% \begin{itemize}
+% \item $x$: $x \in \mathcal{U}$ is the current element of the stream
+% \item $pk$:  public key
+% \item $D_{h}$: The table, \textbf{T} which represents leaves of the Merkle tree described by the scheme
+% \item $auth(D_{h})$: The auxiliary information allowing authentication of the elements in $D_{h}$ including all labels $\lambda(v_{i})$ for internals nodes and $d_{h}$, the root digest of the whole tree.
+% \end{itemize}
+% \subsubsection{Output}
+% 
+% \begin{itemize}
+% \item $D_{h + 1}$: Updated table \textbf{T}
+% \item $auth(D_{h + 1})$: Updated labels and root digest
+% \end{itemize}
+% 
+% \subsubsection{Example}
+% 
+% Using the same scenario as the verifier example where $x = 3$, the updated labels is given by:
+% 
+% \begin{equation}
+% \lambda(v_{i}) = \lambda(v_{i}) + \textbf{b}( \mathcal{D}_{v_{i}}(3, \textbf{1}) ) \textrm{ for } i = \ell, \ell -1, \ldots, 1  
+% \end{equation}
+% 
+% Calculating each $\lambda(v_{i})$ is straight forward.  In the last example, we understood how to calculate a partial digest, and the $\textbf{b}()$ function is well-defined.
 
 %\subsection{Questions}
 
@@ -205,43 +230,43 @@ requirements accordingly.
 
 %\end{enumerate}
 
-\section{Matrix Multiplication in Ruby}
-
-
-\subsection{The \texttt{[row $\times$ column]} multiplication:}
-\begin{itemize}
-\item $ C = A_{n \times n} \times B_{n \times n}$
-\item where $ c_{ij} = \sum\limits_{k=1}^n a_{ik} . b_{kj}   $
-\item complexity : $\Theta(n^3)$ \\
-\end{itemize}
-
-
-\subsection{Divide and Conquer}
-
-\begin{itemize}
-
-\item Each of the matrices is divided into four $\frac{n}{2} \times \frac{n}{2}$
-\item The multiplication of two $ n \times  n $ matrices is reduced to 8 multiplications of 
-two $\frac{n}{2} \times \frac{n}{2}$ matrices and four $\frac{n}{2} \times \frac{n}{2}$ matrix additions.
-\item recurrence : $T(n) = 8.T. \frac{n}{2} + \Theta(n^2) \rightarrow \Theta(n^3)$ \\
-\end{itemize}
-
-\subsection{Strassen's Algorithm}
-
-\begin{itemize}
-
-\item Bulky for implementation and not numerically stable
-\item Useful and advantageous for large matrices
-\item $ \Theta(n^{log7}) \approx \Theta(n^{2.807})$ \\
-\end{itemize}
-
-\subsection{Coppersmith Winograd Algorithm}
-
-\begin{itemize}
-
-\item Theoretical optimum; never used in practice.
-\item $ \Theta(n^{2.376}) $ \\
-\end{itemize}
+% \section{Matrix Multiplication in Ruby}
+% 
+% 
+% \subsection{The \texttt{[row $\times$ column]} multiplication:}
+% \begin{itemize}
+% \item $ C = A_{n \times n} \times B_{n \times n}$
+% \item where $ c_{ij} = \sum\limits_{k=1}^n a_{ik} . b_{kj}   $
+% \item complexity : $\Theta(n^3)$ \\
+% \end{itemize}
+% 
+% 
+% \subsection{Divide and Conquer}
+% 
+% \begin{itemize}
+% 
+% \item Each of the matrices is divided into four $\frac{n}{2} \times \frac{n}{2}$
+% \item The multiplication of two $ n \times  n $ matrices is reduced to 8 multiplications of 
+% two $\frac{n}{2} \times \frac{n}{2}$ matrices and four $\frac{n}{2} \times \frac{n}{2}$ matrix additions.
+% \item recurrence : $T(n) = 8.T. \frac{n}{2} + \Theta(n^2) \rightarrow \Theta(n^3)$ \\
+% \end{itemize}
+% 
+% \subsection{Strassen's Algorithm}
+% 
+% \begin{itemize}
+% 
+% \item Bulky for implementation and not numerically stable
+% \item Useful and advantageous for large matrices
+% \item $ \Theta(n^{log7}) \approx \Theta(n^{2.807})$ \\
+% \end{itemize}
+% 
+% \subsection{Coppersmith Winograd Algorithm}
+% 
+% \begin{itemize}
+% 
+% \item Theoretical optimum; never used in practice.
+% \item $ \Theta(n^{2.376}) $ \\
+% \end{itemize}
 
 
 
