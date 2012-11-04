@@ -1,6 +1,4 @@
 require 'simplecov'
-#SimpleCov.start if ENV['COVERAGE']
-
 require 'rubygems'
 require 'bundler'
 begin
@@ -10,12 +8,18 @@ rescue Bundler::BundlerError => e
   $stderr.puts "Run `bundle install` to install missing gems"
   exit e.status_code
 end
-require 'test/unit'
-require 'shoulda'
+
+require 'minitest/unit'
+require "minitest/reporters"
+MiniTest::Reporters.use! MiniTest::Reporters::SpecReporter.new
+
+#require 'shoulda'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'sads'
 
-class Test::Unit::TestCase
+class MiniTest::Unit::TestCase
 end
+
+MiniTest::Unit.autorun

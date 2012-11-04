@@ -1,6 +1,6 @@
 require 'helper'
 
-class TestSads < Test::Unit::TestCase
+class TestSads < MiniTest::Unit::TestCase
 	def setup
 		@sad = Sads.new
 	end
