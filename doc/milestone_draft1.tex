@@ -1,274 +1,100 @@
 \documentclass[11pt, letterpaper, oneside]{article}
 \usepackage{enumerate}
-\usepackage{calc}
+\usepackage{ calc }
 \usepackage{ amssymb }
 
 \begin{document}
 
-\title{\textbf{ CMCS 818J Project Milestone Report } \\  \small{Christopher Imbriano \& Behzad Koosha}}
+\title{CMCS 818J Project Milestone Report}
+\author{Behzad Koosha, Christopher Imbriano}
+
 \maketitle
 
 \section{Abstract}
 
-As it has been described in the project proposal, the aim for this project is to present and implement a new model for verifying data structure queries in a streaming scenario.
-The proposed scheme gives rise to new cryptographic constructions with improved properties such as dynamic cryptographic accumulator; parallel online memory checking and a space efficient three party authenticated data structure.
+	A scheme for achieving a streaming authenticated data structure (SADS) was proposed by Papamanthou and Shi \cite{sads}.
+	The goal of this project is twofold.
+	First, we will implement an example of this data structure and second, we will build an application using the SADS primitive.
 
 
 \section{Introduction}
 
-The introduced scheme, streaming authenticated data structure, does not require any interaction between the client and the server while the stream is observed.
-Three important properties is obtained using this scheme : a. Independence of prover and verifier : the prover and the verifier update their status independently and with no interaction. b. Efficiency : It can be shown that an exponential improvement for many commonly queries in the prover's running time can be achieved. c. Expressiveness : a wide range of queries such as membership/ non-membership, successor, range search and frequencies can be supported using this scheme.
-
-\section{Previous Work}
-
-Most of the existing streaming verifiable protocols are efficient in terms of verifier complexity; it can be observed that in all of them the prover complexity is linear in the size of stream which this limits the applicability of the protocols.
-Other works include verifiable computation and authenticated data structures, which are not directly applicable to the streaming data set or their application results in increased complexities or interactive protocols.
+	The introduced scheme, streaming authenticated data structure, does not require any interaction between the client and the server while the stream is observed.
+	Three important properties are obtained using this scheme :
+	\begin{enumerate}[a.]
+	\item Independence of prover and verifier : the prover and the verifier update their status independently and with no interaction.
+	\item Efficiency : It can be shown that an exponential improvement for many commonly queries in the prover's running time can be achieved.
+	\item Expressiveness : a wide range of queries such as membership/ non-membership, successor, range search and frequencies can be supported using this scheme.
+	\end{enumerate}
 
 \section{Our Approach}
 
-%In the following, we will represent the steps that the streaming authenticated data structure follows to implement range search queries.
-Taking into account that the bottomline of our scheme is the Merkle tree structure and using lattice based hash function with homomorphic property, we are implementing the algorithm in ython or Ruby language at this stage and actually testing and configuring different steps in the algorithm i.e. \texttt{genkey, initialize, updateVerifier, updateProver, query, verify}.
+	The description of the SADS scheme reads much like a protocol, focusing on the behaviour of each of the prover and verifier during a streaming phase and a query phase.
+	Before tackling the problem at the protocol level however, we must first implement the basic data structures each of the verifier and prover will need to perform their roles.
+	This will be our starting point.
 
-Languages such as Python or Ruby have support for their community of users that grows up and that
-is one of its most important strengths.
-Ruby has a vibrant and growing community that is friendly towards people of all skill levels.
-Such groups allow users to network with other Ruby programmers.
+	The road map for this project is as follows:
+	\begin{enumerate}
+	\item Implement underlying Merkle tree with homomorphic hash function
+	\item Implement the SADS scheme
+	\item Develop proof-of-concept application using the SADS scheme implementation
+	\end{enumerate}
 
-As for Python, NumPy is an extension module which provides efficient operations on arrays of data allowing Python to operate as a high level language for manipulating numerical data.
-In addition, SciPy is a set of open source scientific and numerical tools for Python.
-It can support special functions, integration, differential equation solvers, etc.
+	\subsection{Underlying Data Structures}
 
-We are also thinking to use some software system such as EventMachine that is designed for writing
-scalable applications in Ruby.
-EventMachine has been used for making various libraries and frameworks in which concurrency is considered.
-Examples of such application could be web servers and proxies, email and IM, authentication and authorization processors and network applications.
+	A crucial component of the SADS algorithm relies on matrix multiplication, a relatively expensive computational operation.
+	When formulating our plan of action for this project, we were recommended a few linear algebra libraries, which will be discussed in a later section.
+	While we recognize the importance of fast matrix operations and parallelism for production quality code, we thought that the added complexity, as well as unknowns with respect to implementation details, would be prohibitive.
+	Instead, we've decided to use an interpreted language and the simple matrix operations that come with the standard libraries to start.
+
+	Our language of choice for this first stage of the project is Ruby. Ruby has a number of advantages including:
+
+	\begin{enumerate}
+	\item Built-in support of matrix and vector operations
+	\item Vibrant developer community that supports both new and experienced developers through learning resources, tool development, etc...
+	\item Ability to write compiled extensions in C
+	\item Numeric and visualization library, SciRuby
+	\end{enumerate}
+
+	\subsection{SADS Scheme}
+
+	Once the underlying data structure is complete, the SADS scheme will use it as a primitive.
+	Though one of the scheme's strengths is the independence of the prover and verifier during the streaming setting, the two parties will necessarily need to communicate during the query phase.
+	Additionally, there may be communication between the two parties to initiate the streaming setting.
+	For these reasons, we anticipate creating an application which will require network communication as it will likely be the case that the verifier and prover are not collocated.
+
+	We have a few frameworks in mind for this task.
+	Two of our options at the moment are EventMachine and Node.js.
+	Node.js is a "platform for building fast, scalable network applications" and has been gaining popularity in the Ruby community. http://nodejs.org/
+	EventMachine is a "fast, simple event-processing library for Ruby programs."http://rubyeventmachine.com/
 
 
-In our work, we have generated a secret and public key depending on the size of the stream and the security parameter.
-The next step was to generate the hash function according to each left and right leaf.
-The hash function is computed as $ h(x,y) = Lx + Ry $ where \textbf{L, R} are selected randomly from $Z_{q}^{k \times m}$ and
-\textbf{x,y} are vectors of small norm.
-
-
+% In our work, we have generated a secret and public key depending on the size of the stream and the security parameter.
+% The next step was to generate the hash function according to each left and right leaf.
+% The hash function is computed as $ h(x,y) = Lx + Ry $ where \textbf{L, R} are selected randomly from $Z_{q}^{k \times m}$ and
+% \textbf{x,y} are vectors of small norm.
 
 %genkey procedure generates a secret and public key.  The public key includes vectors \textbf{L} and \textbf{R} as well as $q$ and $\mathcal{U}$.
 
-%Questions on this step:
-%\begin{enumerate}
-%\item	 In the first algorithm defined on page 10, what does the character in 'sk =  \O' represent? Is that the null set?
-%\end{enumerate}
 
-%\subsection{ 2: Initialization}
-%\label{initialize}
+\section{Looking Forward}
 
-%initialize takes the secret key and the public key generated in step 1, and an empty dictionary over the universe of elements and produces
+	\subsection{Production Quality Libraries}
+	It is yet to be seen whether the existing Ruby matrix libraries, either the built in or SciRuby, will be sufficiently efficient for the needs of the SADS scheme.
+	That's not to say the current choices of technologies will not produce production quality code but, as mentioned earlier, we have been investigating some optimized libraries listed here.
 
-%\begin{enumerate}
-%\item a table \textbf{T} with N entries (0 to N-1) to represent the Merkle tree leaves
-%\item initial state $d_{0} = \textbf{0} \in Z_{q}^{k}$ representing the root digest
-%\item a label for each internal node: $\lambda(v)$
-%\end{enumerate}
+	\begin{enumerate}
+	\item \textbf{NTL 5.5.2} : A free software written in C++ providing data structures and algorithms for arbitrary length integers, for vectors, matrices and polynomials over the integers and over the finite fields and for arbitrary precision floating point arithmetic. \texttt{http://shoup.net/ntl/}
+	\item \textbf{MAGMA V2.18} : The kernel of Magma contains implementations of many of the important concrete classes of structure in five fundamental branches of algebra, namely group theory, ring theory, field theory, module theory and the theory of algebras.
+	In addition, certain families of structures from algebraic geometry and finite incidence geometry are included. \texttt{http://magma.maths.usyd.edu.au/}
+	\end{enumerate}
 
+	\subsection{Semester Outlook}
+		While the ultimate goal of the project is to produce a proof-of-concept application which utilizes a SADS scheme, it is best to set manage expectations.
+		Our baseline target for this semester is to complete the first two layers described above, that is the underlying data structure and the SADS scheme primitive.
+		Having completed these two components, we can then establish time line during which the proof-of-concept application can be hashed out and developed.
+		We hope to leverage the Ruby and broader open-source community by packaging this application, or just the SADS scheme primitive, into a library for others to use and provide feedback.
 
-%Questions on this step:
-%\begin{enumerate}
-%\item What are the dimensions of table \textbf{T}?  ( $N \times ?$ )
-%\item What does q mean in the context of $Z_{q}^{k}$?  Is this a set of $k \times 1$ vectors or a set of $q \times k$ matrices?
-%\end{enumerate}
-
-
-%\subsection{ 3: updateVerifier}
-%\subsubsection{Inputs}
-%\begin{enumerate}
-%\item $x$ where $x \in \mathcal{U}$ is the current element of the stream
-%\item $d_{h}$ current state of $auth(D_{h})$
-%\item sk and pk - secret and public key \\
-%\end{enumerate}
-%
-% \subsubsection{Outputs}
-% \begin{enumerate}
-% \item $d_{h + 1}$ updated state of $auth(D_{h + 1})$
-% \end{enumerate}
-%
-% \begin{equation}
-% d_{h+1} = d_{h} + \mathcal{D}_{r}(x, \textbf{1})
-% \end{equation}
-%
-% \subsubsection{Example}
-%
-% \begin{itemize}
-% \item $\mathcal{U} = \{ 0, 1, 2, 3, 4, 5, 6, 7\}$ similar to example in figure 7.1
-% \item Suppose $x = 3$
-% \end{itemize}
-%
-% Calculating $d_{h + 1}$ reduces to calculating 	$ \mathcal{D}_{r}(x, \textbf{1})$ because $d_{h}$ is known.  \\
-%
-% In our case, we'd like to calculate $\mathcal{D}_{r}(3, \textbf{1})$, i.e. the digest of the root node with respect 3. \\
-%
-% By definition 10,
-% \begin{equation}
-% \mathcal{D}_{r}(3, \textbf{1}) = \textbf{L} \cdot \textbf{b}(\mathcal{D}_{v_{11}}(3, \textbf{x}_{3}))
-% \end{equation}
-% where $v_{11}$ is the left child of $r$, and $\mathcal{D}_{v_{11}}$ is the partial digest of $v_{11}$.
-%
-% This procedure continues for each internal node eventually reaching the leaf node. The partial digest of a leaf node, in our case, that representing the element $x = 3$ is given by:
-%
-% \begin{equation}
-% \mathcal{D}_{3}(3, \textbf{1}) = \textbf{1}
-% \end{equation}
-%
-% Substituting the calculated partial digests for each node in the path from the root to the updated leaf node results in:
-%
-% \begin{equation}
-% \mathcal{D}_{r}(3, \textbf{1}) = \textbf{L} \cdot \textbf{b} ( \textbf{R} \cdot \textbf{b} ( \textbf{R} \cdot \textbf{b} ( \textbf{1} ) )  )
-% \end{equation}
-%
-% Thus, the new digest for the entire tree is given by:
-% \begin{equation}
-% d_{h+1} = d_{h} + \textbf{L} \cdot \textbf{b} ( \textbf{R} \cdot \textbf{b} ( \textbf{R} \cdot \textbf{b} ( \textbf{1} ) )  )
-% \end{equation}
-%
-% %\subsection{Questions}
-% %\begin{enumerate}
-% %\item What are the roles of the secret and public key as inputs?  In the previous email, you said the prover generates the secret key and does not output it. Therefore, the verifier can't have any value here for $sk$ besides null.
-% %\end{enumerate}
-%
-% \subsection{ 4: updateProver}
-% \subsubsection{Input}
-% \begin{itemize}
-% \item $x$: $x \in \mathcal{U}$ is the current element of the stream
-% \item $pk$:  public key
-% \item $D_{h}$: The table, \textbf{T} which represents leaves of the Merkle tree described by the scheme
-% \item $auth(D_{h})$: The auxiliary information allowing authentication of the elements in $D_{h}$ including all labels $\lambda(v_{i})$ for internals nodes and $d_{h}$, the root digest of the whole tree.
-% \end{itemize}
-% \subsubsection{Output}
-%
-% \begin{itemize}
-% \item $D_{h + 1}$: Updated table \textbf{T}
-% \item $auth(D_{h + 1})$: Updated labels and root digest
-% \end{itemize}
-%
-% \subsubsection{Example}
-%
-% Using the same scenario as the verifier example where $x = 3$, the updated labels is given by:
-%
-% \begin{equation}
-% \lambda(v_{i}) = \lambda(v_{i}) + \textbf{b}( \mathcal{D}_{v_{i}}(3, \textbf{1}) ) \textrm{ for } i = \ell, \ell -1, \ldots, 1
-% \end{equation}
-%
-% Calculating each $\lambda(v_{i})$ is straight forward.  In the last example, we understood how to calculate a partial digest, and the $\textbf{b}()$ function is well-defined.
-
-%\subsection{Questions}
-
-%From the algorithm $updateProver$ on page 10,
-
-%\begin{quote}
-%The algorithm sets $\textbf{T}[x]$ = $\textbf{T}[x] + \textbf{1}$, outputting the updated $\textbf{T}[x]$ as $D_{h + 1}$. Let now
-%$v_{\ell}$, $\ldots$, $v_{1}$ be the path in the lattice-based Merkle tree $T$ from node $v_{\ell}$ ($v_{\ell}$ stores the value  $\textbf{T}[x]$) to the child $v_{1}$ of the root $r$ of $T$.
-%\end{quote}
-
-
-%\begin{enumerate}
-%\item How is  $\ell$ calculated in our scenario?
-
-%\item What is meant by ``$v_{\ell}$ stores the value $\textbf{T}[x]$''? Is $v_{\ell}$ the leaf node of the Merkle tree?  If so, equation 5.5 would update a label for $v_{\ell}$, but that contradicts our understanding of the $initialize$ algorithm which assigns labels for only internal nodes.
-
-
-%\item Looking at the tree in Figure 7.1, we think the path is ($v_{22}$, $v_{11}$) where $\ell = 2$, because these are the only internal nodes for which there is a label to update.  (The root has a digest, $d_{h}$, and the leaf node has an entry in $\textbf{T}$.)  Additionally, the algorithm states the path is from $v_{\ell}$ to ``the child $v_{1}$ of the root $r$ of $T$" suggesting that the last element of the path in question is the child of the root node, not the root node itself. Is this correct?
-
-%\item A notation question about the statement ``outputting the updated $\textbf{T}[x]$ as $D_{h + 1}$".  Isn't \textbf{T} the whole table, whereas $\textbf{T}[x]$ is an element in \textbf{T}.  If so, is there not a type mismatch in that statement, where $D_{h + 1}$ is the whole data structure and $\textbf{T}[x]$ is just one element?
-
-%\item When/where does the root digest get updated (especially if our understanding of the path in the questions 2 and 3 is correct, i.e. the root is not included in that path)?  Shouldn't there be a similar update for the root or the root digest?
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Implementation Issues}
-\subsection{Proof of Concept}
-\begin{enumerate}
-\item In order to implement a streaming authenticated data structure based on lattices, a fast
-arithmetic library for matrices and vector is required.
-\item Matrix multiplication mod \texttt{q} ( \texttt{q poly(k)}) is needed.
-\end{enumerate}
-
-\subsection{Applicable Libraries}
-\begin{enumerate}
-\item \textbf{NTL 5.5.2} : A free software written in C++ providing data structures and algorithms for arbitrary length
-integers, for vectors, matrices and polynomials over the integers and over the finite fields and for
-arbitrary precision floating point arithmetic. \texttt{http://shoup.net/ntl/}
-\item \textbf{MAGMA V2.18} : The kernel of Magma contains implementations of many of the important concrete classes of structure in five fundamental branches of algebra, namely group theory, ring theory, field theory, module theory and the theory of algebras.
-In addition, certain families of structures from algebraic geometry and finite incidence geometry are included. \texttt{http://magma.maths.usyd.edu.au/}
-\end{enumerate}
-
-\subsection{ Library Prototype}
-
-We decided to start a feasible implementation of the model by trying to find the right library
-for matrix operations and arbitrary precision floating point arithmetics.
-In our investigations, we had the following observations :
-
-\begin{itemize}
-
-\item It seems that there has been more recent updates and user discussion links regarding MAGMA
-and the library has attracted more draw in terms of being more up to dated and user-friendly.
-\item MAGMA is a collection of linear algebra GPU accelerated libraries designed and implemented
-by the team that developed LAPACK.
-Since we were not completely sure about MAGMA's dependency on CUDA and other related libraries we did not go into further detail at this stage.
-\item We decided to work with Ruby (or Python) for the first implementation since they both have a
-standard library documentation for matrices.
-\item Starting with this idea, we can smoothly find the best matching library for our system
-model which helps us to know exactly what requirements we need and which library matches these
-requirements accordingly.
-\end{itemize}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-%\end{enumerate}
-
-% \section{Matrix Multiplication in Ruby}
-%
-%
-% \subsection{The \texttt{[row $\times$ column]} multiplication:}
-% \begin{itemize}
-% \item $ C = A_{n \times n} \times B_{n \times n}$
-% \item where $ c_{ij} = \sum\limits_{k=1}^n a_{ik} . b_{kj}   $
-% \item complexity : $\Theta(n^3)$ \\
-% \end{itemize}
-%
-%
-% \subsection{Divide and Conquer}
-%
-% \begin{itemize}
-%
-% \item Each of the matrices is divided into four $\frac{n}{2} \times \frac{n}{2}$
-% \item The multiplication of two $ n \times  n $ matrices is reduced to 8 multiplications of
-% two $\frac{n}{2} \times \frac{n}{2}$ matrices and four $\frac{n}{2} \times \frac{n}{2}$ matrix additions.
-% \item recurrence : $T(n) = 8.T. \frac{n}{2} + \Theta(n^2) \rightarrow \Theta(n^3)$ \\
-% \end{itemize}
-%
-% \subsection{Strassen's Algorithm}
-%
-% \begin{itemize}
-%
-% \item Bulky for implementation and not numerically stable
-% \item Useful and advantageous for large matrices
-% \item $ \Theta(n^{log7}) \approx \Theta(n^{2.807})$ \\
-% \end{itemize}
-%
-% \subsection{Coppersmith Winograd Algorithm}
-%
-% \begin{itemize}
-%
-% \item Theoretical optimum; never used in practice.
-% \item $ \Theta(n^{2.376}) $ \\
-% \end{itemize}
-
-
-
-\section{Future Work}
-
-For the remaining time in the semester, we plan to implement our idea in Ruby and then move on to implenting the structure to the right library such as MAGMA. We aim to design and implement the scheme for applications that can fully enable efficient verification of data structure queries on a stream.
-In addition, we will be meeting with Elaine (and Babis via Skype) to discuss and exchange thoughts about our approach to solve the problem as we have already practiced it before.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
