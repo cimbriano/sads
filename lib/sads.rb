@@ -2,7 +2,7 @@
 require 'matrix'
 
 class Sads
-	
+
 	attr_accessor :labels, :leaves, :digest
 
 	# Left and Right vectors for algebraic hash function
@@ -33,11 +33,11 @@ class Sads
 	def initialize()
 		# Input parameteres?
 		#  # Size of Universe
-				
+
 		@k = 5
 		@q = 17
 		@mu   = calculate_mu(@k, @q)
-		
+
 		init_L_R
 
 	end
@@ -59,9 +59,9 @@ class Sads
 
 	def calculate_q(n, k)
 		# q is the smallest prime satisfying
-		# 
+		#
 		# q / log (q + 1) >= n * 2k * w( sqrt(k * log k))
-		
+
 		# Temporarily Set to arbirary value
 		n * k
 	end
