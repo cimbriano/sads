@@ -9,7 +9,7 @@ group :development do
 end
 
 group :test do
-  # gem "minitest-reporters", "~> 0.12.0"
+  gem "minitest-reporters", "~> 0.12.0"
   #gem "rspec", :require => "spec"
   #gem "turn",  :require => false
 end
