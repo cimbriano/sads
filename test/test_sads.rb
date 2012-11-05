@@ -9,16 +9,16 @@ class TestSads < MiniTest::Unit::TestCase
 		@sad.wont_be_nil
 	end
 
-	# Leave test here: failing test at the moment
-	def test_calc_mu_q_0
-		skip
-		# assert(false, "Not implemented")
-		# assert_equal(0, @sad.calculate_mu(0,0))
-	end
-
 	def test_mu_is_not_a_float
-		skip
-		# assert(false, "Not implemented")
+		primes = Prime.instance
+
+		primes.take(10).each do |q|
+
+			(1..10).each do |k|
+
+				@sad.calculate_mu(k, q).must_be_instance_of Fixnum
+			end
+		end
 	end
 
 	def test_calc_q
@@ -64,16 +64,31 @@ class TestSads < MiniTest::Unit::TestCase
 		assert( false == @sad.L.eql?(@sad.R))
 	end
 
-	def test_hash_elements_are_mod_q
-		skip
-		# @sad.hash(x,y).each do |item|
-		# 	assert(item < @sad.q)
-		# end
+	def test_hash_result_is_a_matrix
+
+		# x and y have to be m entries "tall" if L & R are k x m
+		# m = mu / 2
+
+		mu = @sad.mu / 2
+
+		x = Matrix.column_vector( (0...mu).to_a )
+		y = Matrix.column_vector( (0...mu).to_a.map { |e| e * 2  } )
+
+		assert_instance_of(Matrix, @sad.hash(x,y))
 	end
 
-	def test_hash_result_is_a_matrix
-		skip
-		# assert_instance_of(Matrix, @sad.hash(x,y))
+	def test_hash_elements_are_mod_q
+
+		mu = @sad.mu / 2
+
+		x = Matrix.column_vector( (0...mu).to_a )
+		y = Matrix.column_vector( (0...mu).to_a.map { |e| e * 2  } )
+
+		@sad.hash(x,y).each do |item|
+			assert(item < @sad.q, "#{item} is >= #{@sad.q}")
+		end
 	end
+
+
 
 end
