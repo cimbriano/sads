@@ -1,4 +1,5 @@
 require 'helper'
+require 'sads_helper'
 
 class TestSads < MiniTest::Unit::TestCase
 	def setup
@@ -65,24 +66,19 @@ class TestSads < MiniTest::Unit::TestCase
 	end
 
 	def test_hash_result_is_a_matrix
+		m = @sad.mu / 2
 
-		# x and y have to be m entries "tall" if L & R are k x m
-		# m = mu / 2
-
-		mu = @sad.mu / 2
-
-		x = Matrix.column_vector( (0...mu).to_a )
-		y = Matrix.column_vector( (0...mu).to_a.map { |e| e * 2  } )
+		x = node_label(m)
+		y = node_label(m)
 
 		assert_instance_of(Matrix, @sad.hash(x,y))
 	end
 
 	def test_hash_elements_are_mod_q
+		m = @sad.mu / 2
 
-		mu = @sad.mu / 2
-
-		x = Matrix.column_vector( (0...mu).to_a )
-		y = Matrix.column_vector( (0...mu).to_a.map { |e| e * 2  } )
+		x = node_label(m)
+		y = node_label(m)
 
 		@sad.hash(x,y).each do |item|
 			assert(item < @sad.q, "#{item} is >= #{@sad.q}")
