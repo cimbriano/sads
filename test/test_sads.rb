@@ -3,8 +3,9 @@ require 'sads_helper'
 require 'prime'
 
 class TestSads < MiniTest::Unit::TestCase
+
 	def setup
-		@sad = Sads.new
+		@sad = Sads.new(2,10)
 	end
 
 	def test_constructor
@@ -25,8 +26,9 @@ class TestSads < MiniTest::Unit::TestCase
 	end
 
 	def test_calc_q
-		skip
-		# assert(false, "Not implemented")
+
+		# assert_true( calculate_q(1024, 256)
+		assert_equal(29, @sad.calculate_q(2,10))
 	end
 
 
@@ -70,23 +72,40 @@ class TestSads < MiniTest::Unit::TestCase
 	def test_hash_result_is_a_matrix
 		m = @sad.mu / 2
 
-		x = node_label(m)
-		y = node_label(m)
+		x = column_vector(m)
+		y = column_vector(m)
 
 		assert_instance_of(Matrix, @sad.hash(x,y))
 	end
 
 	def test_hash_elements_are_mod_q
-		m = @sad.mu / 2
+		skip
+		# m = @sad.mu / 2
 
-		x = node_label(m)
-		y = node_label(m)
+		# x = column_vector(m)
+		# y = column_vector(m)
 
-		@sad.hash(x,y).each do |item|
-			assert(item < @sad.q, "#{item} is >= #{@sad.q}")
-		end
+		# @sad.hash(x,y).each do |item|
+		# 	assert(item < @sad.q, "#{item} is >= #{@sad.q}")
+		# end
 	end
 
+	def test_binary_vector
+		m = @sad.mu / 2
+
+		x = column_vector(@sad.k)
+
+		# puts
+		# puts "k: #{@sad.k}"
+		# puts "q: #{@sad.q}"
+		# puts "log q: #{Math.log2(@sad.q).ceil}"
+
+		b_size = @sad.binary_vector(x).row_size
+		expected = @sad.k * Math.log2(@sad.q).ceil
+
+		assert_equal(	expected, b_size)
+
+	end
 
 
 end
