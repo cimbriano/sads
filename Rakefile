@@ -32,6 +32,12 @@ Rake::TestTask.new(:test) do |test|
   test.verbose = true
 end
 
+Rake::TestTask.new(:spec) do |test|
+  test.libs << 'lib' << 'test'
+  test.pattern = 'specs/**/spec_*.rb'
+  test.verbose = true
+end
+
 # coverage task is not a Rake::Task b/c of issue described here:
 # https://github.com/colszowka/simplecov/issues/37
 task :cov do
