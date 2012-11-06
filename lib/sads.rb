@@ -58,7 +58,34 @@ class Sads
 	end
 
 	# private below here
-	#
+
+	def partial_digest(node_index, with_repect_to_index)
+		if node_index.length == with_repect_to_index.length
+
+			if node_index == with_repect_to_index
+
+				return "1"
+				# return Matrix.build(1, @k) { 1 }
+			else
+				raise RangeError
+			end
+		end
+
+		# is wrt_index in left or right subtree
+		#
+		# Drop the characters of wrt_index that match the node_index
+		# 	The first character of the remainder tells you
+		# 	to go left or right
+		if with_repect_to_index.sub(node_index, '')[0] == "0"
+			# Left
+			# return "L( " + partial_digest( node_index + '0' ,with_repect_to_index )
+			return @L * binary_vector(partial_digest( node_index + '0' ,with_repect_to_index ) )
+		else
+			#Right
+			# return "R( " + partial_digest( node_index + '1' ,with_repect_to_index )
+			return @R * binary_vector(partial_digest( node_index + '1' ,with_repect_to_index ) )
+		end
+	end
 
 
 

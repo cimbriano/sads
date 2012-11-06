@@ -92,20 +92,28 @@ class TestSads < MiniTest::Unit::TestCase
 
 	def test_binary_vector
 		m = @sad.mu / 2
-
 		x = column_vector(@sad.k)
-
-		# puts
-		# puts "k: #{@sad.k}"
-		# puts "q: #{@sad.q}"
-		# puts "log q: #{Math.log2(@sad.q).ceil}"
 
 		b_size = @sad.binary_vector(x).row_size
 		expected = @sad.k * Math.log2(@sad.q).ceil
 
 		assert_equal(	expected, b_size)
+	end
+
+	def test_partial_digest
 
 	end
 
+	def test_partial_label
+
+	end
+
+	def test_node_digest
+
+	end
+
+	def node_label
+
+	end
 
 end
