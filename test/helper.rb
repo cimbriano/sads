@@ -15,14 +15,13 @@ require "minitest/reporters"
 require 'minitest/autorun'
 MiniTest::Reporters.use! MiniTest::Reporters::DefaultReporter.new
 
-#MiniTest::Reporters::SpecReporter.new
+MiniTest::Reporters::SpecReporter.new
 
 #require 'shoulda'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'sads'
-require 'mathn'
 
 class MiniTest::Unit::TestCase
 end
