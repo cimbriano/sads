@@ -43,8 +43,6 @@ end
 task :cov do
   ENV['COVERAGE'] = "true"
   Rake::Task["test"].execute
-  #`rake test COVERAGE=true`
-  #`open coverage/index.html`
 end
 
 task :default => :test
