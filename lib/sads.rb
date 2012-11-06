@@ -30,12 +30,14 @@ class Sads
 	#beta
 	attr_reader :beta
 
-	def initialize()
+	def initialize(k, n)
 		# Input parameteres?
 		#  # Size of Universe
 
-		@k = 5
-		@q = 17
+		@k = k
+		@stream_bound_n = n
+
+		@q = calculate_q(k, n)
 		@mu   = calculate_mu(@k, @q)
 
 		init_L_R
