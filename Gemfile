@@ -4,8 +4,6 @@ group :development do
   gem "jeweler", "~> 1.8.4"
   gem "simplecov", :require => false, :group => :test
   #gem "bundler", "~> 1.2.1"
-
-
 end
 
 group :test do
