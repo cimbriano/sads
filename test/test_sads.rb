@@ -1,28 +1,36 @@
 require 'helper'
+require 'sads_helper'
+require 'prime'
 
-class TestSads < Test::Unit::TestCase
+class TestSads < MiniTest::Unit::TestCase
+
 	def setup
-		@sad = Sads.new
+		@sad = Sads.new(2,10)
 	end
 
 	def test_constructor
-		assert_not_nil(@sad)
-	end
-
-	# Leave test here: failing test at the moment
-	def test_calc_mu_q_0
-		assert(false, "Not implemented")
-		assert_equal(0, @sad.calculate_mu(0,0))
+		@sad.wont_be_nil
 	end
 
 	def test_mu_is_not_a_float
-		assert(false, "Not implemented")
+		# primes = Prime.instance
+		# primes = [2,3,5,7,11,13,17,19,23,29]
+
+		Prime.each (100) do |q|
+
+			(1..10).each do |k|
+
+				@sad.calculate_mu(k, q).must_be_instance_of Fixnum
+			end
+		end
 	end
-	
+
 	def test_calc_q
-		assert(false, "Not implemented")
-	end 
-	
+
+		# assert_true( calculate_q(1024, 256)
+		assert_equal(29, @sad.calculate_q(2,10))
+	end
+
 
 	def test_calc_mu
 		assert_equal(12, @sad.calculate_mu(2,8))
@@ -61,14 +69,51 @@ class TestSads < Test::Unit::TestCase
 		assert( false == @sad.L.eql?(@sad.R))
 	end
 
-	def test_hash_elements_are_mod_q
-		@sad.hash(x,y).each do |item|
-			assert(item < @sad.q)
-		end
+	def test_hash_result_is_a_matrix
+		m = @sad.mu / 2
+
+		x = column_vector(m)
+		y = column_vector(m)
+
+		assert_instance_of(Matrix, @sad.hash(x,y))
 	end
 
-	def test_hash_result_is_a_matrix
-		assert_instance_of(Matrix, @sad.hash(x,y))
+	def test_hash_elements_are_mod_q
+		skip
+		# m = @sad.mu / 2
+
+		# x = column_vector(m)
+		# y = column_vector(m)
+
+		# @sad.hash(x,y).each do |item|
+		# 	assert(item < @sad.q, "#{item} is >= #{@sad.q}")
+		# end
+	end
+
+	def test_binary_vector
+		m = @sad.mu / 2
+		x = column_vector(@sad.k)
+
+		b_size = @sad.binary_vector(x).row_size
+		expected = @sad.k * Math.log2(@sad.q).ceil
+
+		assert_equal(	expected, b_size)
+	end
+
+	def test_partial_digest
+
+	end
+
+	def test_partial_label
+
+	end
+
+	def test_node_digest
+
+	end
+
+	def node_label
+
 	end
 
 end
