@@ -58,14 +58,45 @@ class Sads
 	end
 
 	# private below here
+	#
 
-	def calculate_q(n, k)
+
+
+
+	def binary_vector(x)
+
+		b_parts = Array.new
+
+		x.each do |ele|
+
+			# Make each element in x into binary form
+			# 	Add each bit to output vector
+
+			bin = ele.to_s(2)
+
+			(Math.log2(q).ceil - bin.length).times do
+				b_parts << 0
+			end
+
+			bin.each_char do |bit|
+				b_parts << bit.to_i
+
+			end
+		end
+
+		Matrix.column_vector(b_parts)
+	end
+
+	def calculate_q(k, n)
 		# q is the smallest prime satisfying
-		#
 		# q / log (q + 1) >= n * 2k * w( sqrt(k * log k))
+		#
+		# Using THETA notation, epsilon = 1
 
-		# Temporarily Set to arbirary value
-		n * k
+
+		# Using ceiling for now, until we actually find the
+		# smallest prime bigger than this quantity
+		(n * k * Math.log2(k) * Math.sqrt( k * Math.log2(k) )).ceil
 	end
 
 	def calculate_mu(k, q)
