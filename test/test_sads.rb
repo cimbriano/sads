@@ -1,6 +1,6 @@
 require 'helper'
 require 'sads_helper'
-# require 'mathn'
+require 'prime'
 
 class TestSads < MiniTest::Unit::TestCase
 	def setup
@@ -13,10 +13,9 @@ class TestSads < MiniTest::Unit::TestCase
 
 	def test_mu_is_not_a_float
 		# primes = Prime.instance
+		# primes = [2,3,5,7,11,13,17,19,23,29]
 
-		primes = [2,3,5,7,11,13,17,19,23,29]
-
-		primes.take(10).each do |q|
+		Prime.each (100) do |q|
 
 			(1..10).each do |k|
 
