@@ -11,9 +11,7 @@ end
 group :test do
 	gem "minitest", ">= 4.1.0"
   gem "minitest-reporters", "~> 0.12.0"
-  # gem "minitest-colorize", "~> 0.0.4"
   #gem "rspec", :require => "spec"
-  #gem "turn",  :require => false
 end
 
 group :debug do
