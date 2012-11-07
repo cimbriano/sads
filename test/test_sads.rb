@@ -146,8 +146,24 @@ class TestSads < MiniTest::Unit::TestCase
 
 	end
 
-	def test_range
-		# @sad.range("0",)
+	def test_range_of_self
+		# Range of leaf is just itself
+
+		num_bits_needed = Math.log2(@sad.universe_size_m).ceil
+		# puts "Bits Needed: #{num_bits_needed}"
+
+		leaf_node = '0' * num_bits_needed
+		# puts "Leaf node: #{leaf_node}"
+
+		act_range = @sad.range(leaf_node)
+		# puts "Returned range: #{act_range}"
+
+		assert(act_range.include?(leaf_node), "Leaf node is not in range of iteself")
+
+		# Remove leaf_node
+		act_range.delete(leaf_node)
+
+		assert(act_range.empty?, "Range had more than just leaf_node")
 	end
 
 	def test_mod
