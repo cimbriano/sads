@@ -58,6 +58,9 @@ class Sads
 	end
 
 	# private below here
+	#
+
+	def
 
 	def partial_digest(node_index, with_repect_to_index)
 		if node_index.length == with_repect_to_index.length
@@ -88,6 +91,16 @@ class Sads
 	end
 
 
+	def node_digest
+		#d(w) =SUM i∈range(w) ci ·Dw(i)
+		#
+		#
+
+	end
+
+	def range
+
+	end
 
 
 	def binary_vector(x)

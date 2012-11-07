@@ -10,12 +10,12 @@ rescue Bundler::BundlerError => e
   exit e.status_code
 end
 
-# require 'minitest/unit'
+require 'minitest/unit'
 require 'minitest/reporters'
 require 'minitest/autorun'
-# require 'minitest/spec'
+require 'minitest/spec'
 
-# MiniTest::Reporters.use! MiniTest::Reporters::DefaultReporter.new
+MiniTest::Reporters.use! MiniTest::Reporters::DefaultReporter.new
 
 #MiniTest::Reporters::SpecReporter.new
 
