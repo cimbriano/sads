@@ -16,7 +16,7 @@ class Sads
 	attr_reader :k
 
 	# Size of Universe
-	attr_reader :universe_size_M
+	attr_reader :universe_size_m
 
 	# Upper bound on size of stream
 	attr_reader :stream_bound_n
@@ -31,9 +31,11 @@ class Sads
 	#beta
 	attr_reader :beta
 
-	def initialize(k, n)
+	def initialize(k, n, m)
 		# Input parameteres?
 		#  # Size of Universe
+		#
+		@universe_size_m = m
 
 		@k = k
 		@stream_bound_n = n

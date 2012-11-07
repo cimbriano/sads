@@ -5,7 +5,7 @@ require 'prime'
 class TestSads < MiniTest::Unit::TestCase
 
 	def setup
-		@sad = Sads.new(2,10)
+		@sad = Sads.new(2,10, 8)
 	end
 
 	def test_constructor
