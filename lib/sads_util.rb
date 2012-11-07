@@ -56,8 +56,8 @@ class Sads
 
 	def range(node)
 		range = Array.new
-		total_bits_needed = Math.log2(@universe_size_m).ceil
-		remainder = node.length - total_bits_needed
+		total_bits_needed = Math.log2(@universe_size_m).ceil + 1
+		remainder = total_bits_needed - node.length
 
 		# puts "Bits needed: #{total_bits_needed}"
 		# puts "Remainder: #{remainder}"
@@ -72,11 +72,11 @@ class Sads
 				# puts "bin: #{bin}"
 
 				(remainder - bin.length).times do
-				# 	puts "Adding padding 0"
+					# puts "Adding padding 0"
 					element += "0"
 				end
 
-				# puts "Adding bin to element"
+				# puts "Adding #{bin} to element"
 				element += bin
 			end
 

@@ -149,7 +149,7 @@ class TestSads < MiniTest::Unit::TestCase
 	def test_range_of_self
 		# Range of leaf is just itself
 
-		num_bits_needed = Math.log2(@sad.universe_size_m).ceil
+		num_bits_needed = Math.log2(@sad.universe_size_m).ceil + 1
 		# puts "Bits Needed: #{num_bits_needed}"
 
 		leaf_node = '0' * num_bits_needed
@@ -164,6 +164,22 @@ class TestSads < MiniTest::Unit::TestCase
 		act_range.delete(leaf_node)
 
 		assert(act_range.empty?, "Range had more than just leaf_node")
+	end
+
+	def test_range_returns_indices_of_correct_length
+		num_bits_needed = Math.log2(@sad.universe_size_m).ceil + 1
+
+		act_range = @sad.range('0')
+
+		act_range.each do |leaf|
+			assert_equal(num_bits_needed, leaf.length, "Leaf length is: #{leaf.length}")
+		end
+	end
+
+	def test_range_of_root_is_whole_universe
+		act_range = @sad.range('0')
+		assert_equal(@sad.universe_size_m, act_range.length, "Range size is: #{act_range.length}")
+
 	end
 
 	def test_mod
