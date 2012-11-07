@@ -91,16 +91,46 @@ class TestSads < MiniTest::Unit::TestCase
 	end
 
 	def test_binary_vector
-		m = @sad.mu / 2
 		x = column_vector(@sad.k)
 
-		b_size = @sad.binary_vector(x).row_size
-		expected = @sad.k * Math.log2(@sad.q).ceil
+		b_vector = @sad.binary_vector(x)
 
-		assert_equal(	expected, b_size)
+
+
+		b_rowsize = b_vector.row_size
+		b_columnsize = b_vector.column_size
+
+		# m = k * log q
+		expected_row_size = @sad.k * Math.log2(@sad.q).ceil
+
+
+		assert_equal(expected_row_size, b_rowsize, "Row size is #{b_rowsize}")
+		assert_equal(1 ,b_columnsize, "Column size is: #{b_columnsize}")
 	end
 
-	def test_partial_digest
+	def test_partial_digest_wrt_itself
+		# Digest of a node with respect to istelf should be a vector of 1
+		#
+		part_dig = @sad.partial_digest('00', '00')
+
+		part_dig.must_be_instance_of Matrix
+		assert_equal(@sad.k, part_dig.row_size, "Partial Digest rowsize: #{part_dig.row_size}")
+		assert_equal(1, part_dig.column_size, "Partial Digest Column Size: #{part_dig.column_size}")
+	end
+
+	def test_partial_digest_wrt_leaf_node
+
+		s = ['00','000']
+
+		s.each do |internal_node|
+			# puts internal_node
+			part_dig = @sad.partial_digest('0', internal_node)
+			part_dig.must_be_instance_of Matrix
+			assert_equal(@sad.k, part_dig.row_size, "Partial Digest wrt #{internal_node} rowsize: #{part_dig.row_size}")
+			assert_equal(1, part_dig.column_size, "Partial Digest wrt #{internal_node} Column Size: #{part_dig.column_size}")
+	end
+
+
 
 	end
 
@@ -112,10 +142,22 @@ class TestSads < MiniTest::Unit::TestCase
 
 	end
 
-	def node_label
+	def test_node_label
 
 	end
 
+	def test_range
+		# @sad.range("0",)
+	end
+
+	def test_mod
+		m = Matrix.build(10, 10) { rand 100 }
+
+		mod(m, 8).each do |ele|
+
+			assert(ele < 8)
+		end
+	end
 
 
 end
