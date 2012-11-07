@@ -1,4 +1,4 @@
-require 'unit/unit_helper'
+require 'helper'
 require 'sads_helper'
 require 'prime'
 

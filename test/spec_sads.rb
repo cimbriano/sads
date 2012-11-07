@@ -1,5 +1,5 @@
 # sads_spec.rb
-require 'spec/spec_helper'
+require 'helper'
 require 'minitest/spec'
 require 'minitest/autorun'
 
