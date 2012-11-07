@@ -1,5 +1,7 @@
 # sads_spec.rb
-require 'sads'
+require 'spec/spec_helper'
+require 'minitest/spec'
+require 'minitest/autorun'
 
 describe Sads do
 
