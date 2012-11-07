@@ -179,7 +179,10 @@ class TestSads < MiniTest::Unit::TestCase
 	def test_range_of_root_is_whole_universe
 		act_range = @sad.range('0')
 		assert_equal(@sad.universe_size_m, act_range.length, "Range size is: #{act_range.length}")
+	end
 
+	def test_range_of_internal_node
+		skip
 	end
 
 	def test_mod
