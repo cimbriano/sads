@@ -31,12 +31,10 @@ class TestSads < MiniTest::Unit::TestCase
 		assert_equal(29, @sad.calculate_q(2,10))
 	end
 
-
 	def test_calc_mu
 		assert_equal(12, @sad.calculate_mu(2,8))
 		assert_equal(16, @sad.calculate_mu(2,9))
 	end
-
 
 	def test_calc_beta
 		assert_equal(6, @sad.calculate_beta(2,9))
@@ -131,7 +129,7 @@ class TestSads < MiniTest::Unit::TestCase
 		end
 	end
 
-	
+
 	def test_node_digest_is_correct_type_and_size
 
 		@sad.addElement(0)
@@ -158,14 +156,11 @@ class TestSads < MiniTest::Unit::TestCase
 		zeroth_digest.each do |ele|
 			assert_equal(3, ele, "Element was #{ele}, not 3 as expected")
 		end
-
 	end
-
 
 	def test_partial_label
 		skip
 	end
-
 
 	def test_node_label
 		skip
@@ -218,6 +213,5 @@ class TestSads < MiniTest::Unit::TestCase
 			assert(ele < 8)
 		end
 	end
-
 
 end
