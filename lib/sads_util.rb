@@ -19,12 +19,34 @@ class Sads
 		n * Math.sqrt(mu)
 	end
 
+	def partial_label(node_index, with_repect_to_index)
+		binary_vector(partial_digest(node_index, with_repect_to_index))
+	end
+
+	def node_label(node_index)
+		# TODO - This is repeated code from node_label and doesn't
+		# 	take advantage of stored digests or labels
+
+		log_q = Math.log2(@q).ceil
+		accum = Vector.elements( Array.new(@k * log_q) { 0 } )
+
+		range_of_w = range(node_index)
+
+		range_of_w.each do | leaf |
+			frequency = leaves[leaf] || 0
+			p_label = partial_label(node_index, leaf)
+			accum += ( frequency * p_label )
+		end
+
+		return accum
+	end
+
 	def partial_digest(node_index, with_repect_to_index)
 		if node_index.length == with_repect_to_index.length
 			if node_index == with_repect_to_index
 
 				# wrt itself defined to be vector of 1's
-				return Matrix.build(@k ,1) { 1 }
+				return Vector.elements( Array.new(@k) { 1 } )
 			else
 				raise RangeError
 			end
@@ -50,7 +72,9 @@ class Sads
 	def node_digest(node_index)
 		#d(w) =SUM i∈range(w) ci ·Dw(i)
 
-		accum = Matrix.build(@k, 1) { 0 }
+		# accum = Matrix.build(@k, 1) { 0 }
+
+		accum = Vector.elements( Array.new(@k) { 0 } )
 
 		range_of_w = range(node_index)
 
@@ -117,13 +141,21 @@ class Sads
 			end
 		end
 
-		Matrix.column_vector(b_parts)
+		Vector.elements(b_parts)
 	end
 end
 
 
-def mod(matrix, q)
-	Matrix.build(matrix.row_size, matrix.column_size) { |row, col|
-			matrix[row, col] % q
-	}
+def mod(m, q)
+	case(m)
+	when Vector
+		return Vector.elements( Array.new(m.size) {|i| m[i] % q })
+	when Matrix
+		return Matrix.build(m.row_size, m.column_size) { |row, col| m[row, col] % q }
+	when Numeric
+		return m % q
+	else
+		raise TypeError "mod(m,q) takes either a Vector or Matrix for m"
+	end
+
 end
