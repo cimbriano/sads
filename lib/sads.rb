@@ -45,11 +45,25 @@ class Sads
 
 		init_L_R
 
+		@leaves = {}
 	end
 
 
 	def addElement(ele)
-		leaves.store(ele, 1)
+		# Need an index for this element (assuming for now element is
+		# 	an integer representing which universe element to "add"
+
+		num_in_bin = ele.to_s(2)
+		index = '0' * (Math.log2(@universe_size_m).ceil + 1 - num_in_bin.length)
+		index += num_in_bin
+
+		if leaves.include?(index) 
+			leaves[index] += 1
+		else
+			leaves[index] = 1
+		end
+
+		# leaves.store(ele, 1)
 	end
 
 	def removeElement(ele)

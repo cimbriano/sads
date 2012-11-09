@@ -47,11 +47,21 @@ class Sads
 		end
 	end
 
-	def node_digest
+	def node_digest(node_index)
 		#d(w) =SUM i∈range(w) ci ·Dw(i)
-		#
-		#
-		#
+
+		accum = Matrix.build(@k, 1) { 0 }
+
+		range_of_w = range(node_index)
+
+		# range_of_w.inject{ |acc, leaf| sum + (leaves[leaf] || 0) + partial_digest(node_index, leaf) }
+		range_of_w.each do | leaf |
+			frequency = leaves[leaf] || 0
+			p_digest = partial_digest(node_index, leaf)
+			accum += ( frequency * p_digest )
+		end
+
+		return accum
 	end
 
 	def range(node)

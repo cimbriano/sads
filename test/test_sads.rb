@@ -128,22 +128,47 @@ class TestSads < MiniTest::Unit::TestCase
 			part_dig.must_be_instance_of Matrix
 			assert_equal(@sad.k, part_dig.row_size, "Partial Digest wrt #{internal_node} rowsize: #{part_dig.row_size}")
 			assert_equal(1, part_dig.column_size, "Partial Digest wrt #{internal_node} Column Size: #{part_dig.column_size}")
+		end
 	end
 
+	
+	def test_node_digest_is_correct_type_and_size
 
+		@sad.addElement(0)
+		@sad.addElement(1)
+		@sad.addElement(1)
+		@sad.addElement(3)
+		@sad.addElement(6)
+		@sad.addElement(7)
+		@sad.addElement(7)
+		@sad.addElement(7)
+
+		zeroth_digest = @sad.node_digest('0000')
+
+		zeroth_digest.must_be_instance_of Matrix
+	
+		assert_equal(@sad.k, zeroth_digest.row_size, "Digest Row Size is: #{zeroth_digest.row_size}")
+		assert_equal(1, zeroth_digest.column_size, "Digest column size is: #{zeroth_digest.column_size}")	
+		
+		zeroth_digest.each do |ele|
+			assert_equal(1, ele, "Element was #{ele}, not 1 as expected")
+		end
+
+		seventh_digest = @sad.node_digest('0111')
+		zeroth_digest.each do |ele|
+			assert_equal(3, ele, "Element was #{ele}, not 3 as expected")
+		end
 
 	end
+
 
 	def test_partial_label
-
+		skip
 	end
 
-	def test_node_digest
-
-	end
 
 	def test_node_label
-
+		skip
 	end
 
 	def test_range_of_self
