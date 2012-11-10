@@ -157,7 +157,22 @@ class Sads
 
 		Vector.elements(b_parts)
 	end
-end
+
+	# Given an integer representing the desired universe element
+	# 	returns the appropriate node index.
+	def get_node_index(integer)
+		binary = integer.to_s(2)
+		log_q = Math.log2(@universe_size_m).ceil + 1
+		index = ''
+
+		(log_q - binary.length).times do
+			index += '0'
+		end
+		index += binary
+
+	end
+
+end #Sads
 
 
 # The mod function is a short term fix for doing all the arithmetic mod q
