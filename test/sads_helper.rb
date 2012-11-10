@@ -31,3 +31,22 @@ def check_radix_label(label, digest, q)
 	end
 	return true
 end
+
+def set_of_all_node_indices(universe_size)
+	num_layers = Math.log2(universe_size).ceil
+	layers = Array.new
+
+	layers << ['0']
+
+	num_layers.times do
+		layers.last.each do |parent|
+				layers << children_indices(parent)
+		end
+	end
+
+	return layers.flatten
+end
+
+def children_indices(parent)
+	[parent + '0', parent + '1']
+end

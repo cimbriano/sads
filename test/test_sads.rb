@@ -153,9 +153,8 @@ class TestSads < MiniTest::Unit::TestCase
 		end
 
 		seventh_digest = @sad.node_digest('0111')
-		zeroth_digest.each do |ele|
-			skip
-			# assert_equal(3, ele, "Element was #{ele}, not 3 as expected")
+		seventh_digest.each do |ele|
+			assert_equal(3, ele, "Element was #{ele}, not 3 as expected")
 		end
 	end
 
@@ -215,4 +214,23 @@ class TestSads < MiniTest::Unit::TestCase
 		end
 	end
 
-end
+	def test_digest_is_radix_of_label
+		@sad.addElement(0)
+		@sad.addElement(1)
+		@sad.addElement(1)
+		@sad.addElement(3)
+		@sad.addElement(6)
+		@sad.addElement(7)
+		@sad.addElement(7)
+		@sad.addElement(7)
+
+		all_nodes = set_of_all_node_indices(@sad.universe_size_m)
+
+		all_nodes.each do |node|
+			digest = @sad.node_digest(node)
+			label = @sad.node_label(node)
+			assert(check_radix_label(label, digest, @sad.q), "Label/Digest Relation Failed for node: #{node}")
+		end
+	end
+
+end # TestSads
