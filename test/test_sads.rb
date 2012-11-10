@@ -215,14 +215,16 @@ class TestSads < MiniTest::Unit::TestCase
 	end
 
 	def test_digest_is_radix_of_label
-		@sad.addElement(0)
-		@sad.addElement(1)
-		@sad.addElement(1)
-		@sad.addElement(3)
-		@sad.addElement(6)
-		@sad.addElement(7)
-		@sad.addElement(7)
-		@sad.addElement(7)
+		# @sad.addElement(0)
+		# @sad.addElement(1)
+		# @sad.addElement(1)
+		# @sad.addElement(3)
+		# @sad.addElement(6)
+		# @sad.addElement(7)
+		# @sad.addElement(7)
+		# @sad.addElement(7)
+		#
+		# Use generator for test data?
 
 		all_nodes = set_of_all_node_indices(@sad.universe_size_m)
 

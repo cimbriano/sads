@@ -53,6 +53,12 @@ class Sads
 	def addElement(ele)
 		# Need an index for this element (assuming for now element is
 		# 	an integer representing which universe element to "add"
+		#
+
+		# addElement has to do the following:
+		# 	* Update the leaves (or frequency value)
+		# 	* Update the labels of all affected nodes
+		# 	* Update the root digest (this may occur as part of the previous)
 
 		num_in_bin = ele.to_s(2)
 		index = '0' * (Math.log2(@universe_size_m).ceil + 1 - num_in_bin.length)

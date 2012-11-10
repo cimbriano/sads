@@ -15,14 +15,20 @@ class Sads
 		2 * k * Math.log2(q).ceil
 	end
 
+
 	def calculate_beta(n, mu)
 		n * Math.sqrt(mu)
 	end
 
+	# Partial label as mentioned in Definition 10.
 	def partial_label(node_index, with_repect_to_index)
 		binary_vector(partial_digest(node_index, with_repect_to_index))
 	end
 
+
+	# Label as sum of partial labels: Definition 12
+	#
+	# Optimization: Use stored labels where possible.
 	def node_label(node_index)
 		# TODO - This is repeated code from node_label and doesn't
 		# 	take advantage of stored digests or labels
@@ -41,6 +47,9 @@ class Sads
 		return accum
 	end
 
+	# Partial digest as defined in Definition 10.
+	#
+	# Likely candidate for optimization as this calculates each partial digest fresh
 	def partial_digest(node_index, with_repect_to_index)
 		if node_index.length == with_repect_to_index.length
 			if node_index == with_repect_to_index
@@ -69,6 +78,10 @@ class Sads
 		end
 	end
 
+	# Digest as a sum of partial digests: Definition 11.
+	#
+	# Optimization: Make use of a stored map of digests instead of calculating them
+	# on the fly each time
 	def node_digest(node_index)
 		#d(w) =SUM i∈range(w) ci ·Dw(i)
 
@@ -88,20 +101,18 @@ class Sads
 		return accum
 	end
 
-	def range(node)
+	# Returns a collection of leaf indicies for the range of the given parameter
+	#
+	# The range of a leaf node is itself.
+	def range(node_index)
 		range = Array.new
 		total_bits_needed = Math.log2(@universe_size_m).ceil + 1
-		remainder = total_bits_needed - node.length
-
-		# puts "Bits needed: #{total_bits_needed}"
-		# puts "Remainder: #{remainder}"
-		# puts "Node length: #{node.length}"
+		remainder = total_bits_needed - node_index.length
 
 		(0...2**remainder).each do |num|
-			# puts "Adding #{node} to element"
-			element = node
+			element = node_index
 
-			if node.length != total_bits_needed
+			if node_index.length != total_bits_needed
 				bin = num.to_s(2)
 				# puts "bin: #{bin}"
 
@@ -114,20 +125,23 @@ class Sads
 				element += bin
 			end
 
-
 			range << element
 		end
 
 		return range
 	end
 
-	def binary_vector(x)
+	# Returns a vector ov size k * log q where each element is 0 or 1
+	#
+	# For now, the vector is storing Ruby's integers 0 or 1.  A future
+	# optimization could be to store only the requisite bits.
+	def binary_vector(vector)
 
 		b_parts = Array.new
 
-		x.each do |ele|
+		vector.each do |ele|
 
-			# Make each element in x into binary form
+			# Make each element in vector into binary form
 			# 	Add each bit to output vector
 			bin = ele.to_s(2)
 
@@ -146,6 +160,11 @@ class Sads
 end
 
 
+# The mod function is a short term fix for doing all the arithmetic mod q
+# 	Consider doing the mod operation during the actualy operations
+# 	if possible (i.e when building a matrix)
+#
+# 	For matrix mutlpication cases, maybe a library can do that?
 def mod(m, q)
 	case(m)
 	when Vector
