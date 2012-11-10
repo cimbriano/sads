@@ -46,6 +46,7 @@ class Sads
 		init_L_R
 
 		@leaves = {}
+		@labels = {}
 	end
 
 
@@ -57,13 +58,14 @@ class Sads
 		index = '0' * (Math.log2(@universe_size_m).ceil + 1 - num_in_bin.length)
 		index += num_in_bin
 
-		if leaves.include?(index) 
+		if leaves.include?(index)
 			leaves[index] += 1
 		else
 			leaves[index] = 1
 		end
 
-		# leaves.store(ele, 1)
+
+
 	end
 
 	def removeElement(ele)
