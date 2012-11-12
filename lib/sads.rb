@@ -31,11 +31,15 @@ class Sads
 	#beta
 	attr_reader :beta
 
+	# loq_q
+	attr_reader :log_q_ceil
+
 	def initialize(k, n, m)
 		# Input parameteres?
 		#  # Size of Universe
 		#
 		@universe_size_m = m
+		@log_q_ceil = Math.log2(m).ceil
 
 		@k = k
 		@stream_bound_n = n

@@ -99,7 +99,7 @@ class TestSads < MiniTest::Unit::TestCase
 		# b_columnsize = b_vector.column_size
 
 		# m = k * log q
-		expected_size = @sad.k * Math.log2(@sad.q).ceil
+		expected_size = @sad.k * @sad.log_q_ceil
 
 
 		assert_equal(expected_size, size, "Row size is #{size}")
@@ -235,8 +235,8 @@ class TestSads < MiniTest::Unit::TestCase
 		end
 	end
 
-	def test_get_node_index
-		bit_length = Math.log2(@sad.universe_size_m).ceil + 1
+	def test_get_leaf_index
+		bit_length = @sad.log_q_ceil + 1
 
 		(0..@sad.universe_size_m).each do |element_number|
 			n_index = @sad.get_node_index(element_number)
@@ -244,6 +244,27 @@ class TestSads < MiniTest::Unit::TestCase
 		end
 
 	end
+
+	def test_binary_with_log_q_bits
+		expected = '000'
+		actual = @sad.binary_with_num_bits(0, 3)
+		assert_equal(expected, actual)
+
+		expected = '100'
+		actual = @sad.binary_with_num_bits(4, 3)
+		assert_equal(expected, actual)
+
+		expected = '101'
+		actual = @sad.binary_with_num_bits(5, 3)
+		assert_equal(expected, actual)
+
+		expected = '111'
+		actual = @sad.binary_with_num_bits(7, 3)
+		assert_equal(expected, actual)
+	end
+
+
+
 
 
 end # TestSads

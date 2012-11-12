@@ -22,7 +22,7 @@ end
 def check_radix_label(label, digest, q)
 	# label should be a radix rep of the digest
 
-	chunk_size = Math.log2(q) + 1
+	chunk_size = @log_q_ceil
 	i = 0
 
 	label.each_slice(chunk_size) do |group|

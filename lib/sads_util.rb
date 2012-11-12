@@ -12,7 +12,7 @@ class Sads
 	end
 
 	def calculate_mu(k, q)
-		2 * k * Math.log2(q).ceil
+		2 * k * @log_q_ceil
 	end
 
 
@@ -33,8 +33,8 @@ class Sads
 		# TODO - This is repeated code from node_label and doesn't
 		# 	take advantage of stored digests or labels
 
-		log_q = Math.log2(@q).ceil
-		accum = Vector.elements( Array.new(@k * log_q) { 0 } )
+		# log_q_ceil = Math.log2(@q).ceil
+		accum = Vector.elements( Array.new(@k * @log_q_ceil) { 0 } )
 
 		range_of_w = range(node_index)
 
