@@ -144,6 +144,12 @@ class Sads
 
 		Vector.elements(b_parts)
 	end
+	# Given a leaf index this method returns the path in the hash tree
+	# 	from the leaf to the child of the root (ie, its a path to the
+	# 	root without the root)
+	def get_update_path(leaf_index)
+
+	end
 
 	# Given an integer representing the desired universe element
 	# 	returns the appropriate leaf index for this tree's parameters

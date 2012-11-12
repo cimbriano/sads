@@ -239,6 +239,16 @@ class TestSads < MiniTest::Unit::TestCase
 			@sad.get_leaf_index(bad_input)
 		}
 	end
+
+	def test_get_update_path_has_correct_number_of_node_indices
+		skip
+	end
+
+	def test_get_update_path_does_not_include_root
+		skip
+		# @sad.update_path('')
+	end
+
 	def test_binary_with_log_q_bits
 		expected = '000'
 		actual = @sad.binary_with_num_bits(0, 3)
