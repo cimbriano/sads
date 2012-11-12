@@ -241,8 +241,8 @@ class TestSads < MiniTest::Unit::TestCase
 	def test_get_leaf_index
 		bit_length = @sad.log_q_ceil + 1
 
-		(0..@sad.universe_size_m).each do |element_number|
-			n_index = @sad.get_node_index(element_number)
+		(0...@sad.universe_size_m).each do |element_number|
+			n_index = @sad.get_leaf_index(element_number)
 			assert_equal(bit_length, n_index.length, "node_index was not the expected length. Node: #{element_number} had index #{n_index}")
 		end
 

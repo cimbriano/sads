@@ -135,17 +135,10 @@ class Sads
 
 		vector.each do |ele|
 
-			# Make each element in vector into binary form
-			# 	Add each bit to output vector
-			bin = ele.to_s(2)
-
-			(Math.log2(q).ceil - bin.length).times do
-				b_parts << 0
-			end
+			bin = binary_with_num_bits(ele, @log_q_ceil)
 
 			bin.each_char do |bit|
 				b_parts << bit.to_i
-
 			end
 		end
 
@@ -153,17 +146,30 @@ class Sads
 	end
 
 	# Given an integer representing the desired universe element
-	# 	returns the appropriate node index.
-	def get_node_index(integer)
-		binary = integer.to_s(2)
-		log_q = Math.log2(@universe_size_m).ceil + 1
-		index = ''
+	# 	returns the appropriate leaf index for this tree's parameters
+	def get_leaf_index(integer)
 
-		(log_q - binary.length).times do
-			index += '0'
+		if integer < 0 or integer >= @universe_size_m
+			raise RangeError, "#{integer} is outside accepatable range for get_leaf_index"
 		end
-		index += binary
 
+		'0' + binary_with_num_bits(integer, @log_q_ceil)
+	end
+
+	# Given any integer, return the binary representation of it such that
+	# 	the length of the binary number is Math.log2(q).ceil
+	def get_padded_binary(integer)
+		binary_with_num_bits(integer, @log_q_ceil)
+	end
+
+
+	#
+	def binary_with_num_bits(integer, num_bits)
+		binary = integer.to_s(2)
+
+		padding_needed = num_bits - binary.length
+
+		index = '0' * padding_needed + binary
 	end
 
 end #Sads
@@ -185,5 +191,6 @@ def mod(m, q)
 	else
 		raise TypeError "mod(m,q) takes either a Vector or Matrix for m"
 	end
-
 end
+
+
