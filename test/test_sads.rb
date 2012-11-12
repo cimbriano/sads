@@ -171,16 +171,22 @@ class TestSads < MiniTest::Unit::TestCase
 		# Range of leaf is just itself
 		expected_length_of_leaf_indices = @sad.bits_needed_for_leaves
 
+		all_nodes = set_of_all_node_indices(@sad.universe_size_m)
 
-		act_range = @sad.range(leaf_node)
-		# puts "Returned range: #{act_range}"
+		all_nodes.each do |node_index|
+			if node_index.length < expected_length_of_leaf_indices
+				# We only want to assert for leaf nodes
+			else
+				# Have a leaf index
+				actual_range = @sad.range(node_index)
+				assert(actual_range.include?(node_index), "#{node_index} wasn't in #{actual_range}")
 
-		assert(act_range.include?(leaf_node), "Leaf node is not in range of iteself")
+				# Leaf was the only element in the range
+				assert(actual_range.size == 1, "Range had more than just leaf_node")
+			end
 
-		# Remove leaf_node
-		act_range.delete(leaf_node)
+		end
 
-		assert(act_range.empty?, "Range had more than just leaf_node")
 	end
 
 	def test_range_returns_indices_of_correct_length

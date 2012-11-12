@@ -106,26 +106,20 @@ class Sads
 	# The range of a leaf node is itself.
 	def range(node_index)
 		range = Array.new
-		total_bits_needed = Math.log2(@universe_size_m).ceil + 1
-		remainder = total_bits_needed - node_index.length
 
-		(0...2**remainder).each do |num|
-			element = node_index
+		prefix = node_index
 
-			if node_index.length != total_bits_needed
-				bin = num.to_s(2)
-				# puts "bin: #{bin}"
+		suffix_length = @bits_needed_for_leaves - prefix.length
+		if suffix_length == 0
+			# This is a leaf, range of leaf is itself
+			range << node_index
+		else
+			# prefix + _ _ _ where
+			(0...2**suffix_length).each do |num|
+				suffix = binary_with_num_bits(num, suffix_length)
 
-				(remainder - bin.length).times do
-					# puts "Adding padding 0"
-					element += "0"
-				end
-
-				# puts "Adding #{bin} to element"
-				element += bin
+				range << prefix + suffix
 			end
-
-			range << element
 		end
 
 		return range
