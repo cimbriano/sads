@@ -1,6 +1,6 @@
 # sads.rb
 require 'matrix'
-require 'sads_util.rb'
+require 'sads_util'
 
 class Sads
 
