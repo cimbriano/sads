@@ -77,15 +77,16 @@ class TestSads < MiniTest::Unit::TestCase
 	end
 
 	def test_hash_elements_are_mod_q
-		skip
-		# m = @sad.mu / 2
 
-		# x = column_vector(m)
-		# y = column_vector(m)
+		m = @sad.mu / 2
+		max = @sad.q * 4
 
-		# @sad.hash(x,y).each do |item|
-		# 	assert(item < @sad.q, "#{item} is >= #{@sad.q}")
-		# end
+		x = column_vector_with_max(m, max)
+		y = column_vector_with_max(m, max)
+
+		@sad.hash(x,y).each do |item|
+			assert(item < @sad.q, "#{item} is >= #{@sad.q}")
+		end
 	end
 
 	def test_binary_vector

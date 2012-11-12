@@ -97,7 +97,7 @@ class Sads
 	end
 
 	def hash(x, y)
-		@L * x + @R * y
+		mod(@L * x + @R * y, @q)
 	end
 	# end private
 end
