@@ -4,7 +4,11 @@ def LR_matrix(k, m, q)
 end
 
 def column_vector(size)
-	Matrix.column_vector( (0...size).to_a )
+	column_vector_with_max(size, size)
+end
+
+def column_vector_with_max(size, max)
+	Matrix.column_vector( Array.new(size) { rand max } )
 end
 
 def check_radix_int(radix, x, q)
