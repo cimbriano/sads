@@ -168,12 +168,8 @@ class TestSads < MiniTest::Unit::TestCase
 
 	def test_range_of_self
 		# Range of leaf is just itself
+		expected_length_of_leaf_indices = @sad.bits_needed_for_leaves
 
-		num_bits_needed = Math.log2(@sad.universe_size_m).ceil + 1
-		# puts "Bits Needed: #{num_bits_needed}"
-
-		leaf_node = '0' * num_bits_needed
-		# puts "Leaf node: #{leaf_node}"
 
 		act_range = @sad.range(leaf_node)
 		# puts "Returned range: #{act_range}"
@@ -187,7 +183,7 @@ class TestSads < MiniTest::Unit::TestCase
 	end
 
 	def test_range_returns_indices_of_correct_length
-		num_bits_needed = Math.log2(@sad.universe_size_m).ceil + 1
+		num_bits_needed = @sad.bits_needed_for_leaves
 
 		act_range = @sad.range('0')
 
