@@ -109,25 +109,17 @@ class TestSads < MiniTest::Unit::TestCase
 
 	def test_partial_digest_wrt_itself
 		# Digest of a node with respect to istelf should be a vector of 1
-		#
-		part_dig = @sad.partial_digest('00', '00')
+
+		# TODO - Test all elements in universe
+		leaf_index = @sad.get_leaf_index(7)
+		part_dig = @sad.partial_digest(leaf_index, leaf_index)
 
 		part_dig.must_be_instance_of Vector
 		assert_equal(@sad.k, part_dig.size, "Partial Digest rowsize: #{part_dig.size}")
-		# assert_equal(1, part_dig.column_size, "Partial Digest Column Size: #{part_dig.column_size}")
 	end
 
 	def test_partial_digest_wrt_leaf_node
-
-		s = ['00','000']
-
-		s.each do |internal_node|
-			# puts internal_node
-			part_dig = @sad.partial_digest('0', internal_node)
-			part_dig.must_be_instance_of Vector
-			assert_equal(@sad.k, part_dig.size, "Partial Digest wrt #{internal_node} rowsize: #{part_dig.size}")
-			# assert_equal(1, part_dig.column_size, "Partial Digest wrt #{internal_node} Column Size: #{part_dig.column_size}")
-		end
+		skip
 	end
 
 
@@ -248,6 +240,14 @@ class TestSads < MiniTest::Unit::TestCase
 
 	end
 
+	def test_get_leaf_index_raises_error_for_bad_input
+
+		bad_input = @sad.universe_size_m + 1
+
+		assert_raises(RangeError){
+			@sad.get_leaf_index(bad_input)
+		}
+	end
 	def test_binary_with_log_q_bits
 		expected = '000'
 		actual = @sad.binary_with_num_bits(0, 3)

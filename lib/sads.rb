@@ -68,18 +68,13 @@ class Sads
 		# 	* Update the labels of all affected nodes
 		# 	* Update the root digest (this may occur as part of the previous)
 
-		num_in_bin = ele.to_s(2)
-		index = '0' * (Math.log2(@universe_size_m).ceil + 1 - num_in_bin.length)
-		index += num_in_bin
+		index = get_leaf_index(ele)
 
 		if leaves.include?(index)
 			leaves[index] += 1
 		else
 			leaves[index] = 1
 		end
-
-
-
 	end
 
 	def removeElement(ele)
