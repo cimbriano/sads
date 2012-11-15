@@ -15,7 +15,7 @@ def check_radix_int(radix, x, q)
 	# x is a number in Z_q
 	#
 	# radix is a vector in Z_q with size log q
-	
+
 	puts "Checking #{radix.reverse} is a radix rep of #{x} mod #{q}"
 	i = radix.length - 1
 	acc = 0
@@ -44,7 +44,7 @@ def check_radix_label(label, digest, q)
 
 		return false unless check_radix_int(group, digest[i], q)
 		i+=1
-		
+
 	end
 	return true
 end
@@ -66,4 +66,14 @@ end
 
 def children_indices(parent)
 	[parent + '0', parent + '1']
+end
+
+def addSomeElements(sad, num_to_add)
+	universe_size = sad.universe_size_m
+
+
+	num_to_add.times do
+		sad.addElement( rand(universe_size) )
+	end
+
 end
