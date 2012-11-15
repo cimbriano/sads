@@ -15,23 +15,36 @@ def check_radix_int(radix, x, q)
 	# x is a number in Z_q
 	#
 	# radix is a vector in Z_q with size log q
-	i = 0
-	radix.inject(0) do |result , r_i|
-		result + ((r_i * 2 ** i) % q)
+	
+	puts "Checking #{radix.reverse} is a radix rep of #{x} mod #{q}"
+	i = radix.length - 1
+	acc = 0
 
-		i+=1
+	radix.reverse.each do |r_i|
+		puts "#{r_i} * 2 ^ #{i}"
+
+		acc += (r_i * (2 ** i))
+		i 	-= 1
 	end
+
+	return x == (acc % q)
 end
 
 def check_radix_label(label, digest, q)
 	# label should be a radix rep of the digest
-
-	chunk_size = @log_q_ceil
+	chunk_size = Math.log2(q).ceil
 	i = 0
 
+
+
 	label.each_slice(chunk_size) do |group|
+
+		puts "Checking chunk: #{group}"
+		puts "Against digest[#{i}] : #{digest[i]}"
+
 		return false unless check_radix_int(group, digest[i], q)
 		i+=1
+		
 	end
 	return true
 end

@@ -37,18 +37,22 @@ class Sads
 	# Bits needed for leaf indices
 	attr_reader :bits_needed_for_leaves
 
-	def initialize(k, n, m)
+	def initialize(k, n, universe_size)
 		# Input parameteres?
 		#  # Size of Universe
 		#
-		@universe_size_m = m
-		@log_q_ceil = Math.log2(m).ceil
-		@bits_needed_for_leaves = @log_q_ceil + 1
+		@universe_size_m = universe_size
+
 
 		@k = k
 		@stream_bound_n = n
 
 		@q = calculate_q(k, n)
+		@log_q_ceil = Math.log2(@q).ceil
+
+
+		@bits_needed_for_leaves = Math.log2(@universe_size_m) + 1
+
 		@mu   = calculate_mu(@k, @q)
 
 		init_L_R

@@ -117,11 +117,29 @@ class TestSads < MiniTest::Unit::TestCase
 
 		part_dig.must_be_instance_of Vector
 		assert_equal(@sad.k, part_dig.size, "Partial Digest rowsize: #{part_dig.size}")
+
+		part_dig.each do |element|
+			assert_equal(1, element, "Element of partial digest was #{element}")
+		end
 	end
 
-	def test_partial_digest_wrt_leaf_node
-		skip
-	end
+	# def test_partial_digest_wrt_leaf_node
+
+	# 	skip "Not sure how to test the application of L and R matrices"
+	# 	# l_matrix = @sad.L
+	# 	# r_matrix = @sad.R
+
+	# 	# pd_00_3 = @sad.partial_digest(@sad.get_leaf_index(3), '00')
+	# 	# puts "Partial Digest Calculated"
+
+	# 	# unpacked_vector = l_matrix.inverse * pd_00_3
+
+	# 	# unpacked_vector.each do |ele|
+	# 	# 	assert_equal(1, ele, "Unpakced vector element was #{ele}")
+	# 	# end
+		
+	# 	# pd_01_4 = @sad.partial_digest(@sad.get_leaf_index(4), '01')
+	# end
 
 
 	def test_node_digest_is_correct_type_and_size
@@ -136,14 +154,13 @@ class TestSads < MiniTest::Unit::TestCase
 		@sad.addElement(7)
 
 		zeroth_digest = @sad.node_digest('0000')
-
 		zeroth_digest.must_be_instance_of Vector
 
 		assert_equal(@sad.k, zeroth_digest.size, "Digest Row Size is: #{zeroth_digest.size}")
 		# assert_equal(1, zeroth_digest.column_size, "Digest column size is: #{zeroth_digest.column_size}")
 
 		zeroth_digest.each do |ele|
-			assert_equal(1, ele, "Element was #{ele}, not 1 as expected")
+			assert_equal(1, ele, "Element was #{ele}, not 1 as expected. #{@sad.leaves}")
 		end
 
 		seventh_digest = @sad.node_digest('0111')
@@ -152,13 +169,81 @@ class TestSads < MiniTest::Unit::TestCase
 		end
 	end
 
-	def test_partial_label
-		skip
+	def test_node_digest_in_Z_q
+		@sad.addElement(0)
+		@sad.addElement(1)
+		@sad.addElement(1)
+		@sad.addElement(3)
+		@sad.addElement(6)
+		@sad.addElement(7)
+		@sad.addElement(7)
+		@sad.addElement(7)
+
+		all_nodes = set_of_all_node_indices(@sad.universe_size_m)
+
+		all_nodes.each do |node_index|
+			digest = @sad.node_digest(node_index)	
+
+			digest.each do |ele|
+				assert(ele < @sad.q, "Element: #{ele} was expected to be less than #{@sad.q}")
+			end
+		end
 	end
 
-	def test_node_label
-		skip
+	def test_partial_label_size
+		begin
+			p_label = @sad.partial_label('01', '0110')
+			assert_equal(@sad.k * @sad.log_q_ceil, p_label.size, "Size of p_label was #{p_label.size}")
+		rescue ArgumentError => err
+
+			puts err.backtrace
+			puts "Error Message"
+
+		end
 	end
+
+	def test_partial_digest_in_Z_q
+
+		@sad.addElement(0)
+		@sad.addElement(1)
+		@sad.addElement(1)
+		@sad.addElement(3)
+		@sad.addElement(6)
+		@sad.addElement(7)
+		@sad.addElement(7)
+		@sad.addElement(7)
+
+		all_nodes = set_of_all_node_indices(@sad.universe_size_m)
+
+		begin
+			all_nodes.each do |node_index|
+
+				# puts "Node_index: #{node_index}"
+
+				leaf_range = @sad.range(node_index)
+
+				leaf_range.each do |leaf|
+
+					# puts "Leaf: #{leaf}"
+
+					p_dig = @sad.partial_digest(node_index, leaf)
+
+					p_dig.each do |ele|
+						assert(ele < @sad.q, "Element was greater than q: #{ele}")
+					end
+				end			
+			end
+
+		rescue ArgumentError => err
+			puts err
+			fail
+		end
+	end	
+
+
+	# def test_node_label_in_Z_q
+		
+	# end
 
 	def test_range_of_self
 		# Range of leaf is just itself
@@ -197,9 +282,9 @@ class TestSads < MiniTest::Unit::TestCase
 		assert_equal(@sad.universe_size_m, act_range.length, "Range size is: #{act_range.length}")
 	end
 
-	def test_range_of_internal_node
-		skip
-	end
+	# def test_range_of_internal_node
+	# 	skip
+	# end
 
 	def test_mod
 		m = Matrix.build(10, 10) { rand 100 }
@@ -211,22 +296,42 @@ class TestSads < MiniTest::Unit::TestCase
 	end
 
 	def test_digest_is_radix_of_label
-		skip
+
+
+		@sad.addElement(0)
+		@sad.addElement(1)
+		@sad.addElement(1)
+		@sad.addElement(3)
+		@sad.addElement(6)
+		@sad.addElement(7)
+		@sad.addElement(7)
+		@sad.addElement(7)
+		
 		all_nodes = set_of_all_node_indices(@sad.universe_size_m)
 
 		all_nodes.each do |node|
 			digest = @sad.node_digest(node)
 			label = @sad.node_label(node)
+
+			puts "Checking label: #{label}"
+			puts "Checking digest: #{digest}"
+			puts "q : #{@sad.q}"
+
+
 			assert(check_radix_label(label, digest, @sad.q), "Label/Digest Relation Failed for node: #{node}")
 		end
 	end
 
 	def test_get_leaf_index
-		bit_length = @sad.log_q_ceil + 1
+		bit_length = @sad.bits_needed_for_leaves
 
 		(0...@sad.universe_size_m).each do |element_number|
 			n_index = @sad.get_leaf_index(element_number)
-			assert_equal(bit_length, n_index.length, "node_index was not the expected length. Node: #{element_number} had index #{n_index}")
+			
+			assert_equal(bit_length, n_index.length, 
+				"node_index was not the expected length. Node: #{element_number} had index #{n_index}")
+
+			assert_equal(element_number, n_index.to_i(2), "Element was different than expected: #{element_number} != #{n_index} in base 2")
 		end
 
 	end
@@ -240,14 +345,14 @@ class TestSads < MiniTest::Unit::TestCase
 		}
 	end
 
-	def test_get_update_path_has_correct_number_of_node_indices
-		skip
-	end
+	# def test_get_update_path_has_correct_number_of_node_indices
+	# 	skip
+	# end
 
-	def test_get_update_path_does_not_include_root
-		skip
-		# @sad.update_path('')
-	end
+	# def test_get_update_path_does_not_include_root
+	# 	skip
+	# 	# @sad.update_path('')
+	# end
 
 	def test_binary_with_log_q_bits
 		expected = '000'

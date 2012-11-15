@@ -44,7 +44,7 @@ class Sads
 			accum += ( frequency * p_label )
 		end
 
-		return accum
+		return mod(accum, @q)
 	end
 
 	# Partial digest as defined in Definition 10.
@@ -69,11 +69,18 @@ class Sads
 
 		if with_repect_to_index.sub(node_index, '')[0] == "0"
 			# Left
-			b_vector = binary_vector(partial_digest( node_index + '0' ,with_repect_to_index ) )
+			#
+
+			p_dig = partial_digest( node_index + '0' ,with_repect_to_index )
+			b_vector = binary_vector( mod(p_dig, @q) )
+
 			return mod(@L * b_vector, @q)
 		else
 			#Right
-			b_vector = binary_vector(partial_digest( node_index + '1' ,with_repect_to_index ) )
+
+			p_dig = partial_digest( node_index + '1' ,with_repect_to_index )
+			b_vector = binary_vector( mod(p_dig, @q) )
+
 			return mod(@R * b_vector, @q)
 		end
 	end
@@ -98,7 +105,7 @@ class Sads
 			accum += ( frequency * p_digest )
 		end
 
-		return accum
+		return mod(accum, @q)
 	end
 
 	# Returns a collection of leaf indicies for the range of the given parameter
@@ -129,6 +136,8 @@ class Sads
 	#
 	# For now, the vector is storing Ruby's integers 0 or 1.  A future
 	# optimization could be to store only the requisite bits.
+	#
+	# Pre-contidion: vector is in Z_q, otherwise, this can produce vectors not in Z_(k * m)
 	def binary_vector(vector)
 
 		b_parts = Array.new
@@ -159,7 +168,7 @@ class Sads
 			raise RangeError, "#{integer} is outside accepatable range for get_leaf_index"
 		end
 
-		'0' + binary_with_num_bits(integer, @log_q_ceil)
+		binary_with_num_bits(integer, @bits_needed_for_leaves)
 	end
 
 	# Given any integer, return the binary representation of it such that
