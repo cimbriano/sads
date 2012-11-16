@@ -16,15 +16,16 @@ def check_radix_int(radix, x, q)
 	#
 	# radix is a vector in Z_q with size log q
 
-	puts "Checking #{radix.reverse} is a radix rep of #{x} mod #{q}"
-	i = radix.length - 1
+	# puts "Checking #{radix.reverse} is a radix rep of #{x} mod #{q}"
+	# i = radix.length - 1
+	i = 0
 	acc = 0
 
 	radix.reverse.each do |r_i|
-		puts "#{r_i} * 2 ^ #{i}"
+		# puts "#{r_i} * 2 ^ #{i}"
 
 		acc += (r_i * (2 ** i))
-		i 	-= 1
+		i 	+= 1
 	end
 
 	return x == (acc % q)
