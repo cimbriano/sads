@@ -40,8 +40,9 @@ def check_radix_label(label, digest, q)
 
 	label.each_slice(chunk_size) do |group|
 
-		puts "Checking chunk: #{group}"
-		puts "Against digest[#{i}] : #{digest[i]}"
+		# puts "Checking chunk: #{group}"
+		# puts "Against digest[#{i}] : #{digest[i]}"
+
 
 		return false unless check_radix_int(group, digest[i], q)
 		i+=1

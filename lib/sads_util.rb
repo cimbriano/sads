@@ -100,12 +100,23 @@ class Sads
 
 		# range_of_w.inject{ |acc, leaf| sum + (leaves[leaf] || 0) + partial_digest(node_index, leaf) }
 		range_of_w.each do | leaf |
+			# puts "leaf : #{leaf}"
+
 			frequency = leaves[leaf] || 0
+			# puts "freq of #{leaf} : #{frequency}"
+
 			p_digest = partial_digest(node_index, leaf)
+			# puts "p_digest of #{node_index} w.r.t #{leaf} : #{p_digest}"
+
 			accum += ( frequency * p_digest )
+			# puts "current accum : #{accum}"
+
 		end
 
-		return mod(accum, @q)
+		modded_accum = mod(accum, @q)
+		# puts "accum mod #{@q} : #{modded_accum}"
+
+		return modded_accum
 	end
 
 	# Returns a collection of leaf indicies for the range of the given parameter

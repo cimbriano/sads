@@ -4,7 +4,7 @@ require 'prime'
 
 class TestSads < MiniTest::Unit::TestCase
 
-	@@sad ||= Sads.new(2,4, 4)
+	@@sad ||= Sads.new(5,10,8)
 	def after
 		@@sad = nil
 	end
@@ -369,10 +369,8 @@ class TestSads < MiniTest::Unit::TestCase
 	end
 
 	def test_digest_is_radix_of_label
-		@@sad.addElement(0)
-		@@sad.addElement(1)
-		@@sad.addElement(1)
-		@@sad.addElement(3)
+
+		addSomeElements(@@sad, 100)
 
 		all_nodes = set_of_all_node_indices(@@sad.universe_size_m)
 
@@ -380,9 +378,12 @@ class TestSads < MiniTest::Unit::TestCase
 			digest = @@sad.node_digest(node)
 			label = @@sad.node_label(node)
 
-			puts "Checking label: #{label}"
-			puts "Checking digest: #{digest}"
-			puts "q : #{@@sad.q}"
+			if @test
+				puts "Checking label: #{label}"
+				puts "Checking digest: #{digest}"
+				puts "q : #{@@sad.q}"
+			end
+
 
 
 			assert(check_radix_label(label, digest, @@sad.q), "Label/Digest Relation Failed for node: #{node}")
