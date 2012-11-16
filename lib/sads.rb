@@ -37,29 +37,46 @@ class Sads
 	# Bits needed for leaf indices
 	attr_reader :bits_needed_for_leaves
 
-	def initialize(k, n, universe_size)
-		# Input parameteres?
-		#  # Size of Universe
-		#
-		@universe_size_m = universe_size
+	def initialize(k, n, universe_size, test=false)
+		@test = test
 
+		if @test
+			# Small universe and parameters and fixed L & R matrices for
+			# 	easier testing
 
-		@k = k
-		@stream_bound_n = n
+			@universe_size_m        = 2
+			@k                      = 2
+			@stream_bound_n         = 2
+			@q                      = calculate_q(@k, @stream_bound_n)
+			@log_q_ceil             = Math.log2(@q).ceil
+			@bits_needed_for_leaves = Math.log2(@universe_size_m) + 1
+			@mu                     = calculate_mu(@k, @q)
 
-		@q = calculate_q(k, n)
-		@log_q_ceil = Math.log2(@q).ceil
+			l0 = [2, 0, 3, 5, 5, 2]
+			l1 = [1, 1, 2, 5, 2 ,0]
 
+			r0 = [0, 3, 0, 5, 5, 5]
+			r1 = [3, 5, 5, 3, 4, 0]
 
-		@bits_needed_for_leaves = Math.log2(@universe_size_m) + 1
+			@L = Matrix.rows([l0, l1])
+			@R = Matrix.rows([r0, r1])
 
-		@mu   = calculate_mu(@k, @q)
+		else
+			@universe_size_m        = universe_size
+			@k                      = k
+			@stream_bound_n         = n
+			@q                      = calculate_q(k, n)
+			@log_q_ceil             = Math.log2(@q).ceil
+			@bits_needed_for_leaves = Math.log2(@universe_size_m) + 1
+			@mu                     = calculate_mu(@k, @q)
 
-		init_L_R
+			init_L_R
+		end
 
 		@leaves = {}
 		@labels = {}
-	end
+
+	end # initialize
 
 
 	def addElement(ele)
