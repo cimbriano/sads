@@ -212,25 +212,6 @@ class TestSads < MiniTest::Unit::TestCase
 			end
 		end
 
-		def test_node_digest_is_correct_value
-			skip
-			# assert_equal(1, zeroth_digest.column_size, "Digest column size is: #{zeroth_digest.column_size}")
-
-			# zeroth_digest.each do |ele|
-			# 	assert_equal(1, ele, "Element was #{ele}, not 1 as expected. #{@@sad.leaves}")
-			# end
-
-			# Element to add depends on universe size
-
-			# @@sad.addElement(7)
-			# @@sad.addElement(7)
-			# @@sad.addElement(7)
-
-			# seventh_digest = @@sad.node_digest('0111')
-			# seventh_digest.each do |ele|
-			# 	assert_equal(3, ele, "Element was #{ele}, not 3 as expected")
-			# end
-		end
 	end # describe node digest
 
 
@@ -251,9 +232,31 @@ class TestSads < MiniTest::Unit::TestCase
 
 
 	describe "node label" do
-		def test_node_label_in_Z_q
-			skip
+
+		def test_node_label_is_correct_type_and_size
+
+			@@sad.addElement(0)
+			zeroth_label = @@sad.node_label( @@sad.get_leaf_index(0) )
+
+			zeroth_label.must_be_instance_of Vector
+			assert_equal(@@sad.k * @@sad.log_q_ceil, zeroth_label.size, "Label Size is: #{zeroth_label.size}")
 		end
+
+
+		# def test_node_label_in_Z_q
+		# 	addSomeElements(@@sad, 20)
+
+		# 	all_nodes = set_of_all_node_indices(@@sad.universe_size_m)
+
+		# 	all_nodes.each do |node_index|
+		# 		label = @@sad.node_label(node_index)
+
+		# 		label.each do |ele|
+		# 			assert(ele < @@sad.q, "Element: #{ele} was expected to be less than #{@@sad.q}")
+		# 		end
+		# 	end
+
+		# end
 	end
 
 	describe "range" do
