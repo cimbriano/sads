@@ -4,7 +4,7 @@ require 'sads_util'
 
 class Sads
 
-	attr_accessor :labels, :leaves, :digest
+	attr_accessor :labels, :leaves, :digests
 
 	# Left and Right vectors for algebraic hash function
 	attr_reader :L, :R
