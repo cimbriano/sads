@@ -75,6 +75,7 @@ class Sads
 
 		@leaves = {}
 		@labels = {}
+		@digest = {}
 
 	end # initialize
 
@@ -106,22 +107,14 @@ class Sads
 		return leaves.include?(ele)
 	end
 
-	# TODO  - This should be called node_digest and the existing
-	# 	method should be calculate_node_digest
-	def public_get_node_digest(node_index)
-		 # Use the ||= construct
+	def node_digest(node_index)
 		 # If the digest has been computed and stored, use that, otherwise compute it
-		 # digest[node_index] ||= calculate_node_digest(node_index)
+		 @digest[node_index] ||= calc_node_digest(node_index)
 	end
 
-	# Same story as digest
-	# TODO  - This should be called node_label and the existing
-	# 	method should be calculate_node_label
-	def public_get_node_label
-		# Use the ||= construct
+	def node_label(node_index)
 		 # If the digest has been computed and stored, use that, otherwise compute it
-		 #
-		 # labels[node_index] ||= calculate_node_labels(node_index)
+		 @labels[node_index] ||= calc_node_label(node_index)
 	end
 
 	# private below here

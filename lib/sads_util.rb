@@ -29,7 +29,7 @@ class Sads
 	# Label as sum of partial labels: Definition 12
 	#
 	# Optimization: Use stored labels where possible.
-	def node_label(node_index)
+	def calc_node_label(node_index)
 		# TODO - This is repeated code from node_label and doesn't
 		# 	take advantage of stored digests or labels
 
@@ -89,7 +89,7 @@ class Sads
 	#
 	# Optimization: Make use of a stored map of digests instead of calculating them
 	# on the fly each time
-	def node_digest(node_index)
+	def calc_node_digest(node_index)
 		#d(w) =SUM i∈range(w) ci ·Dw(i)
 
 		# accum = Matrix.build(@k, 1) { 0 }
