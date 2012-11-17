@@ -359,13 +359,24 @@ class TestSads < MiniTest::Unit::TestCase
 	end # describe binary with num bits
 
 	describe "update path" do
-		def test_get_update_path_has_correct_number_of_node_indices
-			skip
-		end
 
 		def test_get_update_path_does_not_include_root
-			skip
+			update_path = @@sad.get_update_path( @@sad.get_leaf_index(0) )
+
+			update_path.wont_include '0'
 		end
+
+
+		def test_get_update_path_has_correct_number_of_node_indices
+			update_path = @@sad.get_update_path( @@sad.get_leaf_index(0) )
+
+			# Expect one less than num bits needed (root is not on update path)
+			expected_length = @@sad.bits_needed_for_leaves - 1
+
+			assert_equal(expected_length, update_path.length, "Update path had #{update_path.length} elements.")
+		end
+
+
 	end
 
 	def test_digest_is_radix_of_label
