@@ -106,6 +106,24 @@ class Sads
 		return leaves.include?(ele)
 	end
 
+	# TODO  - This should be called node_digest and the existing
+	# 	method should be calculate_node_digest
+	def public_get_node_digest(node_index)
+		 # Use the ||= construct
+		 # If the digest has been computed and stored, use that, otherwise compute it
+		 # digest[node_index] ||= calculate_node_digest(node_index)
+	end
+
+	# Same story as digest
+	# TODO  - This should be called node_label and the existing
+	# 	method should be calculate_node_label
+	def public_get_node_label
+		# Use the ||= construct
+		 # If the digest has been computed and stored, use that, otherwise compute it
+		 #
+		 # labels[node_index] ||= calculate_node_labels(node_index)
+	end
+
 	# private below here
 	def init_L_R
 		@L = Matrix.build(@k, @mu / 2) { rand @q }
