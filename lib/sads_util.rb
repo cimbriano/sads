@@ -198,8 +198,10 @@ class Sads
 		binary = integer.to_s(2)
 
 		padding_needed = num_bits - binary.length
+		raise ArgumentError, "#{integer} can't be represented in #{num_bits} bits" unless padding_needed >= 0
 
 		index = '0' * padding_needed + binary
+		return index
 	end
 
 end #Sads

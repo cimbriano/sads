@@ -359,6 +359,12 @@ class TestSads < MiniTest::Unit::TestCase
 			actual = @@sad.binary_with_num_bits(7, 3)
 			assert_equal(expected, actual)
 		end
+
+		def test_raises_error_for_intergers_too_big
+			assert_raises(ArgumentError){
+				@@sad.binary_with_num_bits(100, 4)
+			}
+		end
 	end # describe binary with num bits
 
 	describe "update path" do
