@@ -15,10 +15,7 @@ class TestSads < MiniTest::Unit::TestCase
 		end
 
 		def test_mu_is_not_a_float
-			# primes = Prime.instance
-			# primes = [2,3,5,7,11,13,17,19,23,29]
-
-			Prime.each (100) do |q|
+			Prime.each(100) do |q|
 
 				(1..10).each do |k|
 
@@ -28,8 +25,6 @@ class TestSads < MiniTest::Unit::TestCase
 		end
 
 		def test_calc_q
-
-			# assert_true( calculate_q(1024, 256)
 			assert_equal(29, @@sad.calculate_q(2,10))
 		end
 
