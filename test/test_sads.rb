@@ -384,8 +384,6 @@ class TestSads < MiniTest::Unit::TestCase
 
 			assert_equal(expected_length, update_path.length, "Update path had #{update_path.length} elements.")
 		end
-
-
 	end
 
 	def test_digest_is_radix_of_label
