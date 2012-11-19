@@ -75,8 +75,7 @@ class Sads
 
 		@leaves = {}
 		@labels = {}
-		@digest = {}
-
+		@digests = {}
 	end # initialize
 
 
@@ -109,7 +108,7 @@ class Sads
 
 	def node_digest(node_index)
 		 # If the digest has been computed and stored, use that, otherwise compute it
-		 @digest[node_index] ||= calc_node_digest(node_index)
+		 @digests[node_index] ||= calc_node_digest(node_index)
 	end
 
 	def node_label(node_index)
