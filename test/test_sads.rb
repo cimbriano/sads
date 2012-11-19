@@ -298,7 +298,17 @@ class TestSads < MiniTest::Unit::TestCase
 		end
 
 		def test_range_of_internal_node
-			skip
+			leaf_length = @@sad.bits_needed_for_leaves
+			all_node_indicies = set_of_all_node_indices(@@sad.universe_size_m)
+
+			internal_nodes = all_node_indicies.reject {|ele| ele.length == leaf_length || ele.length == 1  } 	
+			internal_nodes.each do |internal_node|
+				extra_bits_needed = leaf_length - internal_node.length 
+				act_range = @@sad.range(internal_node)
+				expected_num_of_nodes_in_range = 2 ** extra_bits_needed 
+				assert_equal(expected_num_of_nodes_in_range, act_range.length, " Range of :#{internal_node} had the size: #{act_range.length} ")
+			end
+			
 		end
 	end # describe range
 
