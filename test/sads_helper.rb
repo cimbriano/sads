@@ -17,7 +17,6 @@ def check_radix_int(radix, x, q)
 	# radix is a vector in Z_q with size log q
 
 	# puts "Checking #{radix.reverse} is a radix rep of #{x} mod #{q}"
-	# i = radix.length - 1
 	i = 0
 	acc = 0
 
@@ -36,14 +35,10 @@ def check_radix_label(label, digest, q)
 	chunk_size = Math.log2(q).ceil
 	i = 0
 
-
-
 	label.each_slice(chunk_size) do |group|
 
 		# puts "Checking chunk: #{group}"
 		# puts "Against digest[#{i}] : #{digest[i]}"
-
-
 		return false unless check_radix_int(group, digest[i], q)
 		i+=1
 
@@ -77,5 +72,4 @@ def addSomeElements(sad, num_to_add)
 	num_to_add.times do
 		sad.addElement( rand(universe_size) )
 	end
-
 end

@@ -4,7 +4,11 @@ require 'sads_util'
 
 class Sads
 
+	#Data structures storing Merkle tree
 	attr_accessor :labels, :leaves, :digests
+
+	# Stores digest of root
+	attr_accessor :root_digest
 
 	# Left and Right vectors for algebraic hash function
 	attr_reader :L, :R
@@ -96,10 +100,15 @@ class Sads
 		else
 			leaves[index] = 1
 		end
+
+		# update_root_digest
 	end
 
 	def removeElement(ele)
-		leaves.delete ele
+		# removeElement has to do the following:
+		# 	* Update the leaves (or frequency value)
+		# 	* Update the labels of all affected nodes
+		# 	* Update the root digest (this may occur as part of the previous)
 	end
 
 	def exists?(ele)
@@ -116,14 +125,18 @@ class Sads
 		 @labels[node_index] ||= calc_node_label(node_index)
 	end
 
+	# def update_root_digest
+	# 	@root_digest = node_digest('0')
+	# end
+
 	# private below here
 	def init_L_R
 		@L = Matrix.build(@k, @mu / 2) { rand @q }
 		@R = Matrix.build(@k, @mu / 2) { rand @q }
 	end
 
-	def hash(x, y)
-		mod(@L * x + @R * y, @q)
+	def hash(left_child_idx, right_child_idx)
+		mod(@L * node_label(left_child_idx) + @R * node_label(right_child_idx), @q)
 	end
 	# end private
 end

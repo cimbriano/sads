@@ -7,7 +7,7 @@ class TestSads < MiniTest::Unit::TestCase
 	describe "SADS" do
 
 		before do
-			@sad = Sads.new(5,10,8,true)
+			@sad = Sads.new(5,10,8)
 		end
 
 		describe "Sads Construction" do
