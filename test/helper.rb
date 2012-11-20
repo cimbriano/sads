@@ -10,7 +10,7 @@ rescue Bundler::BundlerError => e
   exit e.status_code
 end
 
-require 'minitest/unit'
+# require 'minitest/unit'
 require 'minitest/reporters'
 require 'minitest/autorun'
 require 'minitest/spec'
