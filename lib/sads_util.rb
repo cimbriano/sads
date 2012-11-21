@@ -193,7 +193,11 @@ class Sads
 	end
 
 
+	# Returns the binary representation of integer using the
+	# 	specified number of bits
 	#
+	# 	raises Arguement error of num_bits is notsufficiently large to represent
+	# 	integer. eg. integer = 15 num_bits=2
 	def binary_with_num_bits(integer, num_bits)
 		binary = integer.to_s(2)
 
