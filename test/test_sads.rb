@@ -4,7 +4,7 @@ require 'prime'
 
 class TestSads < MiniTest::Unit::TestCase
 
-	describe "SADS" do
+	describe "Sads" do
 
 		before do
 			@sad = Sads.new(5,10,8)
@@ -238,20 +238,20 @@ class TestSads < MiniTest::Unit::TestCase
 			end
 
 
-			# def test_node_label_in_Z_q
-			# 	addSomeElements(@sad, 20)
+			def test_node_label_in_Z_q
+				addSomeElements(@sad, 20)
 
-			# 	all_nodes = set_of_all_node_indices(@sad.universe_size_m)
+				all_nodes = set_of_all_node_indices(@sad.universe_size_m)
 
-			# 	all_nodes.each do |node_index|
-			# 		label = @sad.node_label(node_index)
+				all_nodes.each do |node_index|
+					label = @sad.node_label(node_index)
 
-			# 		label.each do |ele|
-			# 			assert(ele < @sad.q, "Element: #{ele} was expected to be less than #{@sad.q}")
-			# 		end
-			# 	end
+					label.each do |ele|
+						assert(ele < @sad.q, "Element: #{ele} was expected to be less than #{@sad.q}")
+					end
+				end
 
-			# end
+			end
 		end # describe node label
 
 		describe "range" do

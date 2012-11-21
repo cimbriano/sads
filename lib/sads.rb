@@ -135,6 +135,9 @@ class Sads
 		@R = Matrix.build(@k, @mu / 2) { rand @q }
 	end
 
+	# The algebraic hash function.
+	# Takes as parameters the indicies of two child nodes and
+	# 	produces the digest of the parent of those children.
 	def hash(left_child_idx, right_child_idx)
 		mod(@L * node_label(left_child_idx) + @R * node_label(right_child_idx), @q)
 	end
