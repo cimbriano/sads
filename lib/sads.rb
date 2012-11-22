@@ -82,7 +82,7 @@ class Sads
 		@digests = {}
 	end # initialize
 
-
+	# Add the specified element to the Merkle tree
 	def addElement(ele)
 		# Need an index for this element (assuming for now element is
 		# 	an integer representing which universe element to "add"
@@ -151,7 +151,6 @@ class Sads
 			# Check the hash of the last siblings is the root digest
 		root_child_1, root_child_2 = proof.last
 		return hash(root_child_1, root_child_2) == @root_digest
-
 	end
 
 	# def update_root_digest
@@ -189,5 +188,6 @@ class Sads
 			raise TypeError "hash takes either a Vector or a String index"
 		end
 	end
+
 	# end private
 end
