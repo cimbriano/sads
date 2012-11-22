@@ -70,26 +70,39 @@ class TestSads < MiniTest::Unit::TestCase
 		end # describe L & R matrices
 
 		describe "hash function" do
-			# def test_hash_result_is_a_matrix
-			# m = @sad.mu / 2
 
-			# x = column_vector(m)
-			# y = column_vector(m)
+			def test_hash_raises_error_for_unlike_types
+				assert_raises(TypeError){
+					@sad.hash('00', 0)
+				}
+			end
 
-			# assert_instance_of(Matrix, @sad.hash(x,y))
-			# end
+			def test_hash_raises_error_for_similar_types_not_string_or_vector
+				assert_raises(TypeError){
+					@sad.hash(0,0)
+				}
+			end
 
-			# def test_hash_elements_are_mod_q
-			# 	m = @sad.mu / 2
-			# 	max = @sad.q * 4
+			def test_hash_result_is_a_vector
+				m = @sad.mu / 2
 
-			# 	x = column_vector_with_max(m, max)
-			# 	y = column_vector_with_max(m, max)
+				x = column_vector(m)
+				y = column_vector(m)
 
-			# 	@sad.hash(x,y).each do |item|
-			# 		assert(item < @sad.q, "#{item} is >= #{@sad.q}")
-			# 	end
-			# end
+				assert_instance_of(Matrix, @sad.hash(x,y))
+			end
+
+			def test_hash_elements_are_mod_q
+				m = @sad.mu / 2
+				max = @sad.q * 4
+
+				x = column_vector_with_max(m, max)
+				y = column_vector_with_max(m, max)
+
+				@sad.hash(x,y).each do |item|
+					assert(item < @sad.q, "#{item} is >= #{@sad.q}")
+				end
+			end
 		end # describe hash function
 
 		describe "binary vector" do
@@ -435,5 +448,4 @@ class TestSads < MiniTest::Unit::TestCase
 		end # describe verification
 
 	end # describe Streaming Authenticated Data Structure
-
 end # TestSads
