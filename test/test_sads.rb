@@ -420,7 +420,14 @@ class TestSads < MiniTest::Unit::TestCase
 					assert_equal(calculated_digest, hashed_digest, "Hashed digest did not equal caclulated digest.")
 				end
 			end
-		end # correctness conditions
+		end # describe correctness conditions
+
+		describe "proof generation & siblings" do
+		end # describe siblings
+
+		describe "verification" do
+
+		end # describe verification
 
 	end # describe Streaming Authenticated Data Structure
 
