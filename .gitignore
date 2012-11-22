@@ -16,3 +16,6 @@ rdoc
 
 # simplecov generated
 coverage
+
+# packaged gem
+pkg
