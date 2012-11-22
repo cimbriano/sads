@@ -124,6 +124,34 @@ class Sads
 	def node_label(node_index)
 		 # If the digest has been computed and stored, use that, otherwise compute it
 		 # @labels[node_index] ||= calc_node_label(node_index)
+		 calc_node_label(node_index)
+	end
+
+	# Given a proof provided by the prover, use this to verify its correctness
+	def verify_proof(proof)
+
+		# Steps:
+		# 	a. Compute the digest of a parent given the labels of its children (hash)
+		# 			- The proof will have labels of the nodes (no indices?... should there be a proof class?)
+		# 	b. Compute the digest of each node given its label
+		# 	c. The digests of a. and b. should be consistent
+
+		0.upto(proof.length - 1) do |i|
+			label_child_1, label_child_2 = proof[i]
+			parent_label = proof[i + 1][0]
+
+			hashed_digest = hash(label_child_1, label_child_2)
+
+			digest_from_label = digest_from_label(parent_label)
+
+			return false if hashed_digest != digest_from_label
+		end
+
+		# d. Check the root digest is equivalent with the known digest
+			# Check the hash of the last siblings is the root digest
+		root_child_1, root_child_2 = proof.last
+		return hash(root_child_1, root_child_2) == @root_digest
+
 	end
 
 	# def update_root_digest
@@ -139,8 +167,27 @@ class Sads
 	# The algebraic hash function.
 	# Takes as parameters the indicies of two child nodes and
 	# 	produces the digest of the parent of those children.
-	def hash(left_child_idx, right_child_idx)
-		mod(@L * node_label(left_child_idx) + @R * node_label(right_child_idx), @q)
+	def hash_children_by_label(left_child_label, right_child_label)
+		mod(@L * left_child_label + @R * right_child_label, @q)
+	end
+
+	#
+	def hash_children_by_index(left_child_idx, right_child_idx)
+		hash_children_by_label(node_label(left_child_idx), node_label(right_child_idx))
+	end
+
+	# Public hash method, expects two strings representing indices, or two Vectors representing labels
+	def hash(x,y)
+		raise TypeError "#{x} and #{y} have different types." if x.class != y.class
+
+		case x
+		when String
+			return hash_children_by_index(x,y)
+		when Vector
+			return hash_children_by_label(x,y)
+		else
+			raise TypeError "hash takes either a Vector or a String index"
+		end
 	end
 	# end private
 end
