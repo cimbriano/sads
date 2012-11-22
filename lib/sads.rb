@@ -117,12 +117,13 @@ class Sads
 
 	def node_digest(node_index)
 		 # If the digest has been computed and stored, use that, otherwise compute it
-		 @digests[node_index] ||= calc_node_digest(node_index)
+		 # @digests[node_index] ||= calc_node_digest(node_index)
+		 calc_node_digest(node_index)
 	end
 
 	def node_label(node_index)
 		 # If the digest has been computed and stored, use that, otherwise compute it
-		 @labels[node_index] ||= calc_node_label(node_index)
+		 # @labels[node_index] ||= calc_node_label(node_index)
 	end
 
 	# def update_root_digest
