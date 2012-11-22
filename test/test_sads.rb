@@ -423,10 +423,15 @@ class TestSads < MiniTest::Unit::TestCase
 		end # describe correctness conditions
 
 		describe "proof generation & siblings" do
+			def test_correct_length
+				skip
+			end
 		end # describe siblings
 
 		describe "verification" do
-
+			def test_verify_proof
+				skip
+			end
 		end # describe verification
 
 	end # describe Streaming Authenticated Data Structure
