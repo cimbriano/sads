@@ -157,6 +157,20 @@ class Sads
 	# 	@root_digest = node_digest('0')
 	# end
 
+	# Public hash method, expects two strings representing indices, or two Vectors representing labels
+	def hash(x,y)
+		raise TypeError "#{x} and #{y} have different types." if x.class != y.class
+
+		case x
+		when String
+			return hash_children_by_index(x,y)
+		when Vector
+			return hash_children_by_label(x,y)
+		else
+			raise TypeError "hash takes either a Vector or a String index"
+		end
+	end
+
 	# private below here
 	def init_L_R
 		@L = Matrix.build(@k, @mu / 2) { rand @q }
@@ -175,19 +189,5 @@ class Sads
 		hash_children_by_label(node_label(left_child_idx), node_label(right_child_idx))
 	end
 
-	# Public hash method, expects two strings representing indices, or two Vectors representing labels
-	def hash(x,y)
-		raise TypeError "#{x} and #{y} have different types." if x.class != y.class
-
-		case x
-		when String
-			return hash_children_by_index(x,y)
-		when Vector
-			return hash_children_by_label(x,y)
-		else
-			raise TypeError "hash takes either a Vector or a String index"
-		end
-	end
-
 	# end private
-end
+end # class Sads
