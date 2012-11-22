@@ -41,7 +41,6 @@ class TestSads < MiniTest::Unit::TestCase
 			end
 		end # describe Sads Construction
 
-
 		describe "L & R Matrices" do
 			def test_init_L_R_are_matricecs
 				assert_instance_of(Matrix, @sad.L)
@@ -70,7 +69,6 @@ class TestSads < MiniTest::Unit::TestCase
 			end
 		end # describe L & R matrices
 
-
 		describe "hash function" do
 			# def test_hash_result_is_a_matrix
 			# m = @sad.mu / 2
@@ -94,7 +92,6 @@ class TestSads < MiniTest::Unit::TestCase
 			# end
 		end # describe hash function
 
-
 		describe "binary vector" do
 			def test_binary_vector
 				x = column_vector(@sad.k)
@@ -114,7 +111,6 @@ class TestSads < MiniTest::Unit::TestCase
 				# assert_equal(1 ,b_columnsize, "Column size is: #{b_columnsize}")
 			end
 		end # describe binary vector
-
 
 		describe "partial digest" do
 
@@ -183,7 +179,6 @@ class TestSads < MiniTest::Unit::TestCase
 			end
 		end # describe partial digest
 
-
 		describe "node digest" do
 			def test_node_digest_is_correct_type_and_size
 
@@ -209,7 +204,6 @@ class TestSads < MiniTest::Unit::TestCase
 			end
 		end # describe node digest
 
-
 		describe "partial label" do
 
 			def test_partial_label_size
@@ -224,7 +218,6 @@ class TestSads < MiniTest::Unit::TestCase
 				end
 			end
 		end # describe partial label
-
 
 		describe "node label" do
 
@@ -307,7 +300,6 @@ class TestSads < MiniTest::Unit::TestCase
 			end
 		end # describe range
 
-
 		describe "get leaf index" do
 			def test_get_leaf_index
 				bit_length = @sad.bits_needed_for_leaves
@@ -333,7 +325,6 @@ class TestSads < MiniTest::Unit::TestCase
 			end
 		end # describe get leaf index
 
-
 		describe "helper methods" do
 			def test_mod
 				m = Matrix.build(10, 10) { rand 100 }
@@ -344,7 +335,6 @@ class TestSads < MiniTest::Unit::TestCase
 				end
 			end
 		end # describe helper methods
-
 
 		describe "binary with num bits" do
 			def test_binary_with_num_bits

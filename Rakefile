@@ -17,24 +17,20 @@ Jeweler::Tasks.new do |gem|
   gem.name = "sads"
   gem.homepage = "http://github.com/cimbriano/sads"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Streaming Authenticated Data Structure}
+  gem.description = %Q{The data structure part of SADS}
   gem.email = "Christopher.Imbriano@gmail.com"
   gem.authors = ["Chris Imbriano"]
   # dependencies defined in Gemfile
 end
-Jeweler::RubygemsDotOrgTasks.new
+
+#Commenting this line so we don't accidentally release to Gemcutter by accident
+#Jeweler::RubygemsDotOrgTasks.new
 
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
   test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-end
-
-Rake::TestTask.new(:spec) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/spec_*.rb'
   test.verbose = true
 end
 
