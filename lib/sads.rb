@@ -159,7 +159,7 @@ class Sads
 
 	# Public hash method, expects two strings representing indices, or two Vectors representing labels
 	def hash(x,y)
-		raise TypeError "#{x} and #{y} have different types." if x.class != y.class
+		raise TypeError, "#{x} and #{y} have different types." if x.class != y.class
 
 		case x
 		when String
@@ -167,7 +167,7 @@ class Sads
 		when Vector
 			return hash_children_by_label(x,y)
 		else
-			raise TypeError "hash takes either a Vector or a String index"
+			raise TypeError, "hash takes either a Vector or a String index"
 		end
 	end
 

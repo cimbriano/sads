@@ -8,7 +8,7 @@ def column_vector(size)
 end
 
 def column_vector_with_max(size, max)
-	Matrix.column_vector( Array.new(size) { rand max } )
+	Vector.elements( Array.new(size) { rand max } )
 end
 
 def check_radix_int(radix, x, q)

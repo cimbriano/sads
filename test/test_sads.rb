@@ -89,7 +89,7 @@ class TestSads < MiniTest::Unit::TestCase
 				x = column_vector(m)
 				y = column_vector(m)
 
-				assert_instance_of(Matrix, @sad.hash(x,y))
+				assert_instance_of(Vector, @sad.hash(x,y))
 			end
 
 			def test_hash_elements_are_mod_q
