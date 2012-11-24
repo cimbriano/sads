@@ -19,3 +19,7 @@ coverage
 
 # packaged gem
 pkg
+
+#
+misc/params.txt
+*.tar.gz
