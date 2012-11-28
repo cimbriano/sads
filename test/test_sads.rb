@@ -436,6 +436,7 @@ class TestSads < MiniTest::Unit::TestCase
 		end # describe correctness conditions
 
 		describe "siblings (membership proof)" do
+
 			def test_siblings_correct_length
 
 				siblings_labels = @sad.get_membership_proof( @sad.get_leaf_index(1) )
