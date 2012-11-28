@@ -435,10 +435,34 @@ class TestSads < MiniTest::Unit::TestCase
 			end
 		end # describe correctness conditions
 
-		describe "proof generation & siblings" do
-			def test_correct_length
-				skip
+		describe "siblings (membership proof)" do
+			def test_siblings_correct_length
+
+				siblings_labels = @sad.get_membership_proof( @sad.get_leaf_index(1) )
+				tree_depth = @sad.bits_needed_for_leaves
+
+				assert_equal(tree_depth - 1, siblings_labels.length, "Proof had #{siblings_labels.length} elements. #{tree_depth - 1} expected")
 			end
+
+			def test_siblings_is_list_of_pairs
+				leaf_index = @sad.get_leaf_index(1)
+
+				siblings_labels = @sad.get_membership_proof( leaf_index )
+
+				update_path = @sad.get_update_path leaf_index
+
+				update_path.each_with_index do |node_index, i|
+
+					label1 = @sad.node_label node_index
+					label2 = @sad.node_label @sad.sibling(node_index)
+
+					child_label1, child_label2 = siblings_labels[i]
+
+					assert_equal(label1, child_label1)
+					assert_equal(label2, child_label2)
+				end
+			end
+
 		end # describe siblings
 
 		describe "verification" do

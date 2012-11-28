@@ -165,7 +165,7 @@ class Sads
 		Vector.elements(b_parts)
 	end
 
-	# Given a leaf index this method returns the path in the hash tree
+	# Given a leaf index this method returns the path (indices) in the hash tree
 	# 	from the leaf to the child of the root (ie, its a path to the
 	# 	root without the root)
 	def get_update_path(leaf_index)
@@ -206,6 +206,27 @@ class Sads
 
 		index = '0' * padding_needed + binary
 		return index
+	end
+
+	# Given a node index, returns a list of pairs of labels.
+	# 		The pairs consist of
+	# 			i) Label of node on the update path of node_index
+	# 			ii) Sibling label of i)
+	def get_membership_proof(node_index)
+		update_path = get_update_path(node_index)
+
+		update_path.map { |node| [node_label(node), node_label( sibling(node) )] }
+	end
+
+
+	# Given a node index
+	# 	returns the index of its sibling in the Merkle tree
+	def sibling(node_index)
+		if node_index[-1] ==  "0"
+			node_index[0...-1] + '1'
+		else
+			node_index[0...-1] + '0'
+		end
 	end
 
 end #Sads

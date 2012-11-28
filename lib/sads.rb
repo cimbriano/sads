@@ -128,7 +128,7 @@ class Sads
 	end
 
 	# Given a proof provided by the prover, use this to verify its correctness
-	def verify_proof(proof)
+	def verify_membership_proof(proof)
 
 		# Steps:
 		# 	a. Compute the digest of a parent given the labels of its children (hash)
@@ -152,6 +152,7 @@ class Sads
 		root_child_1, root_child_2 = proof.last
 		return hash(root_child_1, root_child_2) == @root_digest
 	end
+
 
 	# def update_root_digest
 	# 	@root_digest = node_digest('0')
