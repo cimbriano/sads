@@ -172,7 +172,7 @@ class Sads
 		# Flat_map returns and array with the elements produced by each block
 		2.upto(leaf_index.length).flat_map do | last |
 			leaf_index[0, last]
-		end
+		end.reverse
 	end
 
 	# Given an integer representing the desired universe element

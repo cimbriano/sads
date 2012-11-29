@@ -429,6 +429,19 @@ class TestSads < MiniTest::Unit::TestCase
 
 				assert_equal(expected_length, update_path.length, "Update path had #{update_path.length} elements.")
 			end
+
+			def test_update_path_order
+				leaf_indices = set_of_leaf_indices(@sad.universe_size_m, @sad.bits_needed_for_leaves)
+
+				leaf_indices.each do |idx|
+					update_path  = @sad.get_update_path(idx)
+
+					(update_path.length - 1).times do |i|
+						assert( update_path[i].length == update_path[i + 1].size + 1, "update path: #{update_path}")
+					end
+				end
+
+			end
 		end # describe update path
 
 		describe "correctness conditions" do
@@ -501,6 +514,17 @@ class TestSads < MiniTest::Unit::TestCase
 					assert_equal(label2, child_label2)
 				end
 			end
+
+			# def test_order_of_pairs
+			# 	leaf_indices = set_of_leaf_indices(@sad.universe_size_m, @sad.bits_needed_for_leaves)
+
+			# 	leaf_indices.each do |leaf_index|
+			# 		siblings_labels = @sad.get_membership_proof leaf_index
+
+			# 		parent(leaf_index)
+			# 	end
+
+			# end
 		end # describe siblings
 
 		describe "verify_membership_proof" do
