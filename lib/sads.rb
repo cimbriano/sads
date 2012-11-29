@@ -80,6 +80,8 @@ class Sads
 		@leaves = {}
 		@labels = {}
 		@digests = {}
+
+		@root_digest = node_digest('0')
 	end # initialize
 
 	# Add the specified element to the Merkle tree
@@ -102,6 +104,7 @@ class Sads
 		end
 
 		# update_root_digest
+		@root_digest = mod(@root_digest + partial_digest('0', index), @q)
 	end
 
 	def removeElement(ele)
@@ -153,10 +156,6 @@ class Sads
 		return hash(root_child_1, root_child_2) == @root_digest
 	end
 
-
-	# def update_root_digest
-	# 	@root_digest = node_digest('0')
-	# end
 
 	# Public hash method, expects two strings representing indices, or two Vectors representing labels
 	def hash(x,y)
