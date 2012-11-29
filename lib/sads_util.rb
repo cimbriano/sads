@@ -285,5 +285,3 @@ def mod(m, q)
 		raise TypeError "mod(m,q) takes either a Vector or Matrix for m"
 	end
 end
-
-

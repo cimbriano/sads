@@ -457,6 +457,7 @@ class TestSads < MiniTest::Unit::TestCase
 
 			def test_siblings_correct_length
 
+				# TODO Test all the leaves
 				siblings_labels = @sad.get_membership_proof( @sad.get_leaf_index(1) )
 				tree_depth = @sad.bits_needed_for_leaves
 
