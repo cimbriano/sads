@@ -215,7 +215,13 @@ class Sads
 	def get_membership_proof(node_index)
 		update_path = get_update_path(node_index)
 
-		update_path.map { |node| [node_label(node), node_label( sibling(node) )] }
+		update_path.map { |node| [node_label(node), node_label( sibling(node) ), right_child?(node) ] }
+	end
+
+	# Given a node index
+	# 	returns true if this is the right (not left) child
+	def right_child?(node_index)
+		node_index[-1] == '1'
 	end
 
 

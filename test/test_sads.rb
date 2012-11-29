@@ -89,7 +89,7 @@ class TestSads < MiniTest::Unit::TestCase
 				x = column_vector(m)
 				y = column_vector(m)
 
-				assert_instance_of(Vector, @sad.hash(x,y))
+				assert_instance_of(Vector, @sad.hash(x, y, false))
 			end
 
 			def test_hash_elements_are_mod_q
@@ -99,7 +99,7 @@ class TestSads < MiniTest::Unit::TestCase
 				x = column_vector_with_max(m, max)
 				y = column_vector_with_max(m, max)
 
-				@sad.hash(x,y).each do |item|
+				@sad.hash(x, y, false).each do |item|
 					assert(item < @sad.q, "#{item} is >= #{@sad.q}")
 				end
 			end
@@ -380,10 +380,15 @@ class TestSads < MiniTest::Unit::TestCase
 						@sad.check_radix_label(label, digest)
 					}
 				end
-
 			end #describe check radix
 
+			def test_right_child
+				all_nodes = set_of_all_node_indices(@sad.universe_size_m)
 
+				all_nodes.each do |node|
+					assert_equal(node[-1] == '1', @sad.right_child?(node), "#{node} is a left child")
+				end
+			end
 		end # describe helper methods
 
 		describe "binary with num bits" do

@@ -141,20 +141,23 @@ class Sads
 
 		(proof.length - 1).times do |i|
 
-			label_child_1, label_child_2 = proof[i]
-			parent_label = proof[i + 1][0]
-			hashed_digest = hash(label_child_1, label_child_2)
+			label_child_1, label_child_2, reverse_flag = proof[i]
+			hashed_digest = hash(label_child_1, label_child_2, reverse_flag)
 
-			matched = check_radix_label(parent_label, hashed_digest, @q)
+			parent_label  = proof[i + 1][0]
+
+			matched = check_radix_label(parent_label, hashed_digest)
+
+
 
 			return false if not matched
 		end
 
 		# d. Check the root digest is equivalent with the known digest
 			# Check the hash of the last siblings is the root digest
-		root_child_1, root_child_2 = proof.last
+		root_child_1, root_child_2, reverse_flag = proof.last
 
-		return hash(root_child_1, root_child_2) == @root_digest
+		return hash(root_child_1, root_child_2, reverse_flag) == @root_digest
 	end
 
 
