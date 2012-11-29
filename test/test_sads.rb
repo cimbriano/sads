@@ -339,14 +339,32 @@ class TestSads < MiniTest::Unit::TestCase
 		end # describe get leaf index
 
 		describe "helper methods" do
-			def test_mod
-				m = Matrix.build(10, 10) { rand 100 }
+			describe "mod" do
+				def test_mod
+					m = Matrix.build(10, 10) { rand 100 }
 
-				mod(m, 8).each do |ele|
+					mod(m, 8).each do |ele|
+						assert(ele < 8)
+					end
 
-					assert(ele < 8)
 				end
-			end
+			end #describe mod
+
+			describe "check radix int/label" do
+
+				it "should raise an error if the dimensions are incorrect" do
+
+					label  = [1,2,3]
+					digest = [1,2,3]
+
+					assert_raises(TypeError){
+						@sad.check_radix_label(label, digest)
+					}
+				end
+
+			end #describe check radix
+
+
 		end # describe helper methods
 
 		describe "binary with num bits" do
@@ -412,7 +430,7 @@ class TestSads < MiniTest::Unit::TestCase
 					# puts "Checking digest: #{digest}"
 					# puts "q : #{@sad.q}"
 
-					assert(check_radix_label(label, digest, @sad.q), "Label/Digest Relation Failed for node: #{node}")
+					assert(@sad.check_radix_label(label, digest), "Label/Digest Relation Failed for node: #{node}")
 				end
 			end
 
@@ -463,12 +481,17 @@ class TestSads < MiniTest::Unit::TestCase
 					assert_equal(label2, child_label2)
 				end
 			end
-
 		end # describe siblings
 
-		describe "verification" do
-			def test_verify_proof
-				skip
+		describe "verify_membership_proof" do
+			def test_membership_proof
+
+				addSomeElements(@sad, 8)
+
+				# TODO Test all the leaves
+				proof = @sad.get_membership_proof( @sad.get_leaf_index(1) )
+
+				assert( @sad.verify_membership_proof(proof) , "Proof does not check out")
 			end
 		end # describe verification
 

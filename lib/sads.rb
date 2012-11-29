@@ -139,20 +139,21 @@ class Sads
 		# 	b. Compute the digest of each node given its label
 		# 	c. The digests of a. and b. should be consistent
 
-		0.upto(proof.length - 1) do |i|
+		(proof.length - 1).times do |i|
+
 			label_child_1, label_child_2 = proof[i]
 			parent_label = proof[i + 1][0]
-
 			hashed_digest = hash(label_child_1, label_child_2)
 
-			digest_from_label = digest_from_label(parent_label)
+			matched = check_radix_label(parent_label, hashed_digest, @q)
 
-			return false if hashed_digest != digest_from_label
+			return false if not matched
 		end
 
 		# d. Check the root digest is equivalent with the known digest
 			# Check the hash of the last siblings is the root digest
 		root_child_1, root_child_2 = proof.last
+
 		return hash(root_child_1, root_child_2) == @root_digest
 	end
 

@@ -11,29 +11,6 @@ def column_vector_with_max(size, max)
 	Vector.elements( Array.new(size) { rand max } )
 end
 
-def check_radix_int(radix, x, q)
-	# x is a number in Z_q
-	#
-	# radix is a vector in Z_q with size log q
-	acc = 0
-	radix.reverse.each_with_index do |r_i, i|
-		acc += (r_i * (2 ** i))
-	end
-
-	return x == (acc % q)
-end
-
-def check_radix_label(label, digest, q)
-	# label should be a radix rep of the digest
-	chunk_size = Math.log2(q).ceil
-
-	label.each_slice(chunk_size).each_with_index do |group, i|
-		return false unless check_radix_int(group, digest[i], q)
-	end
-
-	return true
-end
-
 def set_of_all_node_indices(universe_size)
 	num_layers = Math.log2(universe_size).ceil
 	layers = Array.new

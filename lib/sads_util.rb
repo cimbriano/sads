@@ -229,8 +229,44 @@ class Sads
 		end
 	end
 
-end #Sads
+	# Given a node label
+	# 	return its digest
+	def digest_from_label(label)
 
+	end
+
+	# Checks that radix is a radix representation of
+	# 	the integer x mod q
+	def check_radix_int(radix, x)
+		# x is a number in Z_q
+		#
+		# radix is a vector in Z_q with size log q
+		acc = 0
+		radix.reverse.each_with_index do |r_i, i|
+			acc += (r_i * (2 ** i))
+		end
+
+		return x == (acc % @q)
+	end
+
+
+	# Checks that the label is a radix representation of digest mod q
+	# 	Both label and digest are expected to be Vectors or Arrays
+	def check_radix_label(label, digest)
+
+		raise TypeError, "Size mismatch between label and digest" if label.size != digest.size * @log_q_ceil
+		# label should be a radix rep of the digest
+		chunk_size = Math.log2(q).ceil
+
+		label.each_slice(chunk_size).each_with_index do |group, i|
+			return false unless check_radix_int(group, digest[i])
+		end
+
+		return true
+	end
+
+
+end #Sads
 
 # The mod function is a short term fix for doing all the arithmetic mod q
 # 	Consider doing the mod operation during the actualy operations
