@@ -48,7 +48,7 @@ class Sads
 			# Small universe and parameters and fixed L & R matrices for
 			# 	easier testing
 
-			@universe_size_m        = 2
+			@universe_size_m        = 4
 			@k                      = 2
 			@stream_bound_n         = 2
 			@q                      = calculate_q(@k, @stream_bound_n)
@@ -56,11 +56,11 @@ class Sads
 			@bits_needed_for_leaves = Math.log2(@universe_size_m) + 1
 			@mu                     = calculate_mu(@k, @q)
 
-			l0 = [2, 0, 3, 5, 5, 2]
-			l1 = [1, 1, 2, 5, 2 ,0]
+			l0 = [5, 1, 5, 1, 0, 1]
+			l1 = [2, 1, 1, 3, 0, 3]
 
-			r0 = [0, 3, 0, 5, 5, 5]
-			r1 = [3, 5, 5, 3, 4, 0]
+			r0 = [2, 4, 1, 4, 2, 5]
+			r1 = [1, 0, 4, 3, 5, 3]
 
 			@L = Matrix.rows([l0, l1])
 			@R = Matrix.rows([r0, r1])
