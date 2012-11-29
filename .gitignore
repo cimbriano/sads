@@ -21,5 +21,5 @@ coverage
 pkg
 
 #
-misc/params.txt
+misc/*.txt
 *.tar.gz
