@@ -26,6 +26,10 @@ def set_of_all_node_indices(universe_size)
 	return layers.flatten
 end
 
+def set_of_leaf_indices(universe_size, bits_needed_for_leaves)
+	set_of_all_node_indices(universe_size).reject { |n| n.length != bits_needed_for_leaves}
+end
+
 def children_indices(parent)
 	[parent + '0', parent + '1']
 end
@@ -37,4 +41,8 @@ def addSomeElements(sad, num_to_add)
 	num_to_add.times do
 		sad.addElement( rand(universe_size) )
 	end
+end
+
+def parent(index)
+	index[0...-1] unless index.length == 1
 end
