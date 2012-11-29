@@ -103,6 +103,25 @@ class TestSads < MiniTest::Unit::TestCase
 					assert(item < @sad.q, "#{item} is >= #{@sad.q}")
 				end
 			end
+
+			def test_hash_of_vectors_fails_without_parameter
+				m = @sad.mu / 2
+
+				v1 = column_vector(m)
+				v2 = column_vector(m)
+
+				assert_raises(ArgumentError){
+					@sad.hash(v1,v2)
+				}
+			end
+
+			def test_hash_of_string_checks_order
+
+				zeroth = @sad.get_leaf_index(0)
+				first  = @sad.get_leaf_index(1)
+
+				assert_equal(@sad.hash(zeroth, first), @sad.hash(first, zeroth), "Hash of siblings (x,y) not equal to hash of (y,x)")
+			end
 		end # describe hash function
 
 		describe "binary vector" do

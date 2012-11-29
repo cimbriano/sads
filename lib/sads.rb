@@ -159,14 +159,15 @@ class Sads
 
 
 	# Public hash method, expects two strings representing indices, or two Vectors representing labels
-	def hash(x,y)
+	def hash(x,y, reverse=nil)
 		raise TypeError, "#{x} and #{y} have different types." if x.class != y.class
 
 		case x
 		when String
 			return hash_children_by_index(x,y)
 		when Vector
-			return hash_children_by_label(x,y)
+			raise ArgumentError, "<reverse> parameter not provided" if reverse.nil?
+			return hash_children_by_label(x,y,reverse)
 		else
 			raise TypeError, "hash takes either a Vector or a String index"
 		end
@@ -181,13 +182,23 @@ class Sads
 	# The algebraic hash function.
 	# Takes as parameters the indicies of two child nodes and
 	# 	produces the digest of the parent of those children.
-	def hash_children_by_label(left_child_label, right_child_label)
-		mod(@L * left_child_label + @R * right_child_label, @q)
+	def hash_children_by_label(child_1, child_2, reverse)
+		if reverse
+			mod(@L * child_2 + @R * child_1, @q)
+		else
+			mod(@L * child_1 + @R * child_2, @q)
+		end
+
+
 	end
 
-	#
-	def hash_children_by_index(left_child_idx, right_child_idx)
-		hash_children_by_label(node_label(left_child_idx), node_label(right_child_idx))
+	def hash_children_by_index(child_1, child_2)
+		#TODO handle reverse children
+		if child_1[-1] == '1'
+			hash_children_by_label(node_label(child_1), node_label(child_2), reverse=true)
+		else
+			hash_children_by_label(node_label(child_1), node_label(child_2), reverse=false)
+		end
 	end
 
 	# end private
