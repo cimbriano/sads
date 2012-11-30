@@ -11,8 +11,8 @@ def column_vector_with_max(size, max)
 	Vector.elements( Array.new(size) { rand max } )
 end
 
-def set_of_all_node_indices(universe_size)
-	num_layers = Math.log2(universe_size).ceil
+def set_of_all_node_indices(sad)
+	num_layers = Math.log2(sad.universe_size_m).ceil
 	layers = Array.new
 
 	layers << ['0']
@@ -26,8 +26,8 @@ def set_of_all_node_indices(universe_size)
 	return layers.flatten
 end
 
-def set_of_leaf_indices(universe_size, bits_needed_for_leaves)
-	set_of_all_node_indices(universe_size).reject { |n| n.length != bits_needed_for_leaves}
+def set_of_leaf_indices(sad)
+	set_of_all_node_indices(sad).reject { |n| n.length != sad.bits_needed_for_leaves}
 end
 
 def children_indices(parent)

@@ -183,8 +183,7 @@ class TestSads < MiniTest::Unit::TestCase
 
 				addSomeElements(@sad, 10)
 
-				all_nodes = set_of_all_node_indices(@sad.universe_size_m)
-
+				all_nodes = set_of_all_node_indices(@sad)
 				begin
 					all_nodes.each do |node_index|
 
@@ -224,8 +223,7 @@ class TestSads < MiniTest::Unit::TestCase
 			def test_node_digest_in_Z_q
 				addSomeElements(@sad, 10)
 
-				all_nodes = set_of_all_node_indices(@sad.universe_size_m)
-
+				all_nodes = set_of_all_node_indices(@sad)
 				all_nodes.each do |node_index|
 					digest = @sad.node_digest(node_index)
 
@@ -266,8 +264,7 @@ class TestSads < MiniTest::Unit::TestCase
 			def test_node_label_in_Z_q
 				addSomeElements(@sad, 20)
 
-				all_nodes = set_of_all_node_indices(@sad.universe_size_m)
-
+				all_nodes = set_of_all_node_indices(@sad)
 				all_nodes.each do |node_index|
 					label = @sad.node_label(node_index)
 
@@ -284,8 +281,7 @@ class TestSads < MiniTest::Unit::TestCase
 				# Range of leaf is just itself
 				expected_length_of_leaf_indices = @sad.bits_needed_for_leaves
 
-				all_nodes = set_of_all_node_indices(@sad.universe_size_m)
-
+				all_nodes = set_of_all_node_indices(@sad)
 				all_nodes.each do |node_index|
 					if node_index.length < expected_length_of_leaf_indices
 						# We only want to assert for leaf nodes
@@ -319,8 +315,7 @@ class TestSads < MiniTest::Unit::TestCase
 
 			def test_range_of_internal_node
 				leaf_length = @sad.bits_needed_for_leaves
-				all_node_indicies = set_of_all_node_indices(@sad.universe_size_m)
-
+				all_node_indicies = set_of_all_node_indices(@sad)
 				internal_nodes = all_node_indicies.reject {|ele| ele.length == leaf_length || ele.length == 1  }
 				internal_nodes.each do |internal_node|
 					extra_bits_needed = leaf_length - internal_node.length
@@ -383,8 +378,7 @@ class TestSads < MiniTest::Unit::TestCase
 			end #describe check radix
 
 			def test_right_child
-				all_nodes = set_of_all_node_indices(@sad.universe_size_m)
-
+				all_nodes = set_of_all_node_indices(@sad)
 				all_nodes.each do |node|
 					assert_equal(node[-1] == '1', @sad.right_child?(node), "#{node} is a left child")
 				end
@@ -436,7 +430,7 @@ class TestSads < MiniTest::Unit::TestCase
 			end
 
 			def test_update_path_order
-				leaf_indices = set_of_leaf_indices(@sad.universe_size_m, @sad.bits_needed_for_leaves)
+				leaf_indices = set_of_leaf_indices(@sad)
 
 				leaf_indices.each do |idx|
 					update_path  = @sad.get_update_path(idx)
@@ -456,8 +450,7 @@ class TestSads < MiniTest::Unit::TestCase
 				assert(@sad.leaves.empty?, "Sads leaves is not empty: #{@sad.inspect}")
 				addSomeElements(@sad, 9)
 
-				all_nodes = set_of_all_node_indices(@sad.universe_size_m)
-
+				all_nodes = set_of_all_node_indices(@sad)
 				all_nodes.each do |node|
 					digest = @sad.node_digest(node)
 					label = @sad.node_label(node)
@@ -477,8 +470,7 @@ class TestSads < MiniTest::Unit::TestCase
 				addSomeElements(@sad, 9)
 
 
-				all_nodes = set_of_all_node_indices(@sad.universe_size_m)
-
+				all_nodes = set_of_all_node_indices(@sad)
 				internal_nodes = all_nodes.reject {|ele| ele.length == @sad.bits_needed_for_leaves }
 
 				internal_nodes.each do |internal_node|
@@ -538,6 +530,8 @@ class TestSads < MiniTest::Unit::TestCase
 				addSomeElements(@sad, 8)
 
 				# TODO Test all the leaves
+				leaves = set_of_leaf_indices(@sad)
+
 				proof = @sad.get_membership_proof( @sad.get_leaf_index(1) )
 
 				assert( @sad.verify_membership_proof(proof) , "Proof does not check out")
