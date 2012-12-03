@@ -235,6 +235,16 @@ class Sads
 		end
 	end
 
+	# Given a node index
+	# 	returns the parent index
+	def parent(index)
+		if index.nil? || index.length == 1
+			raise ArgumentError, "Root has no parent or index: #{index.nil? ? nil : index} was nil"
+		end
+
+		index[0...-1]
+	end
+
 	# Given a node label
 	# 	return its digest
 	def digest_from_label(label)

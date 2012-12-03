@@ -43,6 +43,3 @@ def addSomeElements(sad, num_to_add)
 	end
 end
 
-def parent(index)
-	index[0...-1] unless index.length == 1
-end
