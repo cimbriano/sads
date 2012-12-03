@@ -281,6 +281,76 @@ class Sads
 		return true
 	end
 
+	# Given a range of leaf nodes (by integer or by index)
+	# 	return the cover (the set of internal nodes that "cover")
+	# 	the specified range
+	def calc_cover(range)
+		raise RangeError, "#{range} is out of range" if range.first < 0 || range.last > @universe_size_m
+
+		leaves = range.map { |e| get_leaf_index e }
+		cover = []
+		tmp = []
+
+
+		while leaves.length > 0 || tmp.length > 0 do
+
+			while leaves.length > 0 do
+				e1 = leaves[0]
+				e2 = leaves[1]
+
+				if e2.nil?
+
+					cover << e1
+					leaves = leaves[1, leaves.length]
+
+				elsif e1.length == e2.length
+
+					if parent(e1) == parent(e2)
+						tmp << parent(e1)
+						#Loop on leaves shortened by two
+						leaves = leaves[2, leaves.length]
+					else
+						cover << e1
+						leaves = leaves[1, leaves.length]
+					end
+
+				else
+					# Different lengths
+
+					tmp << e1
+					leaves = leaves[1, leaves.length]
+				end
+
+			end
+
+			leaves = tmp
+			tmp = []
+		end
+
+		return cover
+
+	end
+
+	# Public facing cover
+	# 	first can have type Fixnum, String or Range.
+	# 	if Fixnum, optinal last indicates end of range,
+	# 		otherwise its a one element range
+	# 	if String, must be a valid leaf index (same assumption with last as Fixnum)
+	def cover(first, last=nil)
+		case(first)
+		when Fixnum
+			if last
+				return calc_cover(first..last)
+			else
+				return calc_cover(first..first)
+			end
+		when Range
+			return calc_cover(first)
+		else
+			raise TypeError, "#{first} has invalid type #{first.class}"
+		end
+
+	end
 
 end #Sads
 

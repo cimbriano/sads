@@ -538,5 +538,68 @@ class TestSads < MiniTest::Unit::TestCase
 			end
 		end # describe verification
 
+		describe "cover" do
+			def test_raise_error_for_elements_out_of_range
+				assert_raises(RangeError){
+					@sad.cover(0...@sad.universe_size_m + 1)
+				}
+
+				assert_raises(RangeError){
+					@sad.cover(-1...@sad.universe_size_m)
+				}
+
+				assert_raises(RangeError){
+					@sad.cover(-1, 1)
+				}
+
+				assert_raises(RangeError){
+					@sad.cover(0, @sad.universe_size_m + 1)
+				}
+
+				#Doesn't raise hack.
+				assert(@sad.cover(0...@sad.universe_size_m).is_a? Object)
+			end
+
+			def test_cover_of_single_index
+
+				element_number = rand(@sad.universe_size_m)
+				leaf_index     = @sad.get_leaf_index( element_number )
+				cover          = @sad.cover(element_number)
+
+				assert_equal(1, cover.size, "Cover not the right size")
+				assert(cover.include?(leaf_index), "Cover: #{cover} did not include #{leaf_index}")
+			end
+
+			def test_cover_of_two_with_same_parent_is_parent
+
+				cover      = @sad.cover(0, 1)
+				leaf_index = @sad.get_leaf_index 0
+				parent     = @sad.parent leaf_index
+
+				assert_equal(1, cover.size, "Cover: #{cover} not the right size")
+				assert( cover.include?(parent), "Cover: #{cover} did not include #{parent}")
+			end
+
+			def test_cover_of_two_adjacent_leaves_with_different_parents
+
+				cover        = @sad.cover(1, 2)
+				leaf_index_0 = @sad.get_leaf_index 1
+				leaf_index_1 = @sad.get_leaf_index 2
+
+				assert_equal(2, cover.size, "Cover: #{cover} not the right size")
+				assert( cover.include?(leaf_index_0), "Cover: #{cover} did not include #{leaf_index_0}")
+				assert( cover.include?(leaf_index_1), "Cover: #{cover} did not include #{leaf_index_1}")
+			end
+
+			def test_cover_of_universe_is_root
+				cover = @sad.cover(0, @sad.universe_size_m - 1)
+
+				assert(cover.include?('0'), "Cover: #{cover} should include root")
+				assert_equal(1, cover.size, "Cover: #{cover} should only include root element")
+
+			end
+
+		end # describe cover
+
 	end # describe Streaming Authenticated Data Structure
 end # TestSads
