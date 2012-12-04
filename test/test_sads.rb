@@ -646,10 +646,15 @@ class TestSads < MiniTest::Unit::TestCase
 		end # describe cover
 
 		describe "range proof" do
-
+			def test_range_proof_attributes
+				skip "Not implemented"
+			end
 		end # describe range proof
 
 		describe "verify range proof" do
+			def test_correctness
+				skip "Not implemented"
+			end
 
 		end # describe verify range proof
 
