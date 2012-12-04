@@ -383,6 +383,35 @@ class TestSads < MiniTest::Unit::TestCase
 					assert_equal(node[-1] == '1', @sad.right_child?(node), "#{node} is a left child")
 				end
 			end
+
+			describe "frequency table" do
+
+				def test_table_for_leaf_only_includes_leaf
+					addSomeElements(@sad, 5)
+					leaf            = @sad.get_leaf_index 0
+					frequency_table = @sad.get_frequency_table(leaf)
+
+
+					assert_equal( 1, frequency_table.size, "Freq table size incorrect.")
+					assert( frequency_table.include?(leaf), "Leaf not included in its own freq table")
+					assert_equal( @sad.leaves[leaf], frequency_table[leaf], "Wrong frequncy returned")
+				end
+
+				def test_table_for_root_include_all_leaves
+					all_leaves      = set_of_leaf_indices(@sad)
+
+
+					(0...@sad.universe_size_m).each do |ele|
+						@sad.addElement ele
+					end
+
+					frequency_table = @sad.get_frequency_table('0')
+					assert_equal(all_leaves.size, frequency_table.size, "Freq table did not include all leaves")
+				end
+
+
+
+			end # describe frequency table
 		end # describe helper methods
 
 		describe "test helper methods" do

@@ -355,6 +355,17 @@ class Sads
 
 	end
 
+
+	# Given a node index
+	# 	Returns a hash of leaf index to that leaf's frequency
+	def get_frequency_table(node_index)
+
+		h = Hash.new
+		range(node_index).each { |leaf| h[leaf] = @leaves[leaf] }
+		return h
+	end
+
+
 end #Sads
 
 # The mod function is a short term fix for doing all the arithmetic mod q
