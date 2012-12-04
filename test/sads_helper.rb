@@ -16,11 +16,16 @@ def set_of_all_node_indices(sad)
 	layers = Array.new
 
 	layers << ['0']
-
+	# puts "layers: #{layers}"
 	num_layers.times do
+		i_th_layer = []
+
 		layers.last.each do |parent|
-				layers << children_indices(parent)
+				i_th_layer << children_indices(parent)
+				# puts "layers: #{layers}"
 		end
+
+		layers << i_th_layer.flatten
 	end
 
 	return layers.flatten

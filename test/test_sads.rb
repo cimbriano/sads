@@ -386,12 +386,18 @@ class TestSads < MiniTest::Unit::TestCase
 		end # describe helper methods
 
 		describe "test helper methods" do
-			def test_all_nodes
-				skip
+			def test_all_set_of_all_nodes
+				num_leaves = @sad.universe_size_m
+				expected_nodes = 2 * num_leaves - 1
+
+				nodes = set_of_all_node_indices(@sad)
+
+				assert_equal(expected_nodes, nodes.size, "Set of nodes was incorrect size: #{nodes}")
 			end
 
-			def test_all_leaves
-				skip
+			def test_set_of_all_leaves
+				leaves = set_of_leaf_indices(@sad).size
+				assert_equal(@sad.universe_size_m, leaves, "Set of leaves not right size: #{leaves}")
 			end
 		end # describe
 
