@@ -349,6 +349,9 @@ class Sads
 		else
 			raise TypeError, "#{first} has invalid type #{first.class}"
 		end
+	end
+
+	def get_range_proof(range)
 
 	end
 

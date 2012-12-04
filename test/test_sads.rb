@@ -598,8 +598,15 @@ class TestSads < MiniTest::Unit::TestCase
 				assert_equal(1, cover.size, "Cover: #{cover} should only include root element")
 
 			end
-
 		end # describe cover
+
+		describe "range proof" do
+
+		end # describe range proof
+
+		describe "verify range proof" do
+
+		end # describe verify range proof
 
 	end # describe Streaming Authenticated Data Structure
 end # TestSads
