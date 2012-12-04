@@ -352,7 +352,7 @@ class TestSads < MiniTest::Unit::TestCase
 			end
 		end # describe get leaf index
 
-		describe "helper methods" do
+		describe "sads util methods" do
 			describe "mod" do
 				def test_mod
 					m = Matrix.build(10, 10) { rand 100 }
@@ -384,6 +384,16 @@ class TestSads < MiniTest::Unit::TestCase
 				end
 			end
 		end # describe helper methods
+
+		describe "test helper methods" do
+			def test_all_nodes
+				skip
+			end
+
+			def test_all_leaves
+				skip
+			end
+		end # describe
 
 		describe "binary with num bits" do
 			def test_binary_with_num_bits
