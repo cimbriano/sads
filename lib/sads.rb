@@ -103,8 +103,7 @@ class Sads
 			leaves[index] = 1
 		end
 
-		# update_root_digest
-		@root_digest = mod(@root_digest + partial_digest('0', index), @q)
+		update_root_digest ele
 	end
 
 	def removeElement(ele)
@@ -128,6 +127,10 @@ class Sads
 		 # If the digest has been computed and stored, use that, otherwise compute it
 		 # @labels[node_index] ||= calc_node_label(node_index)
 		 calc_node_label(node_index)
+	end
+
+	def update_root_digest(ele)
+		@root_digest = mod(@root_digest + partial_digest('0', get_leaf_index(ele) ), @q)
 	end
 
 	# Given a proof provided by the prover, use this to verify its correctness
