@@ -352,17 +352,23 @@ class Sads
 	end
 
 	def get_range_proof(range)
+		cover = cover(range)
 
+		proof = Hash.new
+
+		cover.each do |node_index|
+			proof[node_index] = { 'siblings' => get_membership_proof(node_index), 'freqs' => get_frequency_table(node_index)}
+		end
+
+		return proof
 	end
 
 
 	# Given a node index
 	# 	Returns a hash of leaf index to that leaf's frequency
 	def get_frequency_table(node_index)
-
-		h = Hash.new
-		range(node_index).each { |leaf| h[leaf] = @leaves[leaf] }
-		return h
+		r = range(node_index)
+		@leaves.select {|idx, freq| r.include? idx }
 	end
 
 

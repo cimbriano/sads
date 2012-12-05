@@ -387,10 +387,9 @@ class TestSads < MiniTest::Unit::TestCase
 			describe "frequency table" do
 
 				def test_table_for_leaf_only_includes_leaf
-					addSomeElements(@sad, 5)
+					@sad.addElement 0
 					leaf            = @sad.get_leaf_index 0
 					frequency_table = @sad.get_frequency_table(leaf)
-
 
 					assert_equal( 1, frequency_table.size, "Freq table size incorrect.")
 					assert( frequency_table.include?(leaf), "Leaf not included in its own freq table")
@@ -647,15 +646,24 @@ class TestSads < MiniTest::Unit::TestCase
 
 		describe "range proof" do
 			def test_range_proof_attributes
+				addSomeElements(@sad, 10)
+
+				proof = @sad.get_range_proof(0...@sad.universe_size_m)
+
+				proof.each do |ele|
+				end
 				skip "Not implemented"
 			end
 		end # describe range proof
 
 		describe "verify range proof" do
 			def test_correctness
-				skip "Not implemented"
-			end
+				addSomeElements(@sad, 10)
 
+				proof = @sad.get_range_proof(0...@sad.universe_size_m)
+
+				assert(@sad.verify_range_proof(proof), "Proof failed verification")
+			end
 		end # describe verify range proof
 
 	end # describe Streaming Authenticated Data Structure

@@ -163,6 +163,54 @@ class Sads
 		return hash(root_child_1, root_child_2, reverse_flag) == @root_digest
 	end
 
+	# Given a range proof
+	# 	verify its correctness
+	def verify_range_proof(proof)
+		# For each node in the cover (ie, each key in proof)
+
+		proof.each do |cover_index, proof_parts|
+
+			membership_proof = proof_parts['siblings']
+			freqs = proof_parts['freqs']
+
+			# puts "Siblings"
+			# puts "#{membership_proof}"
+			# puts "Frequencies"
+			# puts "#{freqs}"
+
+			# Calculate this nodes label from given frequencies and calculated partial labels
+			cover_index_label = Vector.elements( Array.new(@k * @log_q_ceil) { 0 } )
+			# puts "freq.size: #{freqs.size}"
+			freqs.each do |leaf_index, frequency|
+				p_label = partial_label(cover_index, leaf_index)
+				# puts ""
+				# puts "partial label: #{p_label}"
+				# puts "accum: #{cover_index_label}"
+				cover_index_label +=  p_label * frequency
+			end
+
+			# label of cover node calculated.  Compare this to label provided in the proof
+
+				# caveat -> if the cover label is the root,
+				# 	then the proof['siblings'] doesn't have anything
+
+			if 0 != membership_proof.size
+
+				return false if siblings[0][0] != cover_index_label
+				return verify_membership_proof(membership_proof)
+
+			else
+
+				return check_radix_label(cover_index_label, @root_digest)
+
+			end
+
+		end
+
+
+		# Calculate label of
+
+	end
 
 	# Public hash method, expects two strings representing indices, or two Vectors representing labels
 	def hash(x,y, reverse=nil)
