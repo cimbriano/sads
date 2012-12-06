@@ -25,7 +25,8 @@ MiniTest::Reporters.use! MiniTest::Reporters::DefaultReporter.new
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'sads'
+# require 'sads'
+# require 'verifier'
 
 class MiniTest::Unit::TestCase
 end

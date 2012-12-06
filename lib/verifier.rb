@@ -1,5 +1,7 @@
+require 'sads'
+
 class Verifier
-	extend Sads
+	include Sads
 
 	# Stores digest of root
 	attr_accessor :root_digest
@@ -7,9 +9,8 @@ class Verifier
 	# Left and Right vectors for algebraic hash function
 	attr_reader :L, :R
 
-	def initialize(l, r)
-		@L = l
-		@R = r
 
+	def update_root_digest(ele)
+		@root_digest = mod(@root_digest + partial_digest('0', get_leaf_index(ele) ), @q)
 	end
 end
