@@ -1,4 +1,7 @@
+require 'sads'
+
 class Prover
+	include Sads
 
 	#Data structures storing Merkle tree
 	attr_accessor :labels, :leaves, :digests
@@ -11,9 +14,6 @@ class Prover
 
 	#beta
 	attr_reader :beta
-
-	# Size of Universe
-	attr_reader :universe_size_m
 
 	# Upper bound on size of stream
 	attr_reader :stream_bound_n
@@ -83,7 +83,7 @@ class Prover
 			leaves[index] = 1
 		end
 
-		update_root_digest ele
+		# update_root_digest ele
 	end
 
 	def removeElement(ele)
@@ -132,7 +132,7 @@ class Prover
 	end
 
 
-	private
+	# private
 
 	def init_L_R
 		@L = Matrix.build(@k, @mu / 2) { rand @q }

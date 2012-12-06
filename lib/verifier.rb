@@ -6,7 +6,7 @@ class Verifier
 	#TODO - check_radix_int requires @q
 	#TODO - check_radix_label requires @log_q_ceil
 
-	def initialize(k, n, q, log_q_ceil, l, r)
+	def initialize(k, n, q, log_q_ceil, l, r, m)
 		@k = k
 		@n = n
 		@q = q
@@ -14,6 +14,7 @@ class Verifier
 		@L = l
 		@R = r
 		@root_digest = Vector.elements( Array.new(@k) { 0 } )
+		@universe_size_m = m
 	end
 
 	def update_root_digest(ele)
@@ -86,7 +87,7 @@ class Verifier
 
 
 
-	private
+	# private
 
 	# Checks that radix is a radix representation of
 	# 	the integer x mod q

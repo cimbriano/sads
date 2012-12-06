@@ -31,20 +31,19 @@ def set_of_all_node_indices(sad)
 	return layers.flatten
 end
 
-def set_of_leaf_indices(sad)
-	set_of_all_node_indices(sad).reject { |n| n.length != sad.bits_needed_for_leaves}
+def set_of_leaf_indices(prover)
+	set_of_all_node_indices(prover).reject { |n| n.length != prover.bits_needed_for_leaves}
 end
 
 def children_indices(parent)
 	[parent + '0', parent + '1']
 end
 
-def addSomeElements(sad, num_to_add)
-	universe_size = sad.universe_size_m
-
+def addSomeElements(prover, num_to_add)
+	universe_size = prover.universe_size_m
 
 	num_to_add.times do
-		sad.addElement( rand(universe_size) )
+		prover.addElement( rand(universe_size) )
 	end
 end
 

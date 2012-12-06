@@ -14,6 +14,9 @@ module Sads
 	# Stores digest of root
 	attr_accessor :root_digest
 
+	# Size of Universe
+	attr_reader :universe_size_m
+
 	# Left and Right vectors for algebraic hash function
 	attr_reader :L, :R
 
@@ -34,7 +37,7 @@ module Sads
 
 
 
-	private
+	# private
 
 	def calculate_q(k, n)
 		# q is the smallest prime satisfying
