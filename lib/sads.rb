@@ -6,7 +6,7 @@ module Sads
 	attr_reader :k
 
 	# q
-	attr_reader :q
+	attr_accessor :q
 
 	# loq_q
 	attr_reader :log_q_ceil
@@ -18,7 +18,7 @@ module Sads
 	attr_reader :universe_size_m
 
 	# Left and Right vectors for algebraic hash function
-	attr_reader :L, :R
+	attr_accessor :L, :R
 
 	# Public hash method, expects two strings representing indices, or two Vectors representing labels
 	def hash(x,y, reverse=nil)
@@ -34,8 +34,6 @@ module Sads
 			raise TypeError, "hash takes either a Vector or a String index"
 		end
 	end
-
-
 
 	# private
 
@@ -77,15 +75,6 @@ module Sads
 		end
 	end
 
-	def hash_children_by_index(child_1, child_2)
-		#TODO handle reverse children
-		if child_1[-1] == '1'
-			hash_children_by_label(node_label(child_1), node_label(child_2), reverse=true)
-		else
-			hash_children_by_label(node_label(child_1), node_label(child_2), reverse=false)
-		end
-	end
-
 	# Partial label as mentioned in Definition 10.
 	def partial_label(node_index, with_repect_to_index)
 		binary_vector(partial_digest(node_index, with_repect_to_index))
@@ -113,7 +102,6 @@ module Sads
 
 		if with_repect_to_index.sub(node_index, '')[0] == "0"
 			# Left
-			#
 
 			p_dig = partial_digest( node_index + '0' ,with_repect_to_index )
 			b_vector = binary_vector( mod(p_dig, @q) )
@@ -153,6 +141,38 @@ module Sads
 		end
 
 		Vector.elements(b_parts)
+	end
+
+
+
+	# Checks that radix is a radix representation of
+	# 	the integer x mod q
+	def check_radix_int(radix, x)
+		# x is a number in Z_q
+		#
+		# radix is a vector in Z_q with size log q
+		acc = 0
+		radix.reverse.each_with_index do |r_i, i|
+			acc += (r_i * (2 ** i))
+		end
+
+		return x == (acc % @q)
+	end
+
+
+	# Checks that the label is a radix representation of digest mod q
+	# 	Both label and digest are expected to be Vectors or Arrays
+	def check_radix_label(label, digest)
+
+		raise TypeError, "Size mismatch between label and digest" if label.size != digest.size * @log_q_ceil
+		# label should be a radix rep of the digest
+		chunk_size = Math.log2(q).ceil
+
+		label.each_slice(chunk_size).each_with_index do |group, i|
+			return false unless check_radix_int(group, digest[i])
+		end
+
+		return true
 	end
 
 end # module Sads

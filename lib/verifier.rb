@@ -38,9 +38,6 @@ class Verifier
 			parent_label  = proof[i + 1][0]
 
 			matched = check_radix_label(parent_label, hashed_digest)
-
-
-
 			return false if not matched
 		end
 
@@ -61,11 +58,6 @@ class Verifier
 			membership_proof = proof_parts['siblings']
 			freqs = proof_parts['freqs']
 
-			# puts "Siblings"
-			# puts "#{membership_proof}"
-			# puts "Frequencies"
-			# puts "#{freqs}"
-
 			# Calculate this nodes label from given frequencies and calculated partial labels
 			cover_index_label = Vector.elements( Array.new(@k * @log_q_ceil) { 0 } )
 			freqs.each do |leaf_index, frequency|
@@ -85,37 +77,6 @@ class Verifier
 		end
 	end
 
-
-
 	# private
 
-	# Checks that radix is a radix representation of
-	# 	the integer x mod q
-	def check_radix_int(radix, x)
-		# x is a number in Z_q
-		#
-		# radix is a vector in Z_q with size log q
-		acc = 0
-		radix.reverse.each_with_index do |r_i, i|
-			acc += (r_i * (2 ** i))
-		end
-
-		return x == (acc % @q)
-	end
-
-
-	# Checks that the label is a radix representation of digest mod q
-	# 	Both label and digest are expected to be Vectors or Arrays
-	def check_radix_label(label, digest)
-
-		raise TypeError, "Size mismatch between label and digest" if label.size != digest.size * @log_q_ceil
-		# label should be a radix rep of the digest
-		chunk_size = Math.log2(q).ceil
-
-		label.each_slice(chunk_size).each_with_index do |group, i|
-			return false unless check_radix_int(group, digest[i])
-		end
-
-		return true
-	end
-end
+end # class Verifier

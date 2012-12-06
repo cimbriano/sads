@@ -2,8 +2,6 @@ require 'helper'
 require 'sads_helper'
 require 'verifier'
 
-
-
 class TestVerifier < MiniTest::Unit::TestCase
 
 describe "Verifier" do
@@ -37,6 +35,8 @@ describe "Verifier" do
 	# 	end
 
 	# 	def test_membership_proof
+	# 		skip "Need to be fixed"
+
 	# 		puts "Test Membership proof"
 
 	# 		puts "Prover: #{@prover}"
@@ -51,10 +51,13 @@ describe "Verifier" do
 	# 	end
 	# end # describe verification
 
-
-
 	# describe "verify range proof" do
+
+
+
 	# 	def test_correctness
+
+	# 		skip "Need to be fixed"
 
 	# 		puts "test correctness"
 	# 		puts "prover: #{@prover}"
@@ -67,6 +70,7 @@ describe "Verifier" do
 	# 		assert(@ver.verify_range_proof(proof), "Proof failed verification")
 	# 	end
 	# end # describe verify range proof
+
 
 
 end # describe verifier

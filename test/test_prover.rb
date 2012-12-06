@@ -369,5 +369,55 @@ describe "Prover" do
 		end
 	end # describe range proof
 
+	describe "correctness conditions" do
+
+		describe "check radix int/label" do
+
+			it "should raise an error if the dimensions are incorrect" do
+
+				label  = [1,2,3]
+				digest = [1,2,3]
+
+				assert_raises(TypeError){
+					@prover.check_radix_label(label, digest)
+				}
+			end
+		end #describe check radix
+
+		def test_digest_is_radix_of_label
+
+			addSomeElements(@prover, 9)
+
+			all_nodes = set_of_all_node_indices(@prover)
+			all_nodes.each do |node|
+				digest = @prover.node_digest(node)
+				label = @prover.node_label(node)
+
+
+				# puts "Checking label: #{label}"
+				# puts "Checking digest: #{digest}"
+				# puts "q : #{@prover.q}"
+
+				assert(@prover.check_radix_label(label, digest), "Label/Digest Relation Failed for node: #{node}")
+			end
+		end
+
+		def test_digest_is_hash_of_child_labels
+
+			addSomeElements(@prover, 9)
+
+
+			all_nodes = set_of_all_node_indices(@prover)
+			internal_nodes = all_nodes.reject {|ele| ele.length == @prover.bits_needed_for_leaves }
+
+			internal_nodes.each do |internal_node|
+				calculated_digest = @prover.node_digest(internal_node)
+
+				hashed_digest = @prover.hash(internal_node + '0' , internal_node + '1')
+				assert_equal(calculated_digest, hashed_digest, "Hashed digest did not equal caclulated digest.")
+			end
+		end
+	end # describe correctness conditions
+
 end # describe
 end # TestProver

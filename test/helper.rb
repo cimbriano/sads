@@ -15,8 +15,8 @@ require 'minitest/reporters'
 require 'minitest/autorun'
 require 'minitest/spec'
 
-MiniTest::Reporters.use! MiniTest::Reporters::DefaultReporter.new
-# MiniTest::Reporters.use! MiniTest::Reporters::SpecReporter.new
+# MiniTest::Reporters.use! MiniTest::Reporters::DefaultReporter.new
+MiniTest::Reporters.use! MiniTest::Reporters::SpecReporter.new
 
 
 #
