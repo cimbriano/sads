@@ -25,51 +25,41 @@ describe "Verifier" do
 		assert(@ver.respond_to?(:root_digest))
 	end
 
-	# describe "verify_membership_proof" do
-	# 	before do
-	# 		@prover = Prover.new(5,10,8)
-	# 	end
+	describe "verify_membership_proof" do
+		before do
+			@p = Prover.new(5,10,8)
+			@v = Verifier.new(@p.k, @p.stream_bound_n, @p.q, @p.log_q_ceil, @p.L, @p.R, @p.universe_size_m)
+		end
 
-	# 	def test_prover_is_not_nil
-	# 		assert(!@prover.nil?, "Prover was nil.")
-	# 	end
+		def test_prover_is_not_nil
+			assert(!@p.nil?, "Prover was nil.")
+		end
 
-	# 	def test_membership_proof
-	# 		skip "Need to be fixed"
+		def test_membership_proof
+			addSomeElements(@p, 8)
 
-	# 		puts "Test Membership proof"
+			# TODO Test all the leaves
+			# leaves = set_of_leaf_indices(@p)
 
-	# 		puts "Prover: #{@prover}"
-	# 		addSomeElements(@prover, 8)
+			proof = @p.get_membership_proof( @p.get_leaf_index(1) )
 
-	# 		# TODO Test all the leaves
-	# 		leaves = set_of_leaf_indices(@prover)
+			assert( @v.verify_membership_proof(proof) , "Proof does not check out")
+		end
+	end # describe verification
 
-	# 		proof = @prover.get_membership_proof( @prover.get_leaf_index(1) )
+	describe "verify range proof" do
+		before do
+			@p = Prover.new(5,10,8)
+			@v = Verifier.new(@p.k, @p.stream_bound_n, @p.q, @p.log_q_ceil, @p.L, @p.R, @p.universe_size_m)
+		end
 
-	# 		assert( @ver.verify_membership_proof(proof) , "Proof does not check out")
-	# 	end
-	# end # describe verification
+		def test_correctness
+			addSomeElements(@p, 10)
+			proof = @p.get_range_proof(0...@p.universe_size_m)
 
-	# describe "verify range proof" do
-
-
-
-	# 	def test_correctness
-
-	# 		skip "Need to be fixed"
-
-	# 		puts "test correctness"
-	# 		puts "prover: #{@prover}"
-	# 		addSomeElements(@prover, 10)
-
-	# 		puts "added Elements"
-
-	# 		proof = @prover.get_range_proof(0...@prover.universe_size_m)
-
-	# 		assert(@ver.verify_range_proof(proof), "Proof failed verification")
-	# 	end
-	# end # describe verify range proof
+			assert(@v.verify_range_proof(proof), "Proof failed verification")
+		end
+	end # describe verify range proof
 
 
 
