@@ -37,14 +37,12 @@ describe "Verifier" do
 		end
 
 		def test_membership_proof
-			addSomeElements(@p, 8)
-
+			simulateStream(@p, @v, 10)
+			# addSomeElements(@p, 8)
 
 			# TODO Test all the leaves
 			# leaves = set_of_leaf_indices(@p)
 			proof = @p.get_membership_proof( @p.get_leaf_index(1) )
-
-
 			assert( @v.verify_membership_proof(proof) , "Proof does not check out")
 		end
 	end # describe verification
@@ -56,7 +54,8 @@ describe "Verifier" do
 		end
 
 		def test_correctness
-			addSomeElements(@p, 10)
+			simulateStream(@p, @v, 10)
+			# addSomeElements(@p, 10)
 			proof = @p.get_range_proof(0...@p.universe_size_m)
 
 			assert(@v.verify_range_proof(proof), "Proof failed verification")

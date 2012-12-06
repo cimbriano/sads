@@ -156,17 +156,6 @@ class Prover
 		binary_with_num_bits(integer, @log_q_ceil)
 	end
 
-	# Given an integer representing the desired universe element
-	# 	returns the appropriate leaf index for this tree's parameters
-	def get_leaf_index(integer)
-
-		if integer < 0 or integer >= @universe_size_m
-			raise RangeError, "#{integer} is outside accepatable range for get_leaf_index"
-		end
-
-		binary_with_num_bits(integer, @bits_needed_for_leaves)
-	end
-
 	# Returns a collection of leaf indicies for the range of the given parameter
 	#
 	# The range of a leaf node is itself.

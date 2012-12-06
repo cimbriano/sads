@@ -47,3 +47,13 @@ def addSomeElements(prover, num_to_add)
 	end
 end
 
+def simulateStream(prover, verifier, num_to_add)
+
+	universe_size = prover.universe_size_m
+
+	num_to_add.times do
+		element = rand(universe_size)
+		prover.addElement( element )
+		verifier.update_root_digest( element )
+	end
+end

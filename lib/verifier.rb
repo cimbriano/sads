@@ -15,6 +15,7 @@ class Verifier
 		@R = r
 		@root_digest = Vector.elements( Array.new(@k) { 0 } )
 		@universe_size_m = m
+		@bits_needed_for_leaves = Math.log2(@universe_size_m) + 1
 	end
 
 	def update_root_digest(ele)
