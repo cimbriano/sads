@@ -376,5 +376,14 @@ class Prover
 		return modded_accum
 	end
 
+	def hash_children_by_index(child_1, child_2)
+		#TODO handle reverse children
+		if child_1[-1] == '1'
+			hash_children_by_label(node_label(child_1), node_label(child_2), reverse=true)
+		else
+			hash_children_by_label(node_label(child_1), node_label(child_2), reverse=false)
+		end
+	end
 
-end
+
+end # class Prover
