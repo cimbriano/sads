@@ -25,6 +25,7 @@ describe "Verifier" do
 		assert(@ver.respond_to?(:root_digest))
 	end
 
+
 	describe "verify_membership_proof" do
 		before do
 			@p = Prover.new(5,10,8)
@@ -38,10 +39,11 @@ describe "Verifier" do
 		def test_membership_proof
 			addSomeElements(@p, 8)
 
+
 			# TODO Test all the leaves
 			# leaves = set_of_leaf_indices(@p)
-
 			proof = @p.get_membership_proof( @p.get_leaf_index(1) )
+
 
 			assert( @v.verify_membership_proof(proof) , "Proof does not check out")
 		end
@@ -60,6 +62,7 @@ describe "Verifier" do
 			assert(@v.verify_range_proof(proof), "Proof failed verification")
 		end
 	end # describe verify range proof
+
 
 
 

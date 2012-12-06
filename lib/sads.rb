@@ -143,22 +143,6 @@ module Sads
 		Vector.elements(b_parts)
 	end
 
-	# Returns the binary representation of integer using the
-	# 	specified number of bits
-	#
-	# 	raises Arguement error of num_bits is notsufficiently large to represent
-	# 	integer. eg. integer = 15 num_bits=2
-	def binary_with_num_bits(integer, num_bits)
-		binary = integer.to_s(2)
-
-		padding_needed = num_bits - binary.length
-		raise ArgumentError, "#{integer} can't be represented in #{num_bits} bits" unless padding_needed >= 0
-
-		index = '0' * padding_needed + binary
-		return index
-	end
-
-
 	# Checks that radix is a radix representation of
 	# 	the integer x mod q
 	def check_radix_int(radix, x)
