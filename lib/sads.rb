@@ -149,13 +149,13 @@ module Sads
 	# raises Arguement error of num_bits is notsufficiently large to represent
 	# integer. eg. integer = 15 num_bits=2
 	def binary_with_num_bits(integer, num_bits)
-	binary = integer.to_s(2)
+		binary = integer.to_s(2)
 
-	padding_needed = num_bits - binary.length
-	raise ArgumentError, "#{integer} can't be represented in #{num_bits} bits" unless padding_needed >= 0
+		padding_needed = num_bits - binary.length
+		raise ArgumentError, "#{integer} can't be represented in #{num_bits} bits" unless padding_needed >= 0
 
-	index = '0' * padding_needed + binary
-	return index
+		index = '0' * padding_needed + binary
+		return index
 	end
 
 	# Given an integer representing the desired universe element
