@@ -391,12 +391,11 @@ describe "Prover" do
 			all_nodes = set_of_all_node_indices(@prover)
 			all_nodes.each do |node|
 				digest = @prover.node_digest(node)
-				label = @prover.node_label(node)
+				label = @prover.calc_node_label(node)
 
-
-				# puts "Checking label: #{label}"
-				# puts "Checking digest: #{digest}"
-				# puts "q : #{@prover.q}"
+				puts "Checking label: #{label}"
+				puts "Checking digest: #{digest}"
+				puts "q : #{@prover.q}"
 
 				assert(@prover.check_radix_label(label, digest), "Label/Digest Relation Failed for node: #{node}")
 			end

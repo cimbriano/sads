@@ -4,7 +4,7 @@ class Prover
 	include Sads
 
 	#Data structures storing Merkle tree
-	attr_accessor :labels, :leaves, :digests
+	attr_accessor :labels, :leaves, :digests, :partial_labels
 
 	# Encryption key pair
 	attr_reader :public_key, :secret_key
@@ -59,7 +59,7 @@ class Prover
 
 		@leaves = {}
 		@labels = {}
-		@digests = {}
+		@partial_labels = {}
 
 		@root_digest = node_digest('0')
 	end # initialize
@@ -73,17 +73,22 @@ class Prover
 		# addElement has to do the following:
 		# 	* Update the leaves (or frequency value)
 		# 	* Update the labels of all affected nodes
-		# 	* Update the root digest (this may occur as part of the previous)
+		# 	* Update the root digest (this may occur as part of the previous
 
 		index = get_leaf_index(ele)
 
+		# Update leaves (frequencies)
 		if leaves.include?(index)
 			leaves[index] += 1
 		else
 			leaves[index] = 1
 		end
 
-		# update_root_digest ele
+		# Update labels for all nodes on the update path
+		get_update_path(index).each do |path_index|
+			update_label(path_index, index)
+		end
+
 	end
 
 	def removeElement(ele)
@@ -128,9 +133,17 @@ class Prover
 	def node_label(node_index)
 		 # If the digest has been computed and stored, use that, otherwise compute it
 		 # @labels[node_index] ||= calc_node_label(node_index)
-		 calc_node_label(node_index)
+		 labels[node_index] || Vector.elements( Array.new(@k * @log_q_ceil) { 0 } )
 	end
 
+
+	# Given a node index, and an index of a
+	def update_label(node_idx, wrt_index)
+		# TODO Checking wrt is a valid index with which to update node index's label
+		# puts "labels[#{node_idx}] = #{labels[node_idx]}"
+		old_label = node_label(node_idx)
+		labels[node_idx] = old_label + partial_label_wrapper(node_idx, wrt_index)
+	end
 
 	# private
 
@@ -308,11 +321,19 @@ class Prover
 
 		range_of_w.each do | leaf |
 			frequency = leaves[leaf] || 0
-			p_label = partial_label(node_index, leaf)
+			p_label = partial_label_wrapper(node_index, leaf)
 			accum += ( frequency * p_label )
 		end
 
 		return mod(accum, @q)
+	end
+
+	def partial_label_wrapper(node_index, leaf)
+		if partial_labels[node_index].nil?
+			partial_labels[node_index] = {}
+		end
+
+		partial_labels[node_index][leaf] ||= partial_label(node_index, leaf)
 	end
 
 	# Digest as a sum of partial digests: Definition 11.
