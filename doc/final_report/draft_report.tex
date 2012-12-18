@@ -195,6 +195,24 @@
 	\label{tab:pub-key_k}
 	\end{table}
 	
+	The estimated memory footprint of the public key matrices grows rapidly with an increasing security parameter, but slowly with increasing stream size.
+	The reason for this is that the scheme calls for matrices of size k x k log q.
+	The matrix size grows faster than k SQUARED because q also depends on k.
+	Fortunately, the current proposal is to pick a security parameter "large enough", say 500, and not to vary k over time.
+	
+	Future benchmarking efforts will also measure the memory footprint of the prover over time, and the size of a proof for varying parameter sizes.
+	Additionally, we will benchmark the time required to perform the following tasks:
+	
+	\begin{itemize}
+	\item Update prover state	
+	\item Proof generation
+	\item Update verifier state
+	\item Proof verification
+	\item Matrix multiplication using built-in Ruby implementation
+	\item Matrix multiplication using optimized libraries
+	\end{itemize}
+	
+	
 	
 \section{Looking Forward}
 
