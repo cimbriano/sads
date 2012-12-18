@@ -58,7 +58,7 @@
 	
         \begin{figure}[h]
         \centering
-        \includegraphics[width=100mm]{./pic/label_digest.jpg}
+        \includegraphics[width=100mm]{./images/label_digest.jpg}
         \caption[]{Labels and Digests}
         \end{figure}
 
@@ -93,7 +93,7 @@
 
 	\begin{figure}[h]
         \centering
-        \includegraphics[width=100mm]{./pic/8.jpg}
+        \includegraphics[width=100mm]{./images/8.jpg}
         \caption[]{Prover}
         \end{figure}
 	
@@ -150,25 +150,52 @@
 	%Node.js is a "platform for building fast, scalable network applications" and has been gaining popularity in the Ruby community. http://nodejs.org/
 	%EventMachine is a "fast, simple event-processing library for Ruby programs."http://rubyeventmachine.com/
 
-	\section{Simulation outline}
+\section{ Benchmarking }
 	
-	For the first stage of this project Ruby is used due to the following reasons :
+	The next stage of development is benchmarking to understand the performance of the implementation and to differentiate constraints resulting from particular design decisions from those arising from the schemes protocol itself.
+	We will focus primarily on benchmarking the timing of important operations in the scheme as well as the memory footprint of the implementations largest data structures.
 	
-	\begin{enumerate}
-	\item built in support of matrix and vector operations
-	\item vibrant developer community
-	\item possibility for extension in C
-        \item numeric and visualization library
-	\end{enumerate}
+	We ran some preliminary calculations to ballpark the size of L and R the public key of the SADS scheme.
+	Recall, L and R are two matrices having elements in Z q, where q is derived from the security parameter k and the upper bound on the size of the stream, n.
+	So a rough estimate of the size of L and R would be the size of the matrices, (ie. the number of elements) multiplied by the amount of space required for each element.
+	Below is a table of these preliminary calculations.
 	
-% In our work, we have generated a secret and public key depending on the size of the stream and the security parameter.
-% The next step was to generate the hash function according to each left and right leaf.
-% The hash function is computed as $ h(x,y) = Lx + Ry $ where \textbf{L, R} are selected randomly from $Z_{q}^{k \times m}$ and
-% \textbf{x,y} are vectors of small norm.
-
-%genkey procedure generates a secret and public key.  The public key includes vectors \textbf{L} and \textbf{R} as well as $q$ and $\mathcal{U}$.
-
-
+	\begin{table}[h]
+	\centering
+		\begin{tabular}{ c | c | c | c}
+		k & n & Matrix dim & Footprint\\ \hline
+		500&10&500 x 1500&2MB\\
+		500&100&500 x 1500&2MB\\
+		500&1000&500 x 1500&2MB\\
+		500&10000&500 x 1500&2MB\\
+		500&100000&500 x 1500&3MB\\
+		500&1000000&500 x 1500&3MB\\
+		500&10000000&500 x 1500&4MB\\
+		500&100000000&500 x 1500&4MB\\
+		
+		\end{tabular}
+	\caption{ Estimation of public key size.  Constant security parameter, varying stream size upper bound }
+	\label{tab:pub-key_n}
+	\end{table}
+	
+	\begin{table}[h]
+	\centering
+	
+		\begin{tabular} { c | c | c | c}
+		
+		k & n & Matrix dim & Footprint\\ \hline
+		1000&100000&1000 x 3000&14MB\\
+		10000&100000&10000 x 30000&1716MB\\
+		100000&100000&100000 x 300000&171661MB\\
+		1000000&100000&1000000 x 3000000&20027160MB\\
+		10000000&100000&10000000 x 30000000&2288818359MB\\	
+		\end{tabular}
+	
+	\caption{Estimation of public key size.  Constant stream size upper bound , varying security parameter } 
+	\label{tab:pub-key_k}
+	\end{table}
+	
+	
 \section{Looking Forward}
 
 	\subsection{Production Quality Libraries}
