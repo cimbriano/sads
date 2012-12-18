@@ -25,3 +25,5 @@ f.write("k\t\t\t\tn\t\t\t\tq\t\t\t\t\tL/R dim\t\t\tEstimated Size of L or R\n")
 		f.write("#{k}\t\t#{n}\t\t#{q}\t\t#{l_rows} x #{l_cols}\t\t#{'%.0f' % l_data_size}MB\n")
 	end
 end
+
+f.close
