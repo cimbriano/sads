@@ -1,4 +1,7 @@
 Benchmarking time to do matrix multiplications
+
+100 multiplications were performed
+
                  user     system      total        real
 k:10 n:10  0.100000   0.000000   0.100000 (  0.103974)
 k:20 n:10  0.470000   0.000000   0.470000 (  0.471976)
