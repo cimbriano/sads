@@ -150,15 +150,36 @@
 	%Node.js is a "platform for building fast, scalable network applications" and has been gaining popularity in the Ruby community. http://nodejs.org/
 	%EventMachine is a "fast, simple event-processing library for Ruby programs."http://rubyeventmachine.com/
 
-\section{ Benchmarking }
+
+\section{Looking Forward}
+
+	\subsection{ Benchmarking }
 	
 	The next stage of development is benchmarking to understand the performance of the implementation and to differentiate constraints resulting from particular design decisions from those arising from the schemes protocol itself.
 	We will focus primarily on benchmarking the timing of important operations in the scheme as well as the memory footprint of the implementations largest data structures.
 	
-	We ran some preliminary calculations to ballpark the size of L and R the public key of the SADS scheme.
-	Recall, L and R are two matrices having elements in Z q, where q is derived from the security parameter k and the upper bound on the size of the stream, n.
-	So a rough estimate of the size of L and R would be the size of the matrices, (ie. the number of elements) multiplied by the amount of space required for each element.
-	Below is a table of these preliminary calculations.
+	We ran some preliminary calculations to ballpark the size of matrices L and R, the public key of the SADS scheme.
+	Recall that L and R are matrices with elements in $Z_q$, that is elements are integers of at most q and q is derived from the security parameter, k and the upper bound on the size of the stream, n.
+	So a rough estimate of the size of L and R can be calculated by multiplying the dimensions of the matrices, by the amount of space required for each element.
+	Below are two tables of estimations.
+	
+	\begin{table}[h]
+	\centering
+	
+		\begin{tabular} { c | c | c | c}
+		
+		k & n & Matrix dim & Footprint\\ \hline
+		1000&100000&1000 x 3000&14MB\\
+		10000&100000&10000 x 30000&1716MB\\
+		100000&100000&100000 x 300000&171661MB\\
+		1000000&100000&1000000 x 3000000&20027160MB\\
+		10000000&100000&10000000 x 30000000&2288818359MB\\	
+		\end{tabular}
+	
+	\caption{Estimation of public key size.  Constant stream size upper bound , varying security parameter } 
+	\label{tab:pub-key_k}
+	\end{table}
+	
 	
 	\begin{table}[h]
 	\centering
@@ -178,51 +199,24 @@
 	\label{tab:pub-key_n}
 	\end{table}
 	
-	\begin{table}[h]
-	\centering
-	
-		\begin{tabular} { c | c | c | c}
-		
-		k & n & Matrix dim & Footprint\\ \hline
-		1000&100000&1000 x 3000&14MB\\
-		10000&100000&10000 x 30000&1716MB\\
-		100000&100000&100000 x 300000&171661MB\\
-		1000000&100000&1000000 x 3000000&20027160MB\\
-		10000000&100000&10000000 x 30000000&2288818359MB\\	
-		\end{tabular}
-	
-	\caption{Estimation of public key size.  Constant stream size upper bound , varying security parameter } 
-	\label{tab:pub-key_k}
-	\end{table}
-	
-	The estimated memory footprint of the public key matrices grows rapidly with an increasing security parameter, but slowly with increasing stream size.
-	The reason for this is that the scheme calls for matrices of size k x k log q.
-	The matrix size grows faster than k SQUARED because q also depends on k.
-	Fortunately, the current proposal is to pick a security parameter "large enough", say 500, and not to vary k over time.
-	
-	Future benchmarking efforts will also measure the memory footprint of the prover over time, and the size of a proof for varying parameter sizes.
-	Additionally, we will benchmark the time required to perform the following tasks:
-	
-	\begin{itemize}
-	\item Update prover state	
-	\item Proof generation
-	\item Update verifier state
-	\item Proof verification
-	\item Matrix multiplication using built-in Ruby implementation
-	\item Matrix multiplication using optimized libraries
-	\end{itemize}
-	
-	
-	
-\section{Looking Forward}
 
-	\subsection{Production Quality Libraries}
-	It is yet to be seen whether the existing Ruby matrix libraries, either the built in or SciRuby, 
-	will be sufficiently efficient for the needs of the SADS scheme. That's not to say the current 
-	choices of technologies will not produce production quality code but, as mentioned earlier, we have
-	been investigating some optimized libraries listed here.
+	The estimated memory footprint of the public key matrices grows rapidly with an increasing security parameter, but slowly with increasing stream size.
+	The reason for this is that the scheme calls for matrices of size $k  \times ( k \times \log q )$.
+	The matrix size grows faster than $k^2$ because $q$ also depends on $k$.
+	Fortunately, the current proposal is to pick one security parameter which is large enough to provide the appropriate security properties for all instances of the SADS scheme.
+	
+	Future benchmarking efforts will also measure the memory footprint of the prover over time, and the size of a proof for varying parameter sizes. Additionally, we will benchmark the time required to perform the important updating and proof tasks for each of the prover and verifier. 
+	
+
+
+	\subsection{ Production Quality Libraries }
+	
+	Through our benchmarking and profiling efforts, we hope to identify and fix the bottlenecks in implementation resulting in faster and higher quality code.
+	We recognize that the built-in implementations of certain high cost operations, such as matrix multiplication may end up being the limiting factor, and as such we've identified a few options for future optimization.
+	We hesitate to invest time and effort into any of these options too soon as we know that our first-draft implementation necessarily has room for improvement, but we outline those options here.
 
 	\begin{enumerate}
+	\item \textbf{SciRuby} : A Ruby library providing efficient implementations of linear algebra operations as well as other science, engineering, and visualization packages. \texttt{http://sciruby.com/}
 	\item \textbf{NTL 5.5.2} : A free software written in C++ providing data structures and algorithms for arbitrary length integers, for vectors, matrices and polynomials over the integers and over the finite fields and for arbitrary precision floating point arithmetic. \texttt{http://shoup.net/ntl/}
 	\item \textbf{MAGMA V2.18} : The kernel of Magma contains implementations of many of the important concrete classes of structure in five fundamental branches of algebra, namely group theory, ring theory, field theory, module theory and the theory of algebras.
 	In addition, certain families of structures from algebraic geometry and finite incidence geometry are included. \texttt{http://magma.maths.usyd.edu.au/}
