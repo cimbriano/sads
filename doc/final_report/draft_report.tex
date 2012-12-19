@@ -27,18 +27,18 @@
 \section{Introduction}
 
 	In the verifiable computation (VC) problem, a client wishes to compute a complex function f on an input x.
-	The client does not trust the server and therefore, would like to be able to verify the correctness of the computation without having to perform the computation themselves.
-	The increasing use of distributed computing over the internet also makes strong servers more commonly available.
-	The growth of outsourcable computation in the form of cloud computing has attracted a renewed interest in the VC problem, and a considerable amount of research has been devoted to these problems \cite{evsc}.
+	The client does not trust the server and therefore, would like to be able to verify the correctness of the computation without having to perform the entire computation themselves.
+	The increasing use of distributed computing over the internet also makes commoditizes powerful servers.
+	The growth of outsourcing computation in the form of cloud computing has attracted a renewed interest in the VC problem, and a considerable amount of research has been devoted to these problems \cite{evsc}.
 	
 	The introduced scheme, Streaming Authenticated Data Structure (SADS), does not require any interaction between the client and the server while the stream is observed.
 	Three important properties are obtained using this scheme :
 	\begin{enumerate}[a.]
-		\item Independence of prover and verifier : the prover and the verifier update their status independently and with no interaction.
+		\item Independence of prover (server) and verifier(client) : the prover and the verifier update their internal state without interaction.
 		\item Efficiency : It can be shown that an exponential improvement for many commonly queries in the prover's running time can be achieved.
 		\item Expressiveness : a wide range of queries such as membership/ non-membership, successor, range search and frequencies can be supported using this scheme.
 	\end{enumerate} 
-	The ultimate goal of the proposed scheme is to build secure protocols that enable the verification of computation 	that is performed by an untrusted resource.
+	The ultimate goal of the proposed scheme is to implement the SADS scheme that enable the verification of computation performed by an untrusted resource.
 	
 	The rest of this paper is organized as follows. We will be describing streaming authenticated data structure goals.
 	Some recent research in streaming verifiable computation will be discussed.
@@ -46,33 +46,45 @@
 	We present significant features of our implementation afterwards followed by presenting the performance of our investigation.
 	Finally, we conclude our paper by providing some future plans.
 	
-	\section{A Lattice-based Hash Tree Model}
+	\section{ Achieving independence through \\ a Lattice-based Hash Tree }
+
+	The core concept that enables the SADS scheme to satisfy the desired goals stated above is a lattice-based hash tree, also known as a Merkle tree.
+	In traditional Merkle trees, a hash function such as SHA-1 might be used to determine the parent of any two children.
+	SHA-1 and similar hashes do not have homomorphic properties which would enable computation over two hashes.
+	In the case of the SADS scheme, the hash used is one with homomorphic properties allowing each node in the tree to be represented as a sum of parts, including the root of the tree.
 	
-	The bottomline for the proposed scheme uses Merkle tree structure using a hash function that has the homomorphic property.
-	A way to map the outputs to the input domain considers \textit{labels} and allocates the root digest as	the sum of well defined functions, nameley, \textit{partial digests} applied to the leaves of the Merkle tree.
-	This will ease for the felxibility and efficiency in streaming update for the verifier and prover.
-	
-	Each node in the tree has a label $\lambda$ and a digest \textit{d}, where a node's digest could be computed uniquely from its label.
-	Given two children labels, the digest of the parent can be calculated. 
-	Figure one represents this property. The labels are denoted by circles and digests are 
-	represented with squares.
+	This homomorphic hash function will map what are called \textit{labels} to \textit{digests}, where labels and digests are different representations of the same value for each node.
+	As in a traditional Merkle tree, each node with children derives its value from the hash of its children.
+	In this case, a parent's digest is exactly the hash of its children's labels.
+	This concept is depicted in figure \ref{fig:labels-and-digests}.	
+	Each node in the tree has a label $\lambda$ and a digest \textit{d}.
 	
         \begin{figure}[h]
         \centering
         \includegraphics[width=100mm]{./images/label_digest.jpg}
         \caption[]{Labels and Digests}
+        \label{fig:labels-and-digests}
         \end{figure}
 
-	As an example, if the set of elements contains the nodes {1,4,6,7} the digest of the hash root of the tree 
-	could be expressed as : \textit{D}(1)+\textit{D}(4)+\textit{D}(6)+\textit{D}(7)
-        where \textit{D}(x) is the partial digest of the root with respect to x.
+	The key homomorphic property, which will only be briefly described here, allows every node in the tree to be represented by a sum of representations of all its children.
+	Each of those children can be represented as a sum of their children and so on.
+	In this way, even the root of the tree can be represented by a sum of representations of the leaves of the tree.
+	The representation being alluded to is called a \textit{partial digest} and is calculated for a node, \textit{with respect to} some node in that parent's subtree.
 	
-	The hash function is calculated as follows. Given a security parameter \textit{k}, $\textit{n} = 
-	poly(\textit{k})$ and $\textit{q} $, $\textit{$\mu$}$, $\textit{$\beta$}$ outputed parameters by the SADS 
-	algorithm, $\textbf{L}, \textbf{R} \in Z $ two (k $\times$ m) random uniform matrices in \textit{mod q}, the 
-	hashed function is defined as h(x,y)= $\textbf{L}$.x + $\textbf{R}$.y mod q.
+	For example, suppose a tree is to represent a set of elements drawn from a universe on integers in $0 \leq x \leq 7$.
+	If then we want to represent the root of such a tree in which the set of nodes \{1, 4, 6, 7\} are present, then digest of the root of the tree can be expressed as a sum of partial digests of the root, with respect to the present elements.
+	That is $\textit{D}(root, 1)+\textit{D}(root, 4)+\textit{D}(root, 6)+\textit{D}(root, 7)$ where $\textit{D}(root, x)$ is the partial digest of the root with respect to x.
+	This type of hash function is what allows the client (verifier) to maintain a correct running digest of all the stream elements seen, regardless of how large the tree is or how many stream elements have been witnessed.
+       	
+	For the readers knowledge, we describe the hash function, but will not go into detail.  The proof of its security and correctness properties can be found in \cite{sads}.
+	The hash function is:
 	
-	\section{Properties of Digests and Labels}
+	\begin{equation}
+		h(x,y)= \textbf{L} x + \textbf{R}y
+	\end{equation}
+	where $x, y$ are labels of nodes, $\textbf{L}, \textbf{R}$ are matrices performing the role of a public key in the scheme and $h(x,y)$ is a digest.
+		
+\section{Properties of Digests and Labels}
 	
 	\begin{enumerate}
 		\item Having a label of a node, its digest can be computed (not necessarily the other way around)
