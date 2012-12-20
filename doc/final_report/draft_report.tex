@@ -6,7 +6,7 @@
 
 \begin{document}
 
-\title{\textbf{CMCS 818J Project Final Report}}
+\title{\textbf{CMCS 818J Project Final Report} \\ Implementing Streaming Authenticated Data Structures}
 \author{Behzad Koosha, Christopher Imbriano}
 
 \maketitle
@@ -14,39 +14,41 @@
 \section{Abstract}
 
 	While Infrastructure and Platform -as-a-Service products provide clients access to large amounts of computing power and storage capacity, the client must trust the provider with their computation.
-	It may be the case that verifying the computation requires too much resources and is infeasible for the client.
-	In this report we will discuss a streaming setting in which a client and provider both witness a stream of data.
-	In this setting the client is assumed to have limited resources in both storage and computational power, and as such, relies on the provider to serve as a database of sorts from which the client can query about the data stream.
+	It may be the case that verifying, by replication of the computation, requires too many resources and is infeasible for the client.
+	In this report we will discuss a scheme for computation verification in a streaming setting; that is, one in which a client and provider both witness a stream of data.
+	In this setting the client is assumed to have limited resources in both storage and computational power, and must rely on the provider to serve as a database of sorts from which the client can query about the data stream.
 	
-	Papamanthou and Shi \cite{sads} proposed a scheme called Streaming Authenticated Data Structures, which allows the client to verify the provider answers his or her query correctly and does not tamper with the query results.
+	Shi and Papamanthou \cite{sads} proposed a scheme called Streaming Authenticated Data Structures which allows a client to verify the correctness and completeness of answers to queries given by an untrusted party.
 	The scheme has been shown to be secure and efficient requiring no communication between the client and the provider during the streaming setting.
-	The goal of this project is twofold. First, we will be implementing an example of this data
-	structure and second, we will be building an application using the SADS primitive. 
+	The goal of this project is twofold: first, produce this data structure as a library primitive and second produce an application demonstrating the library.
+	So far we have implemented this type of data structure as a Ruby library and written a script to demonstrate the basic properties second.
+	We also outline improvements and tasks required to realize an application using the SADS primitive.
 
 
 \section{Introduction}
 
-	In the verifiable computation (VC) problem, a client wishes to compute a complex function f on an input x.
-	The client does not trust the server and therefore, would like to be able to verify the correctness of the computation without having to perform the entire computation themselves.
-	The increasing use of distributed computing over the internet also makes commoditizes powerful servers.
-	The growth of outsourcing computation in the form of cloud computing has attracted a renewed interest in the VC problem, and a considerable amount of research has been devoted to these problems \cite{evsc}.
+	A verifiable computation (VC) is one in which computation can be performed by a server on behalf of a client where the server is an untrusted resource.
+	In this scenario, the client usually cannot, or wishes not to, perform the entire computation themselves but requires a means of verifying the computation efficiently.
+	The growth of outsourced computation in the form of cloud computing has attracted a strong interest in the VC problem.
+	In the streaming setting, many solutions to this problem have been proposed but so far have required inefficient protocols requiring the client and server to communicate updates as each stream element arrives.
+	This communication requirement is prohibitively expensive in certain streaming applications where elements arrive in rapid succession, or are continuous. 
 	
-	The introduced scheme, Streaming Authenticated Data Structure (SADS), does not require any interaction between the client and the server while the stream is observed.
+	The Streaming Authenticated Data Structure scheme (SADS) \cite{dads} does not require any interaction between the client and the server while the stream is observed.
 	Three important properties are obtained using this scheme :
 	\begin{enumerate}[a.]
-		\item Independence of prover (server) and verifier(client) : the prover and the verifier update their internal state without interaction.
-		\item Efficiency : It can be shown that an exponential improvement for many commonly queries in the prover's running time can be achieved.
-		\item Expressiveness : a wide range of queries such as membership/ non-membership, successor, range search and frequencies can be supported using this scheme.
+		\item Independence of prover (server) and verifier (client) : the prover and the verifier can update internal state without interaction.
+		\item Efficiency : SADS demonstrates an exponential improvement in server's running time for many common query types.
+		\item Expressiveness : a wide range of queries such as (non-)membership, successor, range search and frequencies can be supported
 	\end{enumerate} 
 	The ultimate goal of the proposed scheme is to implement the SADS scheme that enable the verification of computation performed by an untrusted resource.
 	
-	The rest of this paper is organized as follows. We will be describing streaming authenticated data structure goals.
-	Some recent research in streaming verifiable computation will be discussed.
-	We then describe the homomorphic property used in the the SADS scheme. Some definitions will be presented in the following section.
-	We present significant features of our implementation afterwards followed by presenting the performance of our investigation.
-	Finally, we conclude our paper by providing some future plans.
+	The rest of this paper is organized as follows. 
+	Section \ref{sec:tree} will discuss the key data structure use to achieve the SADS goals.
+	Section \ref{sec:parts} will discuss the key components in the SADS scheme.
+	Section \ref{sec:impl} will discuss details of our implementation \ref{sec:forward} will discuss preliminary measurements and future improvements. 
 	
-\section{ Achieving independence through \\ a Lattice-based Hash Tree }
+\section{ Achieving Independence through \\ a Lattice-based Hash Tree }
+\label{sec:tree}
 
 	The core concept that enables the SADS scheme to satisfy the desired goals stated above is a lattice-based hash tree, also known as a Merkle tree.
 	In traditional Merkle trees, a hash function such as SHA-1 might be used to determine the parent of any two children.
@@ -93,6 +95,7 @@
 	
 	
 \section{ Participants }
+\label{sec:parts}
 
 	\subsection{ Verifier and Prover }
 	
@@ -132,6 +135,7 @@
 	
 
 \section{ Implementation }
+\label{sec:impl}
 	
 	Implementing the SADS scheme was organized as follows.
 	First to be implemented was the data underlying structure used by the prover and mechanisms used by both prover and verifier to support the SADS scheme.
@@ -170,7 +174,7 @@
 	Some proposed applications include monitoring and verifying of bandwidth charges from an ISP or continuous sensor data. 
 	
 \section{Looking Forward}
-
+\label{sec:forward}
 	\subsection{ Production Quality Libraries }
 	
 	Through our benchmarking and profiling efforts, we hope to identify and fix the bottlenecks in implementation resulting in faster and higher quality code.
@@ -250,7 +254,7 @@
 
 \begin{thebibliography}{9}
 	\bibitem{sads} Elaine Shi, Charalampos Papamanthou \emph{Streaming Authenticated Data Structures}, Date Unknown
-	\bibitem{evsc} B. Applebaum, Y. Ishai and E. Kushilevitz \emph{From Secrecy to Soundness: Efficient Verification via Secure Computation}
+%	\bibitem{evsc} B. Applebaum, Y. Ishai and E. Kushilevitz \emph{From Secrecy to Soundness: Efficient Verification via Secure Computation}
 	\end{thebibliography}
 
 \end{document}
