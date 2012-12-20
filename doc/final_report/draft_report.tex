@@ -145,44 +145,53 @@
 	Ruby is also a forward looking choice as we still have the option to create bindings for C and C++ code, should we require more efficient linear algebra libraries.
 	
 	The implementation in its current state as of this writing consists of two Ruby classes and one Ruby module.
-	The classes are, not surprising, Prover and Verifer and the module is named Sads.
-	Ruby has a feature called \textit{mixing} in which a module can be "mixed into" a class.
+	The classes are, not surprising, Prover and Verifier and the module is named Sads.
+	Ruby has a feature called \textit{mixins} in which a module can be "mixed into" a class.
 	Mixing in a module has the effect of include all the modules fields and methods into the class definition.
-		
+	The Sads module contains any pieces of functionality required by both the Prover and the Verifier - the definition of the hash function for example.
+	However since an instantiation of a Sads would not make sense, module mix in is used instead of class inheritance.
+	The Prover and Verifier classes then mix in the functionality defined in Sads augmenting the Prover-only or Verifier-only functionality defined in their respective classes.
+		Future iterations of this library will include a stronger focus on object-oriented design especially surrounding the nodes of the tree stored by the prover, the proofs generated per query requests, and abstractions surrounding the matrix multiplication so various linear algebra implementations can be tested.
 	
+	The next stage was to implement streaming setting in which the Prover and Verifier operate independently while witnessing a common stream of data.
+	We wrote a very simple script to simulate such a scenario.
+	This script was created as a new project, also using Ruby, and installed the SADS library via the RubyGems command 'gem install --local'.
+	We wanted to ensure that the steps we took to use the SADS library in another project were the same or close to what other developers might do when using our library.
+	The script takes three parameters to initialize the entire protocol, the security parameter, the upper bound on the size of the stream, and the size of the universe of stream elements.
+	The Prover can be initialized from just these three parameter.
+	The Verifier is then initialized with parameters provided to it from the Prover, similar to a client-server initialization wherein a client requests a session from a web server and can only proceed once the server grants the client the credentials.
+	Finally in this small example, the user is then able to run commands such as "add" which simulates the Prover and Verifier both witnessing some stream element or "query" which simulates a membership query from the Verifier to the Prover.
 	
+	The final stage is to implement the simulation across distributed computing infrastructure, that is a Prover and Verifier non-co-located.
+	We imagine at least two possibilities for this implementation.
+	One possibility could be a web service could be created that plays matchmaker between "needy" clients requesting prover services and "generous" clients wishing to act as a prover.
+	Another possibility, similar to the first, is one in which the web service itself acts as a Prover for any client requesting service.
+	In either of these scenarios we imagine deploying a server application possibly build in EventMachine or Node.js or some similar framework.
+	Some proposed applications include monitoring and verifying of bandwidth charges from an ISP or continuous sensor data. 
 	
-	\subsection{Underlying Data Structures}
-
-		A crucial component of the SADS algorithm relies on matrix multiplication, a relatively expensive computational operation.
-		When formulating our plan of action for this project, we were recommended a few linear algebra libraries, which will be discussed in a later section.
-		While we recognize the importance of fast matrix operations and parallelism for production quality code, we thought that the added complexity, as well as unknowns with respect to implementation details, would be prohibitive.
-		Instead, we've decided to use an interpreted language and the simple matrix operations that come with the standard libraries to start.
-
-	
-	\subsection{SADS Scheme}
-
-	Once the underlying data structure is complete, the SADS scheme will use it as a primitive.
-	Though one of the scheme's strengths is the independence of the prover and verifier during the streaming setting, the two parties will necessarily need to communicate during the query phase.
-	Additionally, there may be communication between the two parties to initiate the streaming setting.
-	For these reasons, we anticipate creating an application which will require network communication as it will likely be the case that the verifier and prover are not collocated.
-
-	%We have a few frameworks in mind for this task.
-	%Two of our options at the moment are EventMachine and Node.js.
-	%Node.js is a "platform for building fast, scalable network applications" and has been gaining popularity in the Ruby community. http://nodejs.org/
-	%EventMachine is a "fast, simple event-processing library for Ruby programs."http://rubyeventmachine.com/
-
-
 \section{Looking Forward}
+
+	\subsection{ Production Quality Libraries }
+	
+	Through our benchmarking and profiling efforts, we hope to identify and fix the bottlenecks in implementation resulting in faster and higher quality code.
+	We recognize that the built-in implementations of certain high cost operations, such as matrix multiplication may end up being the limiting factor, and as such we've identified a few options for future optimization.
+	We hesitate to invest time and effort into any of these options too soon as we know that our first-draft implementation necessarily has room for improvement, but we outline those options here.
+
+	\begin{enumerate}
+	\item \textbf{SciRuby} : A Ruby library providing efficient implementations of linear algebra operations as well as other science, engineering, and visualization packages. \texttt{http://sciruby.com/}
+	\item \textbf{NTL 5.5.2} : A free software written in C++ providing data structures and algorithms for arbitrary length integers, for vectors, matrices and polynomials over the integers and over the finite fields and for arbitrary precision floating point arithmetic. \texttt{http://shoup.net/ntl/}
+	\item \textbf{MAGMA V2.18} : The kernel of Magma contains implementations of many of the important concrete classes of structure in five fundamental branches of algebra, namely group theory, ring theory, field theory, module theory and the theory of algebras.
+	In addition, certain families of structures from algebraic geometry and finite incidence geometry are included. \texttt{http://magma.maths.usyd.edu.au/}
+	\end{enumerate}
 
 	\subsection{ Benchmarking }
 	
 	The next stage of development is benchmarking to understand the performance of the implementation and to differentiate constraints resulting from particular design decisions from those arising from the schemes protocol itself.
 	We will focus primarily on benchmarking the timing of important operations in the scheme as well as the memory footprint of the implementations largest data structures.
 	
-	We ran some preliminary calculations to ballpark the size of matrices L and R, the public key of the SADS scheme.
-	Recall that L and R are matrices with elements in $Z_q$, that is elements are integers of at most q and q is derived from the security parameter, k and the upper bound on the size of the stream, n.
-	So a rough estimate of the size of L and R can be calculated by multiplying the dimensions of the matrices, by the amount of space required for each element.
+	We ran some preliminary calculations to ballpark the size of matrices \textbf{L} and \textbf{R}, the public key of the SADS scheme.
+	Recall that \textbf{L} and \textbf{R} are matrices with elements in $Z_q$, that is elements are integers of at most $q$, which is itself derived from the security parameter, $k$ and the upper bound on the size of the stream, $n$.
+	So a rough estimate of the size of \textbf{L} and \textbf{R} can be calculated by multiplying the dimensions of the matrices, by the amount of space required for each element.
 	Below are two tables of estimations.
 	
 	\begin{table}[h]
@@ -198,8 +207,8 @@
 		10000000&100000&10000000 x 30000000&2288818359MB\\	
 		\end{tabular}
 	
-	\caption{Estimation of public key size.  Constant stream size upper bound , varying security parameter } 
-	\label{tab:pub-key_k}
+	\caption{Estimation of public key size.  Constant stream size upper bound, varying security parameter } 
+	\label{tab:pub-key-k}
 	\end{table}
 	
 	
@@ -217,8 +226,8 @@
 		500&100000000&500 x 1500&4MB\\
 		
 		\end{tabular}
-	\caption{ Estimation of public key size.  Constant security parameter, varying stream size upper bound }
-	\label{tab:pub-key_n}
+	\caption{ Estimation of public key size. Constant security parameter, varying stream size upper bound }
+	\label{tab:pub-key-n}
 	\end{table}
 	
 
@@ -229,21 +238,6 @@
 	
 	Future benchmarking efforts will also measure the memory footprint of the prover over time, and the size of a proof for varying parameter sizes. Additionally, we will benchmark the time required to perform the important updating and proof tasks for each of the prover and verifier. 
 	
-
-
-	\subsection{ Production Quality Libraries }
-	
-	Through our benchmarking and profiling efforts, we hope to identify and fix the bottlenecks in implementation resulting in faster and higher quality code.
-	We recognize that the built-in implementations of certain high cost operations, such as matrix multiplication may end up being the limiting factor, and as such we've identified a few options for future optimization.
-	We hesitate to invest time and effort into any of these options too soon as we know that our first-draft implementation necessarily has room for improvement, but we outline those options here.
-
-	\begin{enumerate}
-	\item \textbf{SciRuby} : A Ruby library providing efficient implementations of linear algebra operations as well as other science, engineering, and visualization packages. \texttt{http://sciruby.com/}
-	\item \textbf{NTL 5.5.2} : A free software written in C++ providing data structures and algorithms for arbitrary length integers, for vectors, matrices and polynomials over the integers and over the finite fields and for arbitrary precision floating point arithmetic. \texttt{http://shoup.net/ntl/}
-	\item \textbf{MAGMA V2.18} : The kernel of Magma contains implementations of many of the important concrete classes of structure in five fundamental branches of algebra, namely group theory, ring theory, field theory, module theory and the theory of algebras.
-	In addition, certain families of structures from algebraic geometry and finite incidence geometry are included. \texttt{http://magma.maths.usyd.edu.au/}
-	\end{enumerate}
-
 	
 	%\subsection{Semester Outlook}
 		%While the ultimate goal of the project is to produce a proof-of-concept application which utilizes a SADS scheme, it is best to set manage expectations.
@@ -256,9 +250,7 @@
 
 \begin{thebibliography}{9}
 	\bibitem{sads} Elaine Shi, Charalampos Papamanthou \emph{Streaming Authenticated Data Structures}, Date Unknown
-	\bibitem{evsc} B. Applebaum, Y. Ishai
-and E. Kushilevitz \emph{From Secrecy to Soundness:
-Efficient Verification via Secure Computation}
+	\bibitem{evsc} B. Applebaum, Y. Ishai and E. Kushilevitz \emph{From Secrecy to Soundness: Efficient Verification via Secure Computation}
 	\end{thebibliography}
 
 \end{document}
