@@ -45,18 +45,23 @@
 	The rest of this paper is organized as follows.
 	Section \ref{sec:tree} will discuss the key data structure use to achieve the SADS goals.
 	Section \ref{sec:parts} will discuss the key components in the SADS scheme.
-	Section \ref{sec:impl} will discuss details of our implementation \ref{sec:forward} will discuss preliminary measurements and future improvements.
+	Section \ref{sec:impl} will discuss details of our implementation and section \ref{sec:forward} will discuss preliminary measurements and outline future improvements.
 
 \section{ Achieving Independence through \\ a Lattice-based Hash Tree }
 \label{sec:tree}
 
-	The core concept that enables the SADS scheme to satisfy the desired goals stated above is a lattice-based hash tree, also known as a Merkle tree.
-	In traditional Merkle trees, a hash function such as SHA-1 might be used to determine the parent of any two children.
-	SHA-1 and similar hashes do not have homomorphic properties which would enable computation over two hashes.
+	The core concept that enables the SADS scheme to satisfy its desired goals is a lattice-based hash tree, also known as a Merkle tree.
+	In traditional Merkle trees a hash function, such as SHA-1, is used to compute the value of any internal node of the tree.
+	SHA-1, and similar hashes, are not homomorphic hash functions; that is, the hash of the sum of two elements is not necessarily the sum of the hash of the individual elements.
+	For example, suppose there is a hash $h(x, y)$, a homomorphic hash would satisfy the following relation:
+	\begin{equation}
+		h(x + y) = h(x) + h(y)
+	\end{equation}
+	The key to the SADS scheme is Merkle tree using a homomorphic hash function which allows 
 	In the case of the SADS scheme, the hash used is one with homomorphic properties allowing each node in the tree to be represented as a sum of parts, including the root of the tree.
 
-	This homomorphic hash function will map what are called \textit{labels} to \textit{digests}, where labels and digests are different representations of the same value for each node.
-	As in a traditional Merkle tree, each node with children derives its value from the hash of its children.
+	The homomorphic hash function in the SADS scheme maps what are called \textit{labels} to \textit{digests}, where labels and digests are different representations of the same value for each node.
+	As in a traditional Merkle tree, each internal node derives its value from the hash of its children.
 	In this case, a parent's digest is exactly the hash of its children's labels.
 	This concept is depicted in figure \ref{fig:labels-and-digests}.
 	Each node in the tree has a label $\lambda$ and a digest \textit{d}.
@@ -68,31 +73,27 @@
         \label{fig:labels-and-digests}
         \end{figure}
 
-	The key homomorphic property, which will only be briefly described here, allows every node in the tree to be represented by a sum of representations of all its children.
+	The crucial property of the hash function in the SADS scheme, which will only be briefly described here, allows every node in the tree to be represented by a sum of representations of its children.
 	Each of those children can be represented as a sum of their children and so on.
 	In this way, even the root of the tree can be represented by a sum of representations of the leaves of the tree.
-	The representation being alluded to is called a \textit{partial digest} and is calculated for a node, \textit{with respect to} some node in that parent's subtree.
+	The representation being alluded to is called a \textit{partial digest} and is calculated for a particular node \textit{with respect to} some descendant in that nodes subtree.
 
-	For example, suppose a tree is to represent a set of elements drawn from a universe on integers in $0 \leq x \leq 7$.
-	If then we want to represent the root of such a tree in which the set of nodes \{1, 4, 6, 7\} are present, then digest of the root of the tree can be expressed as a sum of partial digests of the root, with respect to the present elements.
-	That is $\textit{D}(root, 1)+\textit{D}(root, 4)+\textit{D}(root, 6)+\textit{D}(root, 7)$ where $\textit{D}(root, x)$ is the partial digest of the root with respect to x.
+	For example, suppose a tree is to represent a set of elements drawn from a universe of integers in the range $0 \leq x \leq 7$.
+	To represent the root of such a tree in which the set of nodes \{1, 4, 6, 7\} are present, then digest of the root of the tree can be expressed as a sum of partial digests of the root, with respect to the present elements.
+	That is,
+	\begin{equation}
+		\textit{D}(root, 1)+\textit{D}(root, 4)+\textit{D}(root, 6)+\textit{D}(root, 7)
+	\end{equation} 
+	where $\textit{D}(root, x)$ is the partial digest of the root with respect to x.
 	This type of hash function is what allows the client (verifier) to maintain a correct running digest of all the stream elements seen, regardless of how large the tree is or how many stream elements have been witnessed.
 
 	For the readers knowledge, we describe the hash function, but will not go into detail.  The proof of its security and correctness properties can be found in \cite{sads}.
-	The hash function is:
+	The hash function is given by,
 
 	\begin{equation}
 		h(x,y)= \textbf{L} x + \textbf{R}y
 	\end{equation}
-	where $x, y$ are labels of nodes, $\textbf{L}, \textbf{R}$ are matrices performing the role of a public key in the scheme and $h(x,y)$ is a digest.
-
-\section{Properties of Digests and Labels}
-
-	\begin{enumerate}
-		\item Having a label of a node, its digest can be computed (not necessarily the other way around)
-		\item Having the labels of the two children nodes, using the hash functions, the digest of the parent could be computed.
-	\end{enumerate}
-
+	where $x, y$ are labels of nodes, represented as vectors, $\textbf{L}, \textbf{R}$ are matrices performing the role of a public key in the scheme and $h(x,y)$ is a digest also represented as a vector.
 
 \section{ Participants }
 \label{sec:parts}
@@ -100,31 +101,31 @@
 	\subsection{ Verifier and Prover }
 
 		As mentioned previously, the verifier (or client) is a low resource computational device.
-		It is expected that the verifier will not have sufficient storage capacity to store every element of a stream witnessed and as such it has no means to correctly answer queries based on the stream elements.
+		It is expected that the verifier will not have sufficient storage capacity to store every element of a stream witnessed and therefore cannot correctly answer queries over the data stream elements.
 		To accomplish these tasks, the verifier will rely on a more powerful device.
-		The verifier will however have the means to storage a digest, a small representation of all the elements it has seen, with the goal being that it will be able to update its local state efficiently enough so as to not disrupt viewing elements of the stream.
-		So, the verifier's only operation during the streaming phase will be to update its local state with some representation of each element of the stream.
-		This representation will be the partial digest of the root with respect to the witnessed element as previously discussed.
+		The verifier will however have the means to store a digest, a small representation of all the elements it has seen.
+		It will also be able to efficiently update its local state so as to not disrupt viewing elements of the stream.
+		The verifier's only operation during the streaming phase will be to update its local state with some representation of each element of the stream, specifically a partial digest.
 
-		The prover (server) on the other hand must act somewhat as a database.
+		The prover (server) on the other hand will act as a database.
 		Internally, the prover maintains a representation of the stream elements witnessed such that it can answer queries from the verifier.
 		That internal representation is the hash tree mentioned earlier which allows for a node to be update without rehashing its children.
-		The verifier exploits this property to maintain and update the root digest of the tree without communication with the prover.
+		The verifier will exploit this property to maintain and update the root digest of the tree without communication with the prover.
 
 		\subsection{ Query Proof }
 
-		During or after the streaming phase, the verifier may wish to query the prover (server) for the membership, successor, range, frequency etc of a universe element that maybe or may not have been witnessed.
-		The prover is expected to provide and answer to the query as well as a proof that can be efficiently verified by the verifier.
-		Figure \ref{fig:proof} in a visual representation of a membership proof for the green node.
-		The set of green nodes comprises the \textit{update path} for the green leaf node
-		The set of blue nodes are the \textit{siblings} of the nodes on the update path.
-		The prover then responds to a membership query with the computed answer as well as the set of sibling pairs which the verifier can then verify.
+		During or after the streaming phase, the verifier may wish to issue queries to the prover (server) of the form (non-)membership, successor, range, frequency etc. 
+		The prover is expected to provide an answer to the query as well as a proof that can be efficiently verified by the verifier.
+		Figure \ref{fig:proof} gives a visual representation of a membership proof for the green leaf node.
+		The whole set of green nodes comprises the \textit{update path} for the green leaf, while
+		the set of blue nodes is the \textit{siblings} of the nodes on the update path.
+		The prover would respond to a membership query with the computed answer as well as the set of labels of the sibling pairs as proof for the query answer. 
 
-		Verification is done in two parts.
-		First, for each sibling pair is hashed to obtain a digest of their parent.
-		That calculated digest must be an equivalent representation of the label in the next pair representing this pairs parent.
-		Lastly, the digest produced by hashing the last pair of children must be equivalent to the running digest the verifier has been maintaining.
-		Shi and Papamanthou \cite{dads} describe the correctness properties in much more detail.
+		Verification is then done by the verifier in two parts.
+		First, each sibling pair is hashed to obtain a digest of their parent.
+		That calculated digest must be an equivalent representation of this pair's parent label, obtained from the proof.
+		Lastly, the final digest produced by hashing the last pair must be equivalent to the running digest the verifier has been maintaining.
+		Shi and Papamanthou \cite{dads} describe the correctness properties in sufficient detail.
 
 		\begin{figure}[h]
 		\centering
@@ -138,24 +139,24 @@
 \label{sec:impl}
 
 	Implementing the SADS scheme was organized as follows.
-	First to be implemented was the data underlying structure used by the prover and mechanisms used by both prover and verifier to support the SADS scheme.
-	Then the data structures and mechanism to support the query phase was added.
-	Finally, these two parts were packaged such that another project may leverage the SADS scheme as a library primitive and build applications.
+	The first component to be implemented was the underlying datastructure used by the prover and the mechanisms used by both prover and verifier to support the SADS scheme; mechanisms for determining a node's index in the tree and calculating partial digests for example.
+	Then the data structures and mechanisms to support the query phase was added.
+	Finally, these two parts were packaged as a library such that another project may leverage the scheme primitive and build applications on top of SADS.
 
 	Our language of choice for this first stage of the project was Ruby.
-	Ruby's main advantage was the ease of rapid prototyping as well as the vast collection of libraries to enhance development and functionality available.
+	Ruby's main advantage was the ease of rapid prototyping as well as the vast collection of libraries available in the community.
 	Specifically, the main component of the SADS scheme is the hash function which require matrix multiplication support.
 	Ruby's standard library includes Vector and Matrix arithmetic operations which were sufficient for prototype scale implementations.
-	Ruby is also a forward looking choice as we still have the option to create bindings for C and C++ code, should we require more efficient linear algebra libraries.
+	Ruby was also a forward looking choice as we still have the option to create bindings for C and C++ code, when we require more efficient linear algebra libraries.
 
 	The implementation in its current state as of this writing consists of two Ruby classes and one Ruby module.
 	The classes are, not surprising, Prover and Verifier and the module is named Sads.
-	Ruby has a feature called \textit{mixins} in which a module can be "mixed into" a class.
-	Mixing in a module has the effect of include all the modules fields and methods into the class definition.
-	The Sads module contains any pieces of functionality required by both the Prover and the Verifier - the definition of the hash function for example.
-	However since an instantiation of a Sads would not make sense, module mix in is used instead of class inheritance.
-	The Prover and Verifier classes then mix in the functionality defined in Sads augmenting the Prover-only or Verifier-only functionality defined in their respective classes.
-		Future iterations of this library will include a stronger focus on object-oriented design especially surrounding the nodes of the tree stored by the prover, the proofs generated per query requests, and abstractions surrounding the matrix multiplication so various linear algebra implementations can be tested.
+	Ruby has a feature called \textit{mixins} in which a module can be ``mixed into" a class.
+	Mixing in a module has the effect of include all the module's fields and methods into the class definition.
+	The Sads module contains any pieces of functionality required by both the Prover and the Verifier; the definition of the hash function for instance.
+	However, since an instantiation of a Sads would not make sense, module mix-in was used instead of class inheritance.
+	The Prover and Verifier classes then mix-in the functionality defined in Sads augmenting the Prover-only or Verifier-only functionality defined in their respective classes.
+		Future iterations of this library will include a stronger focus on object-oriented design especially surrounding the nodes of the tree stored by the prover, the proofs generated per query requests, and abstractions surrounding the matrix multiplication so various linear algebra implementations can be swapped in and tested.
 
 	The next stage was to implement streaming setting in which the Prover and Verifier operate independently while witnessing a common stream of data.
 	We wrote a very simple script to simulate such a scenario.
