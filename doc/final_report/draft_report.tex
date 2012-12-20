@@ -46,7 +46,7 @@
 	We present significant features of our implementation afterwards followed by presenting the performance of our investigation.
 	Finally, we conclude our paper by providing some future plans.
 	
-	\section{ Achieving independence through \\ a Lattice-based Hash Tree }
+\section{ Achieving independence through \\ a Lattice-based Hash Tree }
 
 	The core concept that enables the SADS scheme to satisfy the desired goals stated above is a lattice-based hash tree, also known as a Merkle tree.
 	In traditional Merkle trees, a hash function such as SHA-1 might be used to determine the parent of any two children.
@@ -91,62 +91,75 @@
 		\item Having the labels of the two children nodes, using the hash functions, the digest of the parent could be computed.
 	\end{enumerate}
 	
-	\section{Prover}
 	
-	The proof of leaf node \textit{i} consists of: 
-	\begin{enumerate}
-		\item the labels of nodes from \textit{i} to the root
-		\item the sibling nodes to that path
-	\end{enumerate}
-	
-	In figure two, the labels are presented in green (path to the root) while the sibling nodes to that path are colored in blue. 
+\section{ Participants }
 
-	\begin{figure}[h]
-        \centering
-        \includegraphics[width=100mm]{./images/8.jpg}
-        \caption[]{Prover}
-        \end{figure}
+	\subsection{ Verifier and Prover }
 	
+		As mentioned previously, the verifier (or client) is a low resource computational device.
+		It is expected that the verifier will not have sufficient storage capacity to store every element of a stream witnessed and as such it has no means to correctly answer queries based on the stream elements.
+		To accomplish these tasks, the verifier will rely on a more powerful device.
+		The verifier will however have the means to storage a digest, a small representation of all the elements it has seen, with the goal being that it will be able to update its local state efficiently enough so as to not disrupt viewing elements of the stream.
+		So, the verifier's only operation during the streaming phase will be to update its local state with some representation of each element of the stream.
+		This representation will be the partial digest of the root with respect to the witnessed element as previously discussed.
+		
+		The prover (server) on the other hand must act somewhat as a database.
+		Internally, the prover maintains a representation of the stream elements witnessed such that it can answer queries from the verifier.
+		That internal representation is the hash tree mentioned earlier which allows for a node to be update without rehashing its children.
+		The verifier exploits this property to maintain and update the root digest of the tree without communication with the prover.
+		
+		\subsection{ Query Proof }
+		
+		During or after the streaming phase, the verifier may wish to query the prover (server) for the membership, successor, range, frequency etc of a universe element that maybe or may not have been witnessed.
+		The prover is expected to provide and answer to the query as well as a proof that can be efficiently verified by the verifier. 
+		Figure \ref{fig:proof} in a visual representation of a membership proof for the green node.
+		The set of green nodes comprises the \textit{update path} for the green leaf node
+		The set of blue nodes are the \textit{siblings} of the nodes on the update path.
+		The prover then responds to a membership query with the computed answer as well as the set of sibling pairs which the verifier can then verify.
+		
+		Verification is done in two parts.
+		First, for each sibling pair is hashed to obtain a digest of their parent.
+		That calculated digest must be an equivalent representation of the label in the next pair representing this pairs parent.
+		Lastly, the digest produced by hashing the last pair of children must be equivalent to the running digest the verifier has been maintaining.
+		Shi and Papamanthou \cite{dads} describe the correctness properties in much more detail.
+		
+		\begin{figure}[h]
+		\centering
+		\includegraphics[width=100mm]{./images/8.jpg}
+		\caption[]{Prover}
+		\label{fig:proof}
+		\end{figure}
 	
-	\section{Verifier}
-	
-	The verifier computes the digest for every node on the path from \textit{i} to the root in two ways, and checks if they are consistent :
-	
-	\begin{enumerate}
-	 \item using the \textit{labels} of its children
-	 \item from the \textit{label} of the node itself
-	\end{enumerate}
 
-
-	\section{Our Approach}
+\section{ Implementation }
 	
-	The description of the SADS scheme reads much like a protocol, focusing on the behavior of each of the prover and verifier during a streaming phase and a query phase.
-	Before tackling the problem at the protocol level however, we must first implement the basic data structures each of the verifier and prover will need to perform their roles.
-	This will be our starting point.
-
-	The road map for this project is as follows:
-	\begin{enumerate}
-	\item Implement underlying Merkle tree with homomorphic hash function
-	\item Implement the SADS scheme
-	\item Develop proof-of-concept application using the SADS scheme implementation
-	\end{enumerate}
-
+	Implementing the SADS scheme was organized as follows.
+	First to be implemented was the data underlying structure used by the prover and mechanisms used by both prover and verifier to support the SADS scheme.
+	Then the data structures and mechanism to support the query phase was added.
+	Finally, these two parts were packaged such that another project may leverage the SADS scheme as a library primitive and build applications.
+	
+	Our language of choice for this first stage of the project was Ruby.
+	Ruby's main advantage was the ease of rapid prototyping as well as the vast collection of libraries to enhance development and functionality available.
+	Specifically, the main component of the SADS scheme is the hash function which require matrix multiplication support.
+	Ruby's standard library includes Vector and Matrix arithmetic operations which were sufficient for prototype scale implementations.
+	Ruby is also a forward looking choice as we still have the option to create bindings for C and C++ code, should we require more efficient linear algebra libraries.
+	
+	The implementation in its current state as of this writing consists of two Ruby classes and one Ruby module.
+	The classes are, not surprising, Prover and Verifer and the module is named Sads.
+	Ruby has a feature called \textit{mixing} in which a module can be "mixed into" a class.
+	Mixing in a module has the effect of include all the modules fields and methods into the class definition.
+		
+	
+	
+	
 	\subsection{Underlying Data Structures}
 
-	A crucial component of the SADS algorithm relies on matrix multiplication, a relatively expensive computational operation.
-	When formulating our plan of action for this project, we were recommended a few linear algebra libraries, which will be discussed in a later section.
-	While we recognize the importance of fast matrix operations and parallelism for production quality code, we thought that the added complexity, as well as unknowns with respect to implementation details, would be prohibitive.
-	Instead, we've decided to use an interpreted language and the simple matrix operations that come with the standard libraries to start.
+		A crucial component of the SADS algorithm relies on matrix multiplication, a relatively expensive computational operation.
+		When formulating our plan of action for this project, we were recommended a few linear algebra libraries, which will be discussed in a later section.
+		While we recognize the importance of fast matrix operations and parallelism for production quality code, we thought that the added complexity, as well as unknowns with respect to implementation details, would be prohibitive.
+		Instead, we've decided to use an interpreted language and the simple matrix operations that come with the standard libraries to start.
 
-	Our language of choice for this first stage of the project is Ruby. Ruby has a number of advantages including:
-
-	\begin{enumerate}
-	\item Built-in support of matrix and vector operations
-	\item Vibrant developer community that supports both new and experienced developers through learning resources, tool development, etc...
-	\item Ability to write compiled extensions in C
-	\item Numeric and visualization library, SciRuby
-	\end{enumerate}
-
+	
 	\subsection{SADS Scheme}
 
 	Once the underlying data structure is complete, the SADS scheme will use it as a primitive.
