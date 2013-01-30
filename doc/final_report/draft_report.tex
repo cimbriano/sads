@@ -57,8 +57,7 @@
 	\begin{equation}
 		h(x + y) = h(x) + h(y)
 	\end{equation}
-	The key to the SADS scheme is Merkle tree using a homomorphic hash function which allows 
-	In the case of the SADS scheme, the hash used is one with homomorphic properties allowing each node in the tree to be represented as a sum of parts, including the root of the tree.
+	The key to the SADS scheme is Merkle tree using a homomorphic hash function which allows each node in the tree to be represented as a sum of parts, including the root of the tree.
 
 	The homomorphic hash function in the SADS scheme maps what are called \textit{labels} to \textit{digests}, where labels and digests are different representations of the same value for each node.
 	As in a traditional Merkle tree, each internal node derives its value from the hash of its children.
@@ -125,7 +124,7 @@
 		First, each sibling pair is hashed to obtain a digest of their parent.
 		That calculated digest must be an equivalent representation of this pair's parent label, obtained from the proof.
 		Lastly, the final digest produced by hashing the last pair must be equivalent to the running digest the verifier has been maintaining.
-		Shi and Papamanthou \cite{dads} describe the correctness properties in sufficient detail.
+		Shi and Papamanthou \cite{sads} describe the correctness properties in sufficient detail.
 
 		\begin{figure}[h]
 		\centering
@@ -139,7 +138,7 @@
 \label{sec:impl}
 
 	Implementing the SADS scheme was organized as follows.
-	The first component to be implemented was the underlying datastructure used by the prover and the mechanisms used by both prover and verifier to support the SADS scheme; mechanisms for determining a node's index in the tree and calculating partial digests for example.
+	The first component to be implemented was the underlying data structure used by the prover and the mechanisms used by both prover and verifier to support the SADS scheme; mechanisms for determining a node's index in the tree and calculating partial digests for example.
 	Then the data structures and mechanisms to support the query phase was added.
 	Finally, these two parts were packaged as a library such that another project may leverage the scheme primitive and build applications on top of SADS.
 
@@ -158,36 +157,25 @@
 	The Prover and Verifier classes then mix-in the functionality defined in Sads augmenting the Prover-only or Verifier-only functionality defined in their respective classes.
 		Future iterations of this library will include a stronger focus on object-oriented design especially surrounding the nodes of the tree stored by the prover, the proofs generated per query requests, and abstractions surrounding the matrix multiplication so various linear algebra implementations can be swapped in and tested.
 
-	The next stage was to implement streaming setting in which the Prover and Verifier operate independently while witnessing a common stream of data.
+	The next stage was to implement the streaming setting in which the Prover and Verifier operate independently while witnessing a common stream of data.
 	We wrote a very simple script to simulate such a scenario.
-	This script was created as a new project, also using Ruby, and installed the SADS library via the RubyGems command 'gem install --local'.
-	We wanted to ensure that the steps we took to use the SADS library in another project were the same or close to what other developers might do when using our library.
+	This script was created as a new project, also using Ruby, and installed the SADS library via the RubyGems command `gem install --local $<$path to library$>$'.
+	We wanted to ensure that the steps we took to use the SADS library in another project were the same as what we would expect other developers to do when using our library.
 	The script takes three parameters to initialize the entire protocol, the security parameter, the upper bound on the size of the stream, and the size of the universe of stream elements.
 	The Prover can be initialized from just these three parameter.
 	The Verifier is then initialized with parameters provided to it from the Prover, similar to a client-server initialization wherein a client requests a session from a web server and can only proceed once the server grants the client the credentials.
-	Finally in this small example, the user is then able to run commands such as "add" which simulates the Prover and Verifier both witnessing some stream element or "query" which simulates a membership query from the Verifier to the Prover.
+	Finally in this small example, the user is then able to run commands such as ``add" which simulates the Prover and Verifier both witnessing some stream element or "query" which simulates a full membership query and response verification between Verifier to the Prover.
 
-	The final stage is to implement the simulation across distributed computing infrastructure, that is a Prover and Verifier non-co-located.
+	The final stage is to implement the simulation across distributed computing infrastructure, that is, with a Prover and a Verifier which are not co-located.
 	We imagine at least two possibilities for this implementation.
-	One possibility could be a web service could be created that plays matchmaker between "needy" clients requesting prover services and "generous" clients wishing to act as a prover.
+	One possibility could be a web service that plays matchmaker between ``needy" clients requesting prover services and ``generous" clients wishing to act as a prover.
+	The web service would then facilitate communication between the two parties but would not provide the computational resources to act as either the prover or verifier.
 	Another possibility, similar to the first, is one in which the web service itself acts as a Prover for any client requesting service.
-	In either of these scenarios we imagine deploying a server application possibly build in EventMachine or Node.js or some similar framework.
+	In either of these scenarios we imagine deploying a server application possibly built with EventMachine or Node.js or some other similar web application framework.
 	Some proposed applications include monitoring and verifying of bandwidth charges from an ISP or continuous sensor data.
 
 \section{Looking Forward}
 \label{sec:forward}
-	\subsection{ Production Quality Libraries }
-
-	Through our benchmarking and profiling efforts, we hope to identify and fix the bottlenecks in implementation resulting in faster and higher quality code.
-	We recognize that the built-in implementations of certain high cost operations, such as matrix multiplication may end up being the limiting factor, and as such we've identified a few options for future optimization.
-	We hesitate to invest time and effort into any of these options too soon as we know that our first-draft implementation necessarily has room for improvement, but we outline those options here.
-
-	\begin{enumerate}
-	\item \textbf{SciRuby} : A Ruby library providing efficient implementations of linear algebra operations as well as other science, engineering, and visualization packages. \texttt{http://sciruby.com/}
-	\item \textbf{NTL 5.5.2} : A free software written in C++ providing data structures and algorithms for arbitrary length integers, for vectors, matrices and polynomials over the integers and over the finite fields and for arbitrary precision floating point arithmetic. \texttt{http://shoup.net/ntl/}
-	\item \textbf{MAGMA V2.18} : The kernel of Magma contains implementations of many of the important concrete classes of structure in five fundamental branches of algebra, namely group theory, ring theory, field theory, module theory and the theory of algebras.
-	In addition, certain families of structures from algebraic geometry and finite incidence geometry are included. \texttt{http://magma.maths.usyd.edu.au/}
-	\end{enumerate}
 
 	\subsection{ Benchmarking }
 
@@ -242,6 +230,20 @@
 	Fortunately, the current proposal is to pick one security parameter which is large enough to provide the appropriate security properties for all instances of the SADS scheme.
 
 	Future benchmarking efforts will also measure the memory footprint of the prover over time, and the size of a proof for varying parameter sizes. Additionally, we will benchmark the time required to perform the important updating and proof tasks for each of the prover and verifier.
+
+
+	\subsection{ Production Quality Libraries }
+
+	Through our benchmarking and profiling efforts, we hope to identify and fix the bottlenecks in implementation resulting in faster and higher quality code.
+	We recognize that the built-in implementations of certain high cost operations, such as matrix multiplication may end up being the limiting factor, and as such we've identified a few options for future optimization.
+	We hesitate to invest time and effort into any of these options too soon as we know that our first-draft implementation necessarily has room for improvement, but we outline those options here.
+
+	\begin{enumerate}
+	\item \textbf{SciRuby} : A Ruby library providing efficient implementations of linear algebra operations as well as other science, engineering, and visualization packages. \texttt{http://sciruby.com/}
+	\item \textbf{NTL 5.5.2} : A free software written in C++ providing data structures and algorithms for arbitrary length integers, for vectors, matrices and polynomials over the integers and over the finite fields and for arbitrary precision floating point arithmetic. \texttt{http://shoup.net/ntl/}
+	\item \textbf{MAGMA V2.18} : The kernel of Magma contains implementations of many of the important concrete classes of structure in five fundamental branches of algebra, namely group theory, ring theory, field theory, module theory and the theory of algebras.
+	In addition, certain families of structures from algebraic geometry and finite incidence geometry are included. \texttt{http://magma.maths.usyd.edu.au/}
+	\end{enumerate}
 
 
 	%\subsection{Semester Outlook}
