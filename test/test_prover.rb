@@ -393,9 +393,9 @@ describe "Prover" do
 				digest = @prover.node_digest(node)
 				label = @prover.calc_node_label(node)
 
-				puts "Checking label: #{label}"
-				puts "Checking digest: #{digest}"
-				puts "q : #{@prover.q}"
+				# puts "Checking label: #{label}"
+				# puts "Checking digest: #{digest}"
+				# puts "q : #{@prover.q}"
 
 				assert(@prover.check_radix_label(label, digest), "Label/Digest Relation Failed for node: #{node}")
 			end
