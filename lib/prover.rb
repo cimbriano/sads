@@ -33,7 +33,7 @@ class Prover
 			@stream_bound_n         = 2
 			@q                      = calculate_q(@k, @stream_bound_n)
 			@log_q_ceil             = Math.log2(@q).ceil
-			@bits_needed_for_leaves = Math.log2(@universe_size_m) + 1
+			@bits_needed_for_leaves = Math.log2(@universe_size_m).ceil + 1
 			@mu                     = calculate_mu(@k, @q)
 
 			l0 = [5, 1, 5, 1, 0, 1]
@@ -51,7 +51,7 @@ class Prover
 			@stream_bound_n         = n
 			@q                      = calculate_q(k, n)
 			@log_q_ceil             = Math.log2(@q).ceil
-			@bits_needed_for_leaves = Math.log2(@universe_size_m) + 1
+			@bits_needed_for_leaves = Math.log2(@universe_size_m).ceil + 1
 			@mu                     = calculate_mu(@k, @q)
 
 			init_L_R
