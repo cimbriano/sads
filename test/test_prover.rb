@@ -25,7 +25,8 @@ describe "Prover" do
 		end
 
 		def test_calc_q
-			assert_equal(29, @prover.calculate_q(2,10))
+			# TODO implement BIG_THETA
+			fail("BIG_THETA not implemented")
 		end
 
 		def test_calc_mu
