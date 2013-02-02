@@ -61,8 +61,13 @@ class Prover
 		@labels = {}
 		@partial_labels = {}
 
-		@root_digest = node_digest('0')
+		@root_digest = init_root_digest
 	end # initialize
+
+	# Basic initialization, avoids computing node_digest('0')
+	def init_root_digest
+		Vector.elements( Array.new(@k) { 0 } )
+	end
 
 	# Add the specified element to the Merkle tree
 	def addElement(ele)
