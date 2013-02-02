@@ -5,13 +5,18 @@ require 'verifier'
 puts "Benchmarking time to update the prover with a new 'stream' element"
 
 
-[100].each do |k|
+[50].each do |k|
 	puts "k: #{k}"
-	(50...51).step(1) do |n|
+	(100..100).step(1) do |n|
 		puts "Stream Size: #{n}"
-		(200...1000).step(200) do |m|
+		(100..100).step(1) do |m|
 			puts "Universe Size: #{m}"
-			p = Prover.new(k, n, m)
+
+			p = nil
+			puts "Time to Instantiate Prover"
+			puts Benchmark.measure { p = Prover.new(k, n, m) }
+
+
 			# v = Verifier.new(p.k, p.stream_bound_n, p.q, p.log_q_ceil, p.L, p.R, p.universe_size_m)
 
 			# Pre-generate random elements to add to the prover
@@ -23,17 +28,18 @@ puts "Benchmarking time to update the prover with a new 'stream' element"
 			p_labels = p.partial_labels
 			leaves = p.leaves
 
-
 			Benchmark.bmbm do |x|
-				(0...num_elements_to_add).each do |index|
-					x.report("k:#{k}, n:#{n}, m:#{m}, ele added:#{num_elements_to_add}") { p.addElement(elements[index]) }
 
-					# Reset prover storage, outside of report
-					labels.clear
-					p_labels.clear
-					leaves.clear
+				x.report("k:#{k}, n:#{n}, m:#{m}, ele added:#{num_elements_to_add}") {
+					(0...num_elements_to_add).each do |index|
+						p.addElement(elements[index])
+					end
+				}
 
-				end
+				# Reset prover storage, outside of report
+				labels.clear
+				p_labels.clear
+				leaves.clear
 			end
 
 		end # m
