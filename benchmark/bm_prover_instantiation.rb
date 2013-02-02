@@ -4,13 +4,13 @@ require 'verifier'
 
 puts "Benchmarking time to instantiate the prover"
 
-[50].each do |k|
+[256].each do |k|
 	puts "k: #{k}"
 
-	(10_000..10_000).step(10000) do |n|
+	(20_000..100_000).step(10_000) do |n|
 		puts "Stream Size: #{n}"
 
-		(100..1000).step(100) do |m|
+		(20_000..100_000).step(10_000) do |m|
 			puts "Universe Size: #{m}"
 
 
