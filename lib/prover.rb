@@ -354,7 +354,6 @@ class Prover
 
 		range_of_w = range(node_index)
 
-		# range_of_w.inject{ |acc, leaf| sum + (leaves[leaf] || 0) + partial_digest(node_index, leaf) }
 		range_of_w.each do | leaf |
 			# puts "leaf : #{leaf}"
 

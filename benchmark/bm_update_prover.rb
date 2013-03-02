@@ -5,16 +5,19 @@ require 'verifier'
 puts "Benchmarking time to update the prover with a new 'stream' element"
 
 
-[50].each do |k|
+[128].each do |k|
 	puts "k: #{k}"
 	(100..100).step(1) do |n|
 		puts "Stream Size: #{n}"
-		(100..100).step(1) do |m|
+		[100].each do |m|
 			puts "Universe Size: #{m}"
 
-			p = nil
-			puts "Time to Instantiate Prover"
-			puts Benchmark.measure { p = Prover.new(k, n, m) }
+			p = Prover.new(k, m, n)
+			puts "Size of Matrices L & R: #{p.L.row_size} x #{p.L.column_size}"
+
+			# puts "Time to Instantiate Prover"
+			# puts Benchmark.measure { p = Prover.new(k, n, m) }
+			# puts ""
 
 
 			# v = Verifier.new(p.k, p.stream_bound_n, p.q, p.log_q_ceil, p.L, p.R, p.universe_size_m)
@@ -41,6 +44,8 @@ puts "Benchmarking time to update the prover with a new 'stream' element"
 				p_labels.clear
 				leaves.clear
 			end
+
+			puts ""
 
 		end # m
 	end # n

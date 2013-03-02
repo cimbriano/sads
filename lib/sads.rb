@@ -18,7 +18,6 @@ module Sads
 	attr_reader :universe_size_m
 
 	# Left and Right vectors for algebraic hash function
-	attr_accessor :L, :R
 
 	# Public hash method, expects two strings representing indices, or two Vectors representing labels
 	def hash(x,y, reverse=nil)
@@ -38,20 +37,12 @@ module Sads
 	# private
 
 	def calculate_q(k, n)
-		# q is the smallest prime satisfying
-		# q / log (q + 1) >= n * 2k * w( sqrt(k * log k))
-		#
-		# Using THETA notation, epsilon = 1
-
-
-		# Using ceiling for now, until we actually find the
-		# smallest prime bigger than this quantity
-		# (n * k * Math.log2(k) * Math.sqrt( k * Math.log2(k) )).ceil
-		#
-
 		# New Value for q based on reviewer comment (per email from Babis 1/31/2013)
 		# TODO Still needs to be BIG_THETA ( n * k * ....  )
 		# ie, the smallest prime bigger than this value
+		#
+		# q (prime) >= n * k^{0.5+e} * log k for any small e>0
+
 		(n * k * Math.log2(k)).ceil
 	end
 
