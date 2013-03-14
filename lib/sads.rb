@@ -18,6 +18,7 @@ module Sads
 	attr_reader :universe_size_m
 
 	# Left and Right vectors for algebraic hash function
+	attr_accessor :L, :R
 
 	# Public hash method, expects two strings representing indices, or two Vectors representing labels
 	def hash(x,y, reverse=nil)
