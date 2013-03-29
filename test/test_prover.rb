@@ -25,7 +25,8 @@ describe "Prover" do
 		end
 
 		def test_calc_q
-			assert_equal(29, @prover.calculate_q(2,10))
+			# TODO implement BIG_THETA
+			fail("BIG_THETA not implemented")
 		end
 
 		def test_calc_mu
@@ -391,8 +392,7 @@ describe "Prover" do
 			all_nodes = set_of_all_node_indices(@prover)
 			all_nodes.each do |node|
 				digest = @prover.node_digest(node)
-				label = @prover.node_label(node)
-
+				label = @prover.calc_node_label(node)
 
 				# puts "Checking label: #{label}"
 				# puts "Checking digest: #{digest}"

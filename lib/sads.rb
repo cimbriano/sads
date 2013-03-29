@@ -38,15 +38,13 @@ module Sads
 	# private
 
 	def calculate_q(k, n)
-		# q is the smallest prime satisfying
-		# q / log (q + 1) >= n * 2k * w( sqrt(k * log k))
+		# New Value for q based on reviewer comment (per email from Babis 1/31/2013)
+		# TODO Still needs to be BIG_THETA ( n * k * ....  )
+		# ie, the smallest prime bigger than this value
 		#
-		# Using THETA notation, epsilon = 1
+		# q (prime) >= n * k^{0.5+e} * log k for any small e>0
 
-
-		# Using ceiling for now, until we actually find the
-		# smallest prime bigger than this quantity
-		(n * k * Math.log2(k) * Math.sqrt( k * Math.log2(k) )).ceil
+		(n * k * Math.log2(k)).ceil
 	end
 
 	def mod(m, q)

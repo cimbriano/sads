@@ -1,8 +1,13 @@
 
+Optimization Idea:
+ ☐ Instead of transferring L and R, tansfer some key or seed and generate L and R from it somehow @startup
+ ☐
+
+
 Data Structures:
   ☐ Pick type for digest
   ☐ What should leaves actually store: key is ele (or some identifier for that element) but what is value?
-  
+
 
 --- ✄ -----------------------
 
@@ -18,10 +23,10 @@ Methods:
 
 Tool Notes:
 
- ☐ minitest-reporters  
-   ☐ Colorized output of tests  
+ ☐ minitest-reporters
+   ☐ Colorized output of tests
    ☐ https://github.com/CapnKernul/minitest-reporters
- 
- ☐ jeweler 
+
+ ☐ jeweler
    ☐ Project management
    ☐ https://github.com/technicalpickles/jeweler/tree/master/lib/jeweler

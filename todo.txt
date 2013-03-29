@@ -1,0 +1,13 @@
+Todo:
+
+Primes:
+Next probable prime library
+
+Partial Labels:
+- Each level is reusable for the next level.
+
+Partial_Digest
+- Remove these
+
+Matrix Multiplication
+- Is it optimized for 0 1 matrices?
